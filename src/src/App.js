@@ -1,7 +1,8 @@
 
 //import './App.css';
 import Navbar from "./components/navbar/Navbar";
-import { BrowserRouter,Routes,Route} from 'react-router-dom';
+import Footer from "./components/footer/Footer";
+import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import LoginSignup from "./pages/LoginSignup";
 import About from "./pages/About";
 import Picture from "./pages/Picture";
@@ -22,6 +23,7 @@ function App() {
         <Route path='/About' element={<About/>}/>
         <Route path='LoginSignup' element={<LoginSignup/>}/>
       </Routes>
+      <Footer/>
       </BrowserRouter>
     </div>
   );

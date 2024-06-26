@@ -1,0 +1,39 @@
+.hero{
+    height: 100vh;
+    display: flex;
+    background-image: linear-gradient(#90Af87, #f6edd9);
+}
+
+.hero-left{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding-left: 180px;
+    line-height: 1.1;
+}
+
+.hero-left h2{
+    color: #5D7A55;
+    font-weight: 600px;
+    font-size: 30px;
+}
+
+.hero-left p{
+    color: #5D7A55;
+    font-weight: 800px;
+    font-size: 80px;
+}
+
+.hero-right{
+    flex:1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-right img{
+    width: 400px;
+    height: auto;
+}

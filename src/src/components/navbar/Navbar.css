@@ -1,26 +1,40 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
 .navbar{
     display: flex;
-    padding: 5px;
+    padding: 16px;
     justify-content: space-around;
-    box-shadow: 0 1px 3px -2px red;
-    background-color: #CC0000;
+    box-shadow: 0 1px 3px -2px white;
+    background-color: #5D7A55;
 }
 
 .nav-logo{
     display: flex;
     align-items: center;
     gap: 10px;
-    max-width: 50px;
+}
+
+.nav-logo p{
+    font-size: 25px;
+    font-weight: 600;
+    color: #f6edd9;
+}
+
+.nav-logo img{
+    width: 75px;
+    height: auto;
 }
 
 .nav-menu{
     display: flex;
     align-items: center;
-    list-style-type: none;
-    gap: 50px;
-    font-size: 15px;
+    list-style: none;
+    gap: 100px;
+    font-size: 18px;
     font-weight: 600;
-    font-family: Arial, Helvetica, sans-serif;
     color: white;
 }
 
@@ -38,7 +52,7 @@
     width: 80%;
     height: 3px;
     border-radius: 10px;
-    background: black;
+    background: #f6edd9;
 }
 
 .nav-login-button{
@@ -48,12 +62,18 @@
 }
 
 .nav-login-button button{
-    width: 157px;
+    width: 138px;
     height: 58px;
-    font-size: 20px;
-    font-weight: 200;
+    font-size: 18px;
+    font-weight: 600px;
     outline: none;
     border: 1px solid gray;
     cursor: pointer;
+    border-radius: 75px;
+    color:#5D7A55;
+}
+
+.nav-login-button button:active{
+    background: #f3f3f3;
 }
 

@@ -2,27 +2,27 @@ import React, {useState} from 'react'
 import "./Navbar.css"
 import logo from '../assets/logo.png'
 import menu_bar from '../assets/menu-bar.png'
+import { Link } from 'react-router-dom'
 
 const Navbar= () => {
-    const [menu,setMenu] = useState("home");
+  const [menu,setMenu] = useState("home");
   return (
-    <>
-        <nav className="navbar">
-            <div className='nav-logo'>
-              <img src={logo} alt=""/>
-            </div>
-            <ul className='nav-menu'>
-              <li onClick={()=> setMenu("Home")}><link to='/'>Trang chủ</link>{menu==="home"? <hr/>:<></>}</li>
-              <li onClick={()=> setMenu("Product")}><link to ='/Product'>Thực đơn</link>{menu==="Product"? <hr/>:<></>}</li>
-              <li onClick={()=> setMenu("About")}><link to ='/About'>Về chúng tôi</link>{menu==="About"? <hr/>:<></>}</li>
-              <li onClick={()=> setMenu("Picture")}><link to ='/Picture'>Hình ảnh</link>{menu==="Picture"? <hr/>:<></>}</li>
-              <li onClick={()=> setMenu("Contact")}><link to ='/Contact'>Liên hệ</link>{menu==="Contact"? <hr/>:<></>}</li>
-            </ul>
-            <div className='nav-login-button'>
-              <button><link to ='/LoginSignup'>Đăng nhập</link></button>
-            </div>
-        </nav>
-    </>
+    <div className="navbar">
+      <div className='nav-logo'>
+        <img src={logo} alt=""/>
+        <p>JustaTea</p>
+      </div>
+      <ul className='nav-menu'>
+        <li onClick={()=> {setMenu("home")}}><Link style={{textDecoration: 'none'}} to='/'>Trang chủ</Link>{menu==="home"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("product")}}><Link style={{textDecoration: 'none'}} to ='/Product'>Thực đơn</Link>{menu==="product"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("about")}}><Link style={{textDecoration: 'none'}} to ='/About'>Về chúng tôi</Link>{menu==="about"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("picture")}}><Link style={{textDecoration: 'none'}} to ='/Picture'>Hình ảnh</Link>{menu==="picture"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("contact")}}><Link style={{textDecoration: 'none'}} to ='/Contact'>Liên hệ</Link>{menu==="contact"? <hr/>:<></>}</li>
+      </ul>
+      <div className='nav-login-button'>
+        <Link to ='/LoginSignup'><button onClick={()=> {setMenu("login")}}>Đăng nhập</button></Link>
+      </div>
+    </div>
   )
 }
 
