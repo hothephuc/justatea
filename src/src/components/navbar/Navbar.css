@@ -47,6 +47,11 @@ body{
     cursor: pointer;
 }
 
+.nav-menu li:hover{
+    color: #90af87;
+    transition: all 0.3s ease;
+}
+
 .nav-menu hr{
     border:none;
     width: 80%;
@@ -65,12 +70,19 @@ body{
     width: 138px;
     height: 58px;
     font-size: 18px;
-    font-weight: 600px;
+    font-weight: 600;
     outline: none;
-    border: 1px solid gray;
+    border: 1px solid #90af87;
     cursor: pointer;
     border-radius: 75px;
     color:#5D7A55;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.nav-login-button button:hover{
+    background:#90af87;
+    transition: all 0.3s ease;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
 .nav-login-button button:active{
