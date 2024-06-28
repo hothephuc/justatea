@@ -2,7 +2,8 @@ import { app } from "../config/firebase-config";
 import { collection, doc, setDoc, getDoc,getFirestore } from "firebase/firestore"; 
 
 const db = getFirestore(app);
-export async function get_user_document(uid){
+
+export async function getUserDocument(uid){
     const docref = doc(db,'users',uid);
     const docsnap = await getDoc(docref);
 
@@ -12,4 +13,13 @@ export async function get_user_document(uid){
     // docSnap.data() will be undefined in this case
     return -1
     }
+}
+
+export async function addUserDoc(user, uid){
+    await setDoc(doc(db,"users",uid),{
+        fullname: user.name,
+        dob: user.dob,
+        email: user.email,
+        address: user.add
+    });
 }
