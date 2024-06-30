@@ -19,11 +19,11 @@ const Navbar= () => {
         <p>JustaTea</p>
       </div>
       <nav /*className={`nav-menu ${isOpen ? 'open' : ''}`} */ className="nav-menu" ref={navRef}>
-        <a onClick={()=> {setMenu("home"); showNavbar();} }><Link style={{textDecoration: 'none'}} to ='/'>Trang chủ</Link>{menu==="home"? <hr/>:<></>}</a>
-        <a onClick={()=> {setMenu("product"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Product'>Thực đơn</Link>{menu==="product"? <hr/>:<></>}</a>
-        <a onClick={()=> {setMenu("about"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/About'>Về chúng tôi</Link>{menu==="about"? <hr/>:<></>}</a>
-        <a onClick={()=> {setMenu("picture"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Picture'>Hình ảnh</Link>{menu==="picture"? <hr/>:<></>}</a>
-        <a onClick={()=> {setMenu("contact"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Contact'>Liên hệ</Link>{menu==="contact"? <hr/>:<></>}</a>
+        <li onClick={()=> {setMenu("home"); showNavbar();} }><Link style={{textDecoration: 'none'}} to ='/'>Trang chủ</Link>{menu==="home"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("product"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Product'>Thực đơn</Link>{menu==="product"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("about"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/About'>Về chúng tôi</Link>{menu==="about"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("picture"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Picture'>Hình ảnh</Link>{menu==="picture"? <hr/>:<></>}</li>
+        <li onClick={()=> {setMenu("contact"); showNavbar();}}><Link style={{textDecoration: 'none'}} to ='/Contact'>Liên hệ</Link>{menu==="contact"? <hr/>:<></>}</li>
         <div className='nav-login-button'>
           <Link to ='/LoginSignup' style={{textDecoration: 'none'}}><button onClick={()=> {setMenu("login"); showNavbar();}}>Đăng nhập</button></Link>
         </div>
