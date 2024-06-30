@@ -1,11 +1,13 @@
-body{
+*{
     margin: 0;
     padding: 0;
 }
 
 .navbar{
     display: flex;
-    padding: 16px;
+    padding: 14px;
+    padding-left: 8px;
+    padding-right: 8px;
     justify-content: space-around;
     box-shadow: 0 1px 3px -2px white;
     background-color: #5D7A55;
@@ -31,6 +33,7 @@ body{
 .nav-menu{
     display: flex;
     align-items: center;
+    text-align: center;
     list-style: none;
     gap: 100px;
     font-size: 18px;
@@ -38,7 +41,7 @@ body{
     color: white;
 }
 
-.nav-menu li{
+.nav-menu a{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,10 +50,10 @@ body{
     cursor: pointer;
 }
 
-.nav-menu li:hover{
+.nav-menu a:hover{
     color: #90af87;
     transition: all 0.3s ease;
-}
+}   
 
 .nav-menu hr{
     border:none;
@@ -89,3 +92,50 @@ body{
     background: #f3f3f3;
 }
 
+.navbar-toggle-icon{
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    background:transparent;
+    display:none;
+    border:none;
+    outline:none;
+}
+  
+@media only screen and (max-width: 1024px) {
+    .nav-bar{
+        gap: 15px;
+    }
+    .nav-menu.responsive-nav{
+        position: absolute;
+        display: flex;
+        height: 100%;
+        width: 100%;
+        top: 95px;
+        left: 0;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column; 
+        background-color: #5D7A55;
+        gap: 1.5rem;
+        transition: 0.5s;
+        cursor: pointer;
+    }
+
+    .nav-menu{
+        display: none;
+    }
+
+    .navbar-toggle-icon {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-self: center;
+        color: #f3f3f3;
+      }
+      
+    .navbar-toggle-icon {
+        font-size: 2rem;
+    }
+
+}
