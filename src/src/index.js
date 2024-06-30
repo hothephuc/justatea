@@ -4,13 +4,28 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './config/firebase-config'
-import { signInGoogle } from './server/auth';
+import { signInGoogle,registerEmail,signInEmail } from './server/auth';
+
+const user = {
+    name: 'John Doe',
+    dob: '1990-01-01',
+    gender: 'male',
+    email: 'john.doe@example.com',
+    add: '123 Main St, Anytown, USA'
+};
+
+const useraccount ={
+  email: user.email,
+  password: '123456'
+};
+
+//registerEmail(useraccount.email,useraccount.password,user);
+signInEmail(useraccount.email,useraccount.password);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <button onClick={signInGoogle}>Sign in with google</button>
     <App />
   </React.StrictMode>
 );
