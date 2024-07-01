@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './config/firebase-config'
-import { signInGoogle,registerEmail,signInEmail } from './server/auth';
+import { signInGoogle,registerEmail,signInEmail, signOutUser } from './server/auth';
 
 const user = {
     name: 'John Doe',
@@ -21,7 +21,7 @@ const useraccount ={
 
 //registerEmail(useraccount.email,useraccount.password,user);
 signInEmail(useraccount.email,useraccount.password);
-
+signOutUser(); 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

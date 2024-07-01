@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addUserDoc } from "./data-handle";
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();
@@ -72,3 +72,12 @@ export async function signInEmail(email, password) {
   }
 }
 
+export async function signOutUser() {
+  try {
+    await signOut(auth);
+    console.log("User signed out successfully");
+  } catch (error) {
+    console.error("Error signing out:", error);
+    throw error; // Re-throw the error if you want to handle it further up the call stack
+  }
+}
