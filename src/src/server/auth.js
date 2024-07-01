@@ -1,5 +1,6 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
-import { addUserDoc, validateEmail, validatePassword } from "./data-handle";
+import { addUserDoc, getUserDocument } from "./data-handle";
+import {validateEmail, validatePassword} from "./utils"
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();
 
@@ -93,6 +94,7 @@ export async function signOutUser() {
     throw error; // Re-throw the error if you want to handle it further up the call stack
   }
 }
+
 // Need to verify new password using validate password function 
 export async function resetPassword(email) {
   // Validate email
