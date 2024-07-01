@@ -1,5 +1,5 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addUserDoc } from "./data-handle";
+import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { addUserDoc, validateEmail, validatePassword } from "./data-handle";
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();
 
@@ -28,15 +28,26 @@ export async function signInGoogle(){
 
 
 export async function registerEmail(email, password, userInfo) {
+  // Validate email and password
+  if (!validateEmail(email)) {
+    console.error("Invalid email format");
+    throw new Error("Invalid email format");
+  }
+
+  if (!validatePassword(password)) {
+    console.error("Password does not meet criteria");
+    throw new Error("Password must be at least 6 characters long, contain a number, an uppercase letter, a lowercase letter, and a special character");
+  }
+
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
+
     // User successfully registered
     const user = userCredential.user;
     console.log("User registered:", user);
 
     // Save user information to Firestore
-    await addUserDoc(userInfo,user.uid);
+    await addUserDoc(userInfo, user.uid);
 
     console.log("User information saved to Firestore");
     return user; // Return the user object if needed
@@ -48,6 +59,7 @@ export async function registerEmail(email, password, userInfo) {
     throw error; // Re-throw the error if you want to handle it further up the call stack
   }
 }
+
 
 export async function signInEmail(email, password) {
   try {
@@ -78,6 +90,24 @@ export async function signOutUser() {
     console.log("User signed out successfully");
   } catch (error) {
     console.error("Error signing out:", error);
+    throw error; // Re-throw the error if you want to handle it further up the call stack
+  }
+}
+// Need to verify new password using validate password function 
+export async function resetPassword(email) {
+  // Validate email
+  if (!validateEmail(email)) {
+    console.error("Invalid email format");
+    throw new Error("Invalid email format");
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    console.log("Password reset email sent successfully");
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error("Error sending password reset email:", errorCode, errorMessage);
     throw error; // Re-throw the error if you want to handle it further up the call stack
   }
 }

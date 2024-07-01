@@ -33,3 +33,27 @@ export async function addUserDoc(user, uid){
         address: user.add
     });
 }
+
+export function validateEmail(email) 
+{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+export function validatePassword(password) 
+{
+    const minLength = 6;
+    const hasNumber = /\d/;
+    const hasUpperCase = /[A-Z]/;
+    const hasLowerCase = /[a-z]/;
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
+  
+    return (
+      password.length >= minLength &&
+      hasNumber.test(password) &&
+      hasUpperCase.test(password) &&
+      hasLowerCase.test(password) &&
+      hasSpecialChar.test(password)
+    );
+}
+  

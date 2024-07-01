@@ -4,24 +4,25 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './config/firebase-config'
-import { signInGoogle,registerEmail,signInEmail, signOutUser } from './server/auth';
+import { signInGoogle,registerEmail,signInEmail, signOutUser, resetPassword } from './server/auth';
 
 const user = {
     name: 'John Doe',
     dob: '1990-01-01',
     gender: 'male',
-    email: 'john.doe@example.com',
+    email: 'shogunaoi2027@gmail.com',
     add: '123 Main St, Anytown, USA'
 };
 
 const useraccount ={
   email: user.email,
-  password: '123456'
+  password: 'abcdefg'
 };
 
 //registerEmail(useraccount.email,useraccount.password,user);
-signInEmail(useraccount.email,useraccount.password);
-signOutUser(); 
+//signInEmail(useraccount.email,useraccount.password);
+//resetPassword(user.email)
+//signOutUser(); 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
