@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faFacebook} from '@fortawesome/free-brands-svg-icons'
 import {faGoogle} from '@fortawesome/free-brands-svg-icons'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+//import { signInGoogle,registerEmail,signInEmail } from '../server/auth.js';
+import { signInGoogle } from '../server/auth';
 const LoginSignup = () => {
   const [username, setUsername] =useState("");
   const [password, setPassword] =useState("");
@@ -16,6 +17,14 @@ const LoginSignup = () => {
     setTimeout(() => {
       setClicked(false); // Revert state back to false after 1 second
     }, 1000);
+  };
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInGoogle();
+      console.log('Google sign-in successful');
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+    }
   };
   return (
     <div className='loginsignup'>
@@ -54,9 +63,9 @@ const LoginSignup = () => {
           <a href='https://facebook.com'>
             <FontAwesomeIcon icon={faFacebook}/>
           </a>
-          <a href="https://accounts.google.com/v3/signin/identifier?ifkv=AS5LTAQAENxTNFn3gJP6nRmUm2JlIXr00NxQl75mDr_p_6sm-uwxipsf1aWvpU68rvMgAqe6NAQMXQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S487526773%3A1719743936592090&ddm=0">
-            <FontAwesomeIcon icon ={faGoogle}/>        
-          </a>
+          <button onClick={handleGoogleSignIn} className="btn btn-link">
+            <FontAwesomeIcon icon={faGoogle} />
+          </button>
         </div>
       </div>
     </div>
