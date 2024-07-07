@@ -1,36 +1,37 @@
-*{
+* {
     margin: 0;
     padding: 0;
-}
-
-.navbar{
+  }
+  
+  .navbar {
     display: flex;
     padding: 14px;
     padding-left: 8px;
     padding-right: 8px;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
     box-shadow: 0 1px 3px -2px white;
     background-color: #5D7A55;
-}
-
-.nav-logo{
+  }
+  
+  .nav-logo {
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.nav-logo p{
+  }
+  
+  .nav-logo p {
     font-size: 25px;
     font-weight: 600;
     color: #f6edd9;
-}
-
-.nav-logo img{
+  }
+  
+  .nav-logo img {
     width: 75px;
     height: auto;
-}
-
-.nav-menu{
+  }
+  
+  .nav-menu {
     display: flex;
     align-items: center;
     text-align: center;
@@ -39,37 +40,37 @@
     font-size: 18px;
     font-weight: 600;
     color: white;
-}
-
-.nav-menu a{
+  }
+  
+  .nav-menu a {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 3px;
     cursor: pointer;
-}
-
-.nav-menu a:hover{
+  }
+  
+  .nav-menu a:hover {
     color: #90af87;
     transition: all 0.3s ease;
-}   
-
-.nav-menu hr{
-    border:none;
+  }
+  
+  .nav-menu hr {
+    border: none;
     width: 80%;
     height: 3px;
     border-radius: 10px;
     background: #f6edd9;
-}
-
-.nav-login-button{
+  }
+  
+  .nav-login-button {
     display: flex;
     align-items: center;
     gap: 30px;
-}
-
-.nav-login-button button{
+  }
+  
+  .nav-login-button button {
     width: 138px;
     height: 58px;
     font-size: 18px;
@@ -78,64 +79,71 @@
     border: 1px solid #90af87;
     cursor: pointer;
     border-radius: 75px;
-    color:#5D7A55;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-
-.nav-login-button button:hover{
-    background:#90af87;
+    color: #5D7A55;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .nav-login-button button:hover {
+    background: #90af87;
     transition: all 0.3s ease;
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-}
-
-.nav-login-button button:active{
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+  .nav-login-button button:active {
     background: #f3f3f3;
-}
-
-.navbar-toggle-icon{
-    align-items: center;
+  }
+  
+  .navbar-toggle-icon {
+    display: none;
     cursor: pointer;
     border: none;
-    background:transparent;
-    display:none;
-    border:none;
-    outline:none;
-}
+    background: transparent;
+    outline: none;
+    font-size: 2rem;
+    color: #f3f3f3;
+  }
   
-@media only screen and (max-width: 1024px) {
-    .nav-bar{
-        gap: 15px;
-    }
-    .nav-menu.responsive-nav{
-        position: absolute;
-        display: flex;
-        height: 100%;
-        width: 100%;
-        top: 95px;
-        left: 0;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column; 
-        background-color: #5D7A55;
-        gap: 1.5rem;
-        transition: 0.5s;
-        cursor: pointer;
-    }
+  .responsive-nav-logo{
+    display: none;
+  }
 
-    .nav-menu{
-        display: none;
-    }
 
+  @media only screen and (max-width: 1024px) {
+    .nav-menu {
+      display: none;
+    }
+    
+    .nav-menu.responsive-nav {
+      position: fixed;
+      display: flex;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: 0;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background-color: #5D7A55;
+      gap: 1.5rem;
+      transition: 0.5s;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  
     .navbar-toggle-icon {
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-        justify-self: center;
-        color: #f3f3f3;
-      }
-      
-    .navbar-toggle-icon {
-        font-size: 2rem;
+      display: flex;
     }
-
-}
+  
+    .responsive-nav-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+  
+    .responsive-nav-logo img {
+      width: 100px;
+      height: auto;
+    }
+  }
+  
