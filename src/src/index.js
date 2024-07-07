@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 //import reportWebVitals from './reportWebVitals';
 import './config/firebase-config'
-import { signInGoogle,registerEmail,signInEmail } from './server/auth';
+import { signInGoogle,registerEmail,signInEmail, signOutUser, resetPassword } from './server/auth';
 
 
 

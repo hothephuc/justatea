@@ -33,3 +33,6 @@ export async function addUserDoc(user, uid){
         address: user.add
     });
 }
+
+
+  
