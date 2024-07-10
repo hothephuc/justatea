@@ -7,7 +7,7 @@ import LoginSignup from "./pages/LoginSignup";
 import About from "./pages/About";
 import Picture from "./pages/Picture";
 import Contact from "./pages/Contact";
-import Product from "./pages/Product";
+import Menu from "./pages/Menu";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 
@@ -18,7 +18,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/Product' element={<Product/>}/>
+        <Route path='/Menu' element={<Menu/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/About' element={<About/>}/>

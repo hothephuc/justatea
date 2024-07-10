@@ -1,5 +1,11 @@
 .item{
-    width: 150px;
+    width: 200px;
+    justify-content: center;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .item img{
@@ -9,6 +15,7 @@
 
 .item-info{
     padding-top: 12px;
+    text-align: center;
 }
 
 .item-info h{
@@ -17,8 +24,7 @@
     font-weight: 600;
 }
 
-.item-prices{
-    display:flex;
+.item-info p{
     color:black;
     font-size: 18px;
 }
