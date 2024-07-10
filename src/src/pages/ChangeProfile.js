@@ -3,14 +3,13 @@ import '../pages/css/ChangeProfile.css';
 import { Link } from 'react-router-dom';
 
 const ChangeProfile = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [fullName, setFullName] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
   const [phoneNum, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
 
-  const isFormValid = firstName && lastName && gender && dob && phoneNum && address;
+  const isFormValid =  fullName && gender && dob && phoneNum && address;
 
   return (
     <div className='change-profile'>
@@ -19,21 +18,12 @@ const ChangeProfile = () => {
         <div className='changeProfile-fields'>
           <div className='name-fields'>
             <div>
-              <label>Họ</label>
+              <label>Họ và tên</label>
               <input
                 type='text'
-                placeholder='Họ'
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
-              />
-            </div>
-            <div>
-              <label>Tên</label>
-              <input
-                type='text'
-                placeholder='Tên'
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
+                placeholder='Họ và tên'
+                value={fullName}
+                onChange={(event) => setFullName(event.target.value)}
               />
             </div>
           </div>

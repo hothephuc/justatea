@@ -20,13 +20,13 @@
   }
 
 .loginsignup-container h1{
-    margin: 20px 0px;
+    margin: 10px 0px;
 }
 
 .loginsignup-fields{
     display: flex;
     flex-direction: column;
-    gap: 29px;
+    gap: 5px;
     margin-top: 30px;
 }
 .loginsignup-fields input{

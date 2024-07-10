@@ -11,7 +11,7 @@ export async function getUserDocument(uid){
     return docsnap.data();
     } else {
     // docSnap.data() will be undefined in this case
-    return -1
+    return null
     }
 }
 

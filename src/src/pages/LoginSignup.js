@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { signInGoogle, resetPassword } from '../server/auth';
+import { signInGoogle, resetPassword, signInEmail } from '../server/auth';
 
 const LoginSignup = () => {
   const [username, setUsername] = useState("");
@@ -21,13 +21,12 @@ const LoginSignup = () => {
     }, 1000);
   };
 
-  const handleLogin = () => {
-    // Giả sử đây là hàm kiểm tra đăng nhập
-    if (username === "correctUsername" && password === "correctPassword") {
-      setErrorMessage("");
-      // Xử lý đăng nhập thành công
-    } else {
-      setErrorMessage("Sai tên tài khoản hoặc mật khẩu.");
+  const handleLogin = async () => {
+    try{
+      await signInEmail();
+      console.log('Sign in successful');
+    }catch(error){
+      setErrorMessage('Email or passwords are incorrect')
     }
   };
 
@@ -54,12 +53,14 @@ const LoginSignup = () => {
       <div className='loginsignup-container'>
         <h1>Đăng nhập</h1>
         <div className='loginsignup-fields'>
+          <label>Email</label>
           <input 
-            type="text" 
-            placeholder='Tên tài khoản'
+            type="email" 
+            placeholder='Email'
             value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
+          <label>Mật khẩu</label>
           <input 
             type="password" 
             placeholder='Mật khẩu'
@@ -103,8 +104,9 @@ const LoginSignup = () => {
         </p>
         {showResetPassword && (
           <div className='reset-password-field'>
+            <label>Nhập email của bạn</label>
             <input 
-              type="email" 
+              type='email' 
               placeholder='Email'
               value={resetEmail}
               onChange={(event) => setResetEmail(event.target.value)}
@@ -117,7 +119,9 @@ const LoginSignup = () => {
         <hr/>
         <div className='Single-col Social-icon d-flex justify-content-evenly'>
           <div onClick={() => window.location.href = 'https://facebook.com'}>
-            <FontAwesomeIcon icon={faFacebook} />
+            <Link to='/ChangeProfile'>
+              <FontAwesomeIcon icon={faFacebook} />
+            </Link>
           </div>
           <div onClick={handleGoogleSignIn}>
             <Link to='/ChangeProfile'>

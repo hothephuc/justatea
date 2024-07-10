@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './css/Signup.css';
 import { Link } from 'react-router-dom';
+import { registerEmail } from '../server/auth';
 
 const Signup = () => {  
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  
+  const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -15,7 +16,7 @@ const Signup = () => {
   const [clicked, setClicked] = useState(false);
 
   const isFormValid = username && password && (password === confirmedPassword) 
-                      && firstName && lastName && gender && dob && phoneNum && address;
+                      && fullName && gender && dob && phoneNum && address;
 
   const handleClick = () => {
     setClicked(true);
@@ -24,6 +25,30 @@ const Signup = () => {
     }, 1000);
   };
 
+  const handleSignup = async (event) => {
+    event.preventDefault(); // Prevent form submission
+
+    // Prepare user info object
+    const userInfo = {
+      fullName,
+      username,
+      gender,
+      dob,
+      phoneNum,
+      address
+      // Add more fields as needed
+    };
+
+    try {
+      // Call registerEmail function
+      const newUser = await registerEmail(username, password, userInfo);
+      console.log("User registered successfully:", newUser);
+      // Optionally, you can redirect to a success page or do something else upon successful registration
+    } catch (error) {
+      console.error("Error registering user:", error.message);
+      // Handle error (e.g., show error message to user)
+    }
+  };
   return (
     <div className='Signup'>
       <div className='signup-container'>
@@ -31,21 +56,12 @@ const Signup = () => {
         <div className='signup-fields'>
           <div className='name-fields'>
             <div>
-              <label>Họ</label>
+              <label>Họ và Tên</label>
               <input
                 type='text'
-                placeholder='Họ'
-                value={firstName}
-                onChange={(event) => setFirstName(event.target.value)}
-              />
-            </div>
-            <div>
-              <label>Tên</label>
-              <input
-                type='text'
-                placeholder='Tên'
-                value={lastName}
-                onChange={(event) => setLastName(event.target.value)}
+                placeholder='Họ và tên'
+                value={fullName}
+                onChange={(event) => setFullName(event.target.value)}
               />
             </div>
           </div>
