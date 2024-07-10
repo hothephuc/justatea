@@ -1,34 +1,22 @@
 import React, { useState } from 'react';
-import './css/Signup.css';
+import '../pages/css/ChangeProfile.css';
 import { Link } from 'react-router-dom';
 
-const Signup = () => {  
+const ChangeProfile = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmedPassword, setConfirmedPassword] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
   const [phoneNum, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [clicked, setClicked] = useState(false);
 
-  const isFormValid = username && password && (password === confirmedPassword) 
-                      && firstName && lastName && gender && dob && phoneNum && address;
-
-  const handleClick = () => {
-    setClicked(true);
-    setTimeout(() => {
-      setClicked(false); // Revert state back to false after 1 second
-    }, 1000);
-  };
+  const isFormValid = firstName && lastName && gender && dob && phoneNum && address;
 
   return (
-    <div className='Signup'>
-      <div className='signup-container'>
+    <div className='change-profile'>
+      <div className='changeProfile-container'>
         <h1>Đăng kí người dùng</h1>
-        <div className='signup-fields'>
+        <div className='changeProfile-fields'>
           <div className='name-fields'>
             <div>
               <label>Họ</label>
@@ -56,9 +44,10 @@ const Signup = () => {
               onChange={(event) => setGender(event.target.value)}
               className='gender_dropdown'
             >
+              <option value=''>Chọn giới tính</option>
               <option value='male'>Nam</option>
               <option value='female'>Nữ</option>
-              <option value='Khác'>Khác</option>
+              <option value='other'>Khác</option>
             </select>
           </div>
           <label>Ngày tháng năm sinh</label>
@@ -82,52 +71,15 @@ const Signup = () => {
             value={address}
             onChange={(event) => setAddress(event.target.value)}
           />
-          <label>Tên tài khoản</label>
-          <input
-            type='text'
-            placeholder='Tên tài khoản'
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-          <label>Mật khẩu</label>
-          <input
-            type='password'
-            placeholder='Mật khẩu'
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <label>Nhập lại mật khẩu</label>
-          <input
-            type='password'
-            placeholder='Nhập lại mật khẩu'
-            value={confirmedPassword}
-            onChange={(event) => setConfirmedPassword(event.target.value)}
-          />
-      </div>
-        <button className={isFormValid ? "active" : ""}
-          disabled={!isFormValid}
-        >
-          <Link to='/'>
-                Đăng ký
+        </div>
+        <button className='button' disabled={!isFormValid}>
+          <Link to={isFormValid ? '/' : '#'}>
+            Đăng ký
           </Link>
         </button>
-        <p className='signup-login'>Đã có tài khoản?
-          <span
-            onClick={handleClick}
-            style={{
-              color: clicked ? 'red' : 'blue',
-              cursor: 'pointer',
-              textDecoration: clicked ? 'underline' : 'none',
-            }}
-          >
-            <Link to='/LoginSignup'>
-              Đăng nhập ngay.
-            </Link>
-          </span>
-        </p>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default ChangeProfile;

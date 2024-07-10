@@ -10,6 +10,7 @@ import Contact from "./pages/Contact";
 import Product from "./pages/Product";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import ChangeProfile from "./pages/ChangeProfile";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path='/About' element={<About/>}/>
         <Route path='LoginSignup' element={<LoginSignup/>}/>
         <Route path='/Signup' element={<Signup/>}/>
+        <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>
