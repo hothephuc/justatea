@@ -5,7 +5,7 @@ import { registerEmail } from '../server/auth';
 
 const Signup = () => {  
   
-  const [fullName, setFullName] = useState("");
+  const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -16,7 +16,7 @@ const Signup = () => {
   const [clicked, setClicked] = useState(false);
 
   const isFormValid = username && password && (password === confirmedPassword) 
-                      && fullName && gender && dob && phoneNum && address;
+                      && fullname && gender && dob && phoneNum && address;
 
   const handleClick = () => {
     setClicked(true);
@@ -26,19 +26,21 @@ const Signup = () => {
   };
 
   const handleSignup = async (event) => {
-    event.preventDefault(); // Prevent form submission
+    //event.preventDefault(); // Prevent form submission
+
+   // if (!isFormValid) return; // Ensure form is valid before proceeding
 
     // Prepare user info object
     const userInfo = {
-      fullName,
-      username,
-      gender,
-      dob,
-      phoneNum,
-      address
+      name:fullname,
+      email:username,
+      gender:gender,
+      dob:dob,
+      phoneNum:phoneNum,
+      add:address
       // Add more fields as needed
     };
-
+    
     try {
       // Call registerEmail function
       const newUser = await registerEmail(username, password, userInfo);
@@ -49,6 +51,7 @@ const Signup = () => {
       // Handle error (e.g., show error message to user)
     }
   };
+
   return (
     <div className='Signup'>
       <div className='signup-container'>
@@ -60,7 +63,7 @@ const Signup = () => {
               <input
                 type='text'
                 placeholder='Họ và tên'
-                value={fullName}
+                value={fullname}
                 onChange={(event) => setFullName(event.target.value)}
               />
             </div>
@@ -119,29 +122,29 @@ const Signup = () => {
             value={confirmedPassword}
             onChange={(event) => setConfirmedPassword(event.target.value)}
           />
-      </div>
-        <button className={isFormValid ? "active" : ""}
-          disabled={!isFormValid}
+        </div>
+        <button 
+          //className={isFormValid ? "active" : ""}
+          //disabled={!isFormValid}
+          onClick={handleSignup}
         >
-          <Link to='/'>
-                Đăng ký
-          </Link>
+          Đăng ký
         </button>
-        <p className='signup-login'>Đã có tài khoản?
-          <span
-            onClick={handleClick}
-            style={{
-              color: clicked ? 'red' : 'blue',
-              cursor: 'pointer',
-              textDecoration: clicked ? 'underline' : 'none',
-            }}
-          >
-            <Link to='/LoginSignup'>
-              Đăng nhập ngay.
-            </Link>
-          </span>
-        </p>
       </div>
+      <p className='signup-login'>Đã có tài khoản?
+        <span
+          onClick={handleClick}
+          style={{
+            color: clicked ? 'red' : 'blue',
+            cursor: 'pointer',
+            textDecoration: clicked ? 'underline' : 'none',
+          }}
+        >
+          <Link to='/LoginSignup'>
+            Đăng nhập ngay.
+          </Link>
+        </span>
+      </p>
     </div>
   );
 };
