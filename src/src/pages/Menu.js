@@ -1,10 +1,11 @@
-import React from 'react'
-import product_data from '../components/assets/Data.js'
+import React, { useContext } from 'react'
+import { MenuContext } from '../context/MenuContext.js'
 import Item from '../components/item/Item.js'
 import './css/Menu.css'
 import banner from '../components/assets/banner.jpg'
 
-const Product = () => {
+const Menu = () => {
+  const {product_data}=useContext(MenuContext);
   return (
     <div className='menu'>
       <img className='banner' src={banner} alt=""/>
@@ -18,4 +19,4 @@ const Product = () => {
   )
 }
 
-export default Product
+export default Menu

@@ -1,21 +1,19 @@
 .item{
     width: 200px;
+    border-radius: 15px;  
     justify-content: center;
-    border-radius: 15px;
+    /* flex-direction: column;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    align-items: center; */
 }
 
 .item img{
-    width: 200px;
-    height: 200px;
+    width: 100%;
 }
 
 .item-info{
     padding-top: 12px;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .item-info h{
@@ -26,7 +24,7 @@
 
 .item-info p{
     color:black;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .item:hover{

@@ -10,6 +10,7 @@ import Contact from "./pages/Contact";
 import Menu from "./pages/Menu";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import Product from "./pages/Product";
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path='/' element={<Home/>}/>
-        <Route path='/Menu' element={<Menu/>}/>
+        <Route path="/Menu" element={<Menu/>}/>
+          <Route path='Menu/:productID' element={<Product/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/About' element={<About/>}/>
