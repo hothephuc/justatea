@@ -23,7 +23,7 @@ const LoginSignup = () => {
 
   const handleLogin = async () => {
     try{
-      await signInEmail();
+      await signInEmail(username, password);
       console.log('Sign in successful');
     }catch(error){
       setErrorMessage('Email or passwords are incorrect')
@@ -47,6 +47,7 @@ const LoginSignup = () => {
       console.error('Error sending password reset email:', error);
     }
   };
+
 
   return (
     <div className={`loginsignup ${showResetPassword ? 'expanded' : ''}`}>

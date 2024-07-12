@@ -37,7 +37,7 @@ export async function registerEmail(email, password, userInfo) {
 
   if (!validatePassword(password)) {
     console.error("Password does not meet criteria");
-    throw new Error("Password must be at least 6 characters long, contain a number, an uppercase letter, a lowercase letter, and a special character");
+    throw new Error("Password must be at least 6 characters long, contain a number, an uppercase letter");
   }
 
   try {
@@ -70,12 +70,22 @@ export async function signInEmail(email, password) {
     const user = userCredential.user;
     console.log("User signed in:", user);
 
-    // Example: Accessing user properties
-    console.log("User UID:", user.uid);
-    console.log("User email:", user.email);
-    console.log("User display name:", user.displayName);
+    // Retrieve user document from Firestore
+    const userData = await getUserDocument(user.uid);
+    console.log("User data from Firestore:", userData);
 
-    return user; // Return the user object if needed
+    // Example: Accessing user data properties
+    if (userData) {
+      console.log("User full name:", userData.fullname);
+      console.log("User date of birth:", userData.dob);
+      console.log("User gender:", userData.gender);
+      console.log("User email:", userData.email);
+      console.log("User address:", userData.address);
+    } else {
+      console.log("No user data found for UID:", user.uid);
+    }
+
+    return { user, userData }; // Return the user object and user data if needed
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
