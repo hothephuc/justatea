@@ -36,7 +36,7 @@ const Signup = () => {
       email:username,
       gender:gender,
       dob:dob,
-      phoneNum:phoneNum,
+      phone:phoneNum,
       add:address
       // Add more fields as needed
     };

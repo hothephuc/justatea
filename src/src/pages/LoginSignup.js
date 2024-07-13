@@ -32,8 +32,14 @@ const LoginSignup = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInGoogle();
+      const google_user = await signInGoogle();
+      // json object, if there is this user in database will return full data 
+      //otherwise onely 3 fields got from google uid,email,name are returned
       console.log('Google sign-in successful');
+      console.log(google_user);
+      if(Object.keys(google_user).length === 3){
+        // 3 fields means there isnt data of this user in database yet
+      }
     } catch (error) {
       console.error('Google sign-in error:', error);
     }

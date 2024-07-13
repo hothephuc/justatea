@@ -4,27 +4,43 @@ import {validateEmail, validatePassword} from "./utils"
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();
 
-export async function signInGoogle(){
-    signInWithPopup(auth, ggProvider)
-    .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        //console.log(user.uid) test userid
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+export async function signInGoogle() {
+  return new Promise((resolve, reject) => {
+      signInWithPopup(auth, ggProvider)
+      .then(async (result) => {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          const credential = GoogleAuthProvider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          const user = result.user;
+          const userdoc = await getUserDocument(user.uid);
+
+          // Extract user details
+          if (userdoc) {
+              // User exists in the database, return existing data
+              resolve(userdoc);
+          } 
+          else {
+              // User does not exist in the database, return new user details
+              const userDetails = {
+                  email: user.email,
+                  uid: user.uid,
+                  name: user.displayName
+              };
+              resolve(userDetails);
+          }
       }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      })
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+
+          reject({ errorCode, errorMessage, email });
+      });
+  });
 }
 
 

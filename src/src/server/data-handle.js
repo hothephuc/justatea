@@ -30,6 +30,7 @@ export async function addUserDoc(user, uid){
         dob: user.dob,
         gender:user.gender,
         email: user.email,
+        phone: user.phone,
         address: user.add
     });
 }
