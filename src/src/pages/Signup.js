@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { registerEmail } from '../server/auth';
 
 const Signup = () => {  
-  
   const [fullname, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,9 +13,49 @@ const Signup = () => {
   const [phoneNum, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [clicked, setClicked] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
 
   const isFormValid = username && password && (password === confirmedPassword) 
-                      && fullname && gender && dob && phoneNum && address;
+                      && fullname && gender && dob && phoneNum && address
+                      && !passwordError && !confirmPasswordError && !emailError;
+
+  const handleUsernameChange = (event) => {
+    const newUsername = event.target.value;
+    setUsername(newUsername);
+
+    // Email validation logic
+    if (!newUsername.includes('@')) {
+      setEmailError("Email phải có dấu @.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+
+    // Password validation logic
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordPattern.test(newPassword)) {
+      setPasswordError("Mật khẩu phải có ít nhất một chữ hoa, một chữ thường và một số.");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    const newConfirmPassword = event.target.value;
+    setConfirmedPassword(newConfirmPassword);
+
+    if (newConfirmPassword !== password) {
+      setConfirmPasswordError("Mật khẩu nhập lại không khớp.");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
 
   const handleClick = () => {
     setClicked(true);
@@ -26,18 +65,18 @@ const Signup = () => {
   };
 
   const handleSignup = async (event) => {
-    //event.preventDefault(); // Prevent form submission
+    // event.preventDefault(); // Prevent form submission
 
-   // if (!isFormValid) return; // Ensure form is valid before proceeding
+    if (!isFormValid) return; // Ensure form is valid before proceeding
 
     // Prepare user info object
     const userInfo = {
-      name:fullname,
-      email:username,
-      gender:gender,
-      dob:dob,
-      phone:phoneNum,
-      add:address
+      name: fullname,
+      email: username,
+      gender: gender,
+      dob: dob,
+      phone: phoneNum,
+      add: address,
       // Add more fields as needed
     };
     
@@ -89,7 +128,7 @@ const Signup = () => {
           />
           <label>Số điện thoại</label>
           <input
-            type='number'
+            type='text'
             placeholder='Số điện thoại'
             value={phoneNum}
             onChange={(event) => setPhoneNumber(event.target.value)}
@@ -101,36 +140,40 @@ const Signup = () => {
             value={address}
             onChange={(event) => setAddress(event.target.value)}
           />
-          <label>Tên tài khoản</label>
+          <label>Email</label>
           <input
-            type='text'
-            placeholder='Tên tài khoản'
+            type='email'
+            placeholder='Email'
             value={username}
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={handleUsernameChange}
           />
+          {emailError && <p className='error'>{emailError}</p>}
           <label>Mật khẩu</label>
           <input
             type='password'
             placeholder='Mật khẩu'
             value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={handlePasswordChange}
           />
+          {passwordError && <p className='error'>{passwordError}</p>}
           <label>Nhập lại mật khẩu</label>
           <input
             type='password'
             placeholder='Nhập lại mật khẩu'
             value={confirmedPassword}
-            onChange={(event) => setConfirmedPassword(event.target.value)}
+            onChange={handleConfirmPasswordChange}
           />
+          {confirmPasswordError && <p className='error'>{confirmPasswordError}</p>}
         </div>
         <button 
-          //className={isFormValid ? "active" : ""}
-          //disabled={!isFormValid}
+          className={isFormValid ? "active" : ""}
+          disabled={!isFormValid}
           onClick={handleSignup}
         >
+        <Link to='/'>
           Đăng ký
+        </Link>
         </button>
-      </div>
       <p className='signup-login'>Đã có tài khoản?
         <span
           onClick={handleClick}
@@ -145,6 +188,7 @@ const Signup = () => {
           </Link>
         </span>
       </p>
+      </div>
     </div>
   );
 };

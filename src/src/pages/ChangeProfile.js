@@ -49,7 +49,7 @@ const ChangeProfile = () => {
           />
           <label>Số điện thoại</label>
           <input
-            type='number'
+            type='text'
             placeholder='Số điện thoại'
             value={phoneNum}
             onChange={(event) => setPhoneNumber(event.target.value)}
