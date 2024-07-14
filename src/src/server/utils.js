@@ -45,3 +45,8 @@ function onUserActivity() {
   startUserActivityTimeout();
   // Additional actions on user activity can be added here
 }
+
+export function getTagType(tag) {
+  return typeof tag === 'string' ? tag.toLowerCase() : 'default';
+}
+
