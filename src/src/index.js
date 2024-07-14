@@ -5,15 +5,16 @@ import './index.css';
 //import reportWebVitals from './reportWebVitals';
 import './config/firebase-config'
 import { signInGoogle,registerEmail,signInEmail, signOutUser, resetPassword } from './server/auth';
-
-
+import MenuContextProvider from './context/MenuContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  // <React.StrictMode>
+    <MenuContextProvider>
+      <App />
+    </MenuContextProvider>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
