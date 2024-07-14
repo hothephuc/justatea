@@ -1,13 +1,61 @@
-import React,{ useState } from 'react'
-import './css/Signup.css'
+import React, { useState } from 'react';
+import './css/Signup.css';
 import { Link } from 'react-router-dom';
+import { registerEmail } from '../server/auth';
 
-const Signup = () => {
-  const [username,setUsername] = useState("");
-  const [password,setPassword] = useState("");
-  const [confirmedPassword,setConfirmedPassword] = useState("");
+const Signup = () => {  
+  const [fullname, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
+  const [gender, setGender] = useState("");
+  const [dob, setDob] = useState("");
+  const [phoneNum, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
   const [clicked, setClicked] = useState(false);
-  const isFormValid = username && password && (password === confirmedPassword);
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const isFormValid = username && password && (password === confirmedPassword) 
+                      && fullname && gender && dob && phoneNum && address
+                      && !passwordError && !confirmPasswordError && !emailError;
+
+  const handleUsernameChange = (event) => {
+    const newUsername = event.target.value;
+    setUsername(newUsername);
+
+    // Email validation logic
+    if (!newUsername.includes('@')) {
+      setEmailError("Email phải có dấu @.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handlePasswordChange = (event) => {
+    const newPassword = event.target.value;
+    setPassword(newPassword);
+
+    // Password validation logic
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordPattern.test(newPassword)) {
+      setPasswordError("Mật khẩu phải có ít nhất một chữ hoa, một chữ thường và một số.");
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    const newConfirmPassword = event.target.value;
+    setConfirmedPassword(newConfirmPassword);
+
+    if (newConfirmPassword !== password) {
+      setConfirmPasswordError("Mật khẩu nhập lại không khớp.");
+    } else {
+      setConfirmPasswordError("");
+    }
+  };
 
   const handleClick = () => {
     setClicked(true);
@@ -16,51 +64,133 @@ const Signup = () => {
     }, 1000);
   };
 
+  const handleSignup = async (event) => {
+    // event.preventDefault(); // Prevent form submission
+
+    if (!isFormValid) return; // Ensure form is valid before proceeding
+
+    // Prepare user info object
+    const userInfo = {
+      name: fullname,
+      email: username,
+      gender: gender,
+      dob: dob,
+      phone: phoneNum,
+      add: address,
+      // Add more fields as needed
+    };
+    
+    try {
+      // Call registerEmail function
+      const newUser = await registerEmail(username, password, userInfo);
+      console.log("User registered successfully:", newUser);
+      // Optionally, you can redirect to a success page or do something else upon successful registration
+    } catch (error) {
+      console.error("Error registering user:", error.message);
+      // Handle error (e.g., show error message to user)
+    }
+  };
+
   return (
     <div className='Signup'>
-      <div className ='signup-container'>
+      <div className='signup-container'>
         <h1>Đăng kí người dùng</h1>
-        <div className ='signup-fields'>
+        <div className='signup-fields'>
+          <div className='name-fields'>
+            <div>
+              <label>Họ và Tên</label>
+              <input
+                type='text'
+                placeholder='Họ và tên'
+                value={fullname}
+                onChange={(event) => setFullName(event.target.value)}
+              />
+            </div>
+          </div>
+          <label>Giới</label>
+          <div className='gender_options'>
+            <select
+              value={gender}
+              onChange={(event) => setGender(event.target.value)}
+              className='gender_dropdown'
+            >
+              <option value='male'>Nam</option>
+              <option value='female'>Nữ</option>
+              <option value='Khác'>Khác</option>
+            </select>
+          </div>
+          <label>Ngày tháng năm sinh</label>
           <input
-            type = 'text'
-            placeholder ='Tên tài khoản hoặc số điện thoại'
-            value = {username}
-            onChange = {(event)=> setUsername(event.target.value)}
+            type='date'
+            value={dob}
+            onChange={(event) => setDob(event.target.value)}
+            className='dob'
           />
+          <label>Số điện thoại</label>
           <input
-            type ='password'
-            placeholder ='Mật khẩu'
-            value ={password}
-            onChange ={(event)=> setPassword(event.target.value)}
+            type='text'
+            placeholder='Số điện thoại'
+            value={phoneNum}
+            onChange={(event) => setPhoneNumber(event.target.value)}
           />
+          <label>Địa chỉ</label>
           <input
-            type ='confirmedPassword'
-            placeholder = 'Nhập lại mật khẩu'
-            value = {confirmedPassword}
-            onChange = {(event)=>setConfirmedPassword(event.target.value)}
+            type='text'
+            placeholder='Địa chỉ'
+            value={address}
+            onChange={(event) => setAddress(event.target.value)}
           />
+          <label>Email</label>
+          <input
+            type='email'
+            placeholder='Email'
+            value={username}
+            onChange={handleUsernameChange}
+          />
+          {emailError && <p className='error'>{emailError}</p>}
+          <label>Mật khẩu</label>
+          <input
+            type='password'
+            placeholder='Mật khẩu'
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          {passwordError && <p className='error'>{passwordError}</p>}
+          <label>Nhập lại mật khẩu</label>
+          <input
+            type='password'
+            placeholder='Nhập lại mật khẩu'
+            value={confirmedPassword}
+            onChange={handleConfirmPasswordChange}
+          />
+          {confirmPasswordError && <p className='error'>{confirmPasswordError}</p>}
         </div>
-        <button className={isFormValid ? "active" : ""}
-          disabled={!isFormValid} 
+        <button 
+          className={isFormValid ? "active" : ""}
+          disabled={!isFormValid}
+          onClick={handleSignup}
         >
+        <Link to='/'>
           Đăng ký
+        </Link>
         </button>
-        <p className='signup-login'>Đã có tài khoản?
+      <p className='signup-login'>Đã có tài khoản?
         <span
           onClick={handleClick}
           style={{
-          color: clicked ? 'red' : 'blue', 
-          cursor: 'pointer',
-          textDecoration: clicked ? 'underline' : 'none',}}
+            color: clicked ? 'red' : 'blue',
+            cursor: 'pointer',
+            textDecoration: clicked ? 'underline' : 'none',
+          }}
         >
-          <Link to ='/LoginSignup'>
+          <Link to='/LoginSignup'>
             Đăng nhập ngay.
           </Link>
         </span>
-        </p>
+      </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

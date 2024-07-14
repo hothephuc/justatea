@@ -11,7 +11,7 @@ export async function getUserDocument(uid){
     return docsnap.data();
     } else {
     // docSnap.data() will be undefined in this case
-    return -1
+    return null
     }
 }
 
@@ -30,6 +30,7 @@ export async function addUserDoc(user, uid){
         dob: user.dob,
         gender:user.gender,
         email: user.email,
+        phone: user.phone,
         address: user.add
     });
 }

@@ -3,7 +3,7 @@ import { signOutUser } from "./auth";
 export function validateEmail(email) 
 {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email.trim());
 }
 
 export function validatePassword(password) 
@@ -11,15 +11,10 @@ export function validatePassword(password)
     const minLength = 6;
     const hasNumber = /\d/;
     const hasUpperCase = /[A-Z]/;
-    const hasLowerCase = /[a-z]/;
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
-  
     return (
       password.length >= minLength &&
       hasNumber.test(password) &&
-      hasUpperCase.test(password) &&
-      hasLowerCase.test(password) &&
-      hasSpecialChar.test(password)
+      hasUpperCase.test(password)
     );
 }
 
