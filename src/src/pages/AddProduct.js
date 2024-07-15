@@ -3,10 +3,14 @@ import './css/AddProduct.css';
 import { uploadProductInfo } from '../server/data-handle';
 
 const AddProduct = () => {
+  const [image,setImage] = useState(false);
+    const imageHandler = (e) => {
+        setImage(e.target.files[0]);
+    }
   const [productInfo, setProductInfo] = useState({
     name: '',
     price: '',
-    category: '', // Initialize category as an empty string
+    category: 'Tea', // Initialize category as an empty string
     description: '',
     image: null,
   });
@@ -64,7 +68,6 @@ const AddProduct = () => {
               value={productInfo.category}
               onChange={handleChange}
             >
-              <option value="">Chọn loại sản phẩm</option>
               <option value="Tea">Tea</option>
               <option value="Cafe">Cafe</option>
               <option value="Food">Food</option>
@@ -80,19 +83,20 @@ const AddProduct = () => {
               onChange={handleChange}
             />
           </div>
-          <div className='add-product-fields'>
-            <label htmlFor='file-input'>
-              <img src="https://static.thenounproject.com/png/187803-200.png" alt="" />
-              <input
-                type="file"
-                name="image"
-                id="file-input"
-                hidden
-                onChange={handleChange}
-              />
-            </label>
-          </div>
-          <button type="submit">Thêm sản phẩm</button>
+          <div className='add-product-fields'> 
+            <p>Hình ảnh</p>
+            <div className='add-product-image'>
+                <label htmlFor='file-input'>
+                    <img src={image?URL.createObjectURL(image):"https://static.thenounproject.com/png/187803-200.png"} alt=""></img>
+                </label>
+                <input onChange={imageHandler} type="file" name="image" id="file-input" hidden/>
+            </div>
+        </div>
+          <button 
+            type="submit"
+            className={productInfo.name && productInfo.price && productInfo.description && image? "active":""}
+            disabled={!productInfo.name || productInfo.price || productInfo.description || !image}
+          >Thêm sản phẩm</button>
         </form>
       </div>
     </div>
