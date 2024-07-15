@@ -42,12 +42,12 @@ export async function addUserDoc(user, uid){
 // Function to upload product information and image (dont accept duplicate product name)
 export async function uploadProductInfo(productInfo, imageFile) {
     try {
-       
         // Determine tag type
-        const tagType = getTagType(productInfo.tag);
+        const tagType = getTagType(productInfo.category);
 
+        console.log("tag type: " + tagType);
         // Construct storage path based on tag type and product name
-        const storagePath = `photos/${tagType}/${productInfo.name}/${imageFile.name}`;
+        const storagePath = `photos/${tagType}/${productInfo.name}`;
 
         // Upload image file to Firebase Storage
         const storageRef = ref(storage, storagePath);
@@ -56,18 +56,21 @@ export async function uploadProductInfo(productInfo, imageFile) {
         // Get download URL of the uploaded image
         const imageUrl = await getDownloadURL(snapshot.ref);
 
+        // Create a new document reference in the "products" collection
+        const productRef = doc(collection(db, "products"));
+
         // Add document with product information to Firestore
-        const docRef = await setDoc(collection(db, "products"), {
+        await setDoc(productRef, {
             name: productInfo.name,
             price: productInfo.price,
-            ingredients: productInfo.ingredients,
-            tag: productInfo.tag,
+            tag: productInfo.category,
+            description: productInfo.description,
             imageUrl: imageUrl,
             timestamp: new Date() // Add current timestamp
         });
 
-        console.log("Product information uploaded successfully with ID:", docRef.id);
-        return docRef.id; // Return the document ID if needed
+        console.log("Product information uploaded successfully with ID:", productRef.id);
+        return productRef.id; // Return the document ID if needed
     } catch (error) {
         if (error.message === "DuplicateProductName") {
             // Handle duplicate product name error on the frontend
