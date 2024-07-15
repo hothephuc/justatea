@@ -61,3 +61,20 @@
     border: 4px solid #5D7A55;
     padding: 7px;
 }
+
+.add-product-button{
+    width: 180px;
+    height: 50px;
+    border-radius: 12px;
+    border-color: #5D7A55;
+    font-size: 18px;
+    font-weight: 500;
+    color: #5D7A55;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.add-product-button:hover{
+    background-color: #5D7A55;
+    color: white;
+}
