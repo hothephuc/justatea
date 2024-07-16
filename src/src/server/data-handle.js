@@ -38,23 +38,50 @@ export async function addUserDoc(user, uid){
 }
 
 
-
-// Function to upload product information and image (dont accept duplicate product name)
-export async function uploadProductInfo(productInfo, imageFile) {
+/**
+ * Uploads an image to Firebase Storage and returns its download URL.
+ * 
+ * @param {File} imageFile - The image file to be uploaded.
+ * @param {string} storagePath - The path in Firebase Storage where the image will be stored.
+ * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded image.
+ * @throws {Error} - Throws an error if the image upload fails.
+ */
+async function uploadImage(imageFile, storagePath) {
     try {
-        // Determine tag type
-        const tagType = getTagType(productInfo.category);
-
-        console.log("tag type: " + tagType);
-        // Construct storage path based on tag type and product name
-        const storagePath = `photos/${tagType}/${productInfo.name}`;
-
         // Upload image file to Firebase Storage
         const storageRef = ref(storage, storagePath);
         const snapshot = await uploadBytes(storageRef, imageFile);
 
         // Get download URL of the uploaded image
         const imageUrl = await getDownloadURL(snapshot.ref);
+
+        return imageUrl;
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        throw error;
+    }
+}
+
+
+/**
+ * Uploads product information and an image to Firebase.
+ * 
+ * @param {Object} productInfo - The product information.
+ * @param {string} productInfo.name - The name of the product.
+ * @param {number} productInfo.price - The price of the product.
+ * @param {string} productInfo.category - The category of the product.
+ * @param {string} productInfo.description - The description of the product.
+ * @param {File} imageFile - The image file of the product.
+ * @returns {Promise<string>} - A promise that resolves to the document ID of the uploaded product.
+ * @throws {Error} - Throws an error if the product upload fails.
+ */
+export async function uploadProductInfo(productInfo, imageFile) {
+    try {
+        // Construct storage path based on category and product name
+        const storagePath = `photos/${productInfo.category}/${productInfo.name}`;
+
+        // Upload image and get the URL
+        const imageUrl = await uploadImage(imageFile, storagePath);
 
         // Create a new document reference in the "products" collection
         const productRef = doc(collection(db, "products"));
@@ -63,7 +90,7 @@ export async function uploadProductInfo(productInfo, imageFile) {
         await setDoc(productRef, {
             name: productInfo.name,
             price: productInfo.price,
-            tag: productInfo.category,
+            category: productInfo.category,
             description: productInfo.description,
             imageUrl: imageUrl,
             timestamp: new Date() // Add current timestamp
