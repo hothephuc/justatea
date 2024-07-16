@@ -2,21 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
 import logo from '../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { checkAuthState } from './yourAuthUtils';  // Import hàm kiểm tra trạng thái đăng nhập
-import { signOutUser } from './yourSignOutUtils';  // Import hàm đăng xuất người dùng
+import { signOutUser, checkAuthState} from '../../server/auth'; 
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
-  const [user, setUser] = useState(null);  // State để lưu thông tin người dùng
+  const [user, setUser] = useState(null);  
   const navRef = useRef();
-  const navigate = useNavigate();  // Hook để điều hướng sau khi đăng xuất
+  const navigate = useNavigate();  
 
-  // Hiển thị hoặc ẩn navbar responsive
+
   const showNavbar = () => {
     navRef.current.classList.toggle('responsive-nav');
   };
 
-  // Kiểm tra trạng thái đăng nhập khi component được mount
+
   useEffect(() => {
     checkAuthState().then((authState) => {
       if (authState) {
@@ -32,9 +31,9 @@ const Navbar = () => {
   // Hàm xử lý đăng xuất
   const handleLogout = async () => {
     try {
-      await signOutUser();  // Sử dụng hàm đăng xuất người dùng
+      await signOutUser();  /
       setUser(null);
-      navigate('/');  // Điều hướng về trang chủ sau khi đăng xuất
+      navigate('/');  
     } catch (error) {
       console.error('Error during sign out:', error);
     }
