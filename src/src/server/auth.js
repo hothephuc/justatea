@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,onAuthStateChanged } from "firebase/auth";
 import { addUserDoc, getUserDocument } from "./data-handle";
 import {validateEmail, validatePassword} from "./utils"
 const auth = getAuth();
@@ -96,6 +96,7 @@ export async function signInEmail(email, password) {
       console.log("User date of birth:", userData.dob);
       console.log("User gender:", userData.gender);
       console.log("User email:", userData.email);
+      console.log("User phonenumber:",userData.phone);
       console.log("User address:", userData.address);
     } else {
       console.log("No user data found for UID:", user.uid);
@@ -138,4 +139,36 @@ export async function resetPassword(email) {
     console.error("Error sending password reset email:", errorCode, errorMessage);
     throw error; // Re-throw the error if you want to handle it further up the call stack
   }
+}
+
+export function checkAuthState() {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log('User is signed in:', user);
+
+        let userData = await getUserDocument(user.uid);
+
+        if (!userData) {
+          // Nếu tài liệu người dùng không tồn tại, tạo tài liệu mới
+          const newUserData = {
+            name: user.displayName || '',
+            dob: '',  // Giá trị mặc định hoặc để trống
+            gender: '',  // Giá trị mặc định hoặc để trống
+            email: user.email || '',
+            phone: '',  // Giá trị mặc định hoặc để trống
+            add: ''  // Giá trị mặc định hoặc để trống
+          };
+
+          await addUserDoc(newUserData, user.uid);
+          userData = newUserData;
+        }
+
+        resolve({ user, userData });
+      } else {
+        console.log('No user is signed in.');
+        resolve(null);
+      }
+    });
+  });
 }

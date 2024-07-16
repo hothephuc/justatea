@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './css/Signup.css';
 import { Link } from 'react-router-dom';
 import { registerEmail } from '../server/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {  
   const [fullname, setFullName] = useState("");
@@ -16,9 +17,12 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const isFormValid = username && password && (password === confirmedPassword) 
-                      && fullname && gender && dob && phoneNum && address
+                      && fullname  && dob && phoneNum && address
                       && !passwordError && !confirmPasswordError && !emailError;
 
   const handleUsernameChange = (event) => {
@@ -38,9 +42,9 @@ const Signup = () => {
     setPassword(newPassword);
 
     // Password validation logic
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
     if (!passwordPattern.test(newPassword)) {
-      setPasswordError("Mật khẩu phải có ít nhất một chữ hoa, một chữ thường và một số.");
+      setPasswordError("Mật khẩu phải có đủ 6 chữ số và có ít nhất một chữ hoa, một chữ thường và một số.");
     } else {
       setPasswordError("");
     }
@@ -65,16 +69,18 @@ const Signup = () => {
   };
 
   const handleSignup = async (event) => {
-    // event.preventDefault(); // Prevent form submission
-
-    if (!isFormValid) return; // Ensure form is valid before proceeding
-
+    event.preventDefault(); // Prevent form submission
+    console.log('Gender:', gender);
+    if (!isFormValid){
+      console.log("Form is invalid!")
+      return; // Ensure form is valid before proceeding
+    }
     // Prepare user info object
     const userInfo = {
       name: fullname,
-      email: username,
-      gender: gender,
       dob: dob,
+      gender: gender,
+      email: username,
       phone: phoneNum,
       add: address,
       // Add more fields as needed
@@ -84,10 +90,10 @@ const Signup = () => {
       // Call registerEmail function
       const newUser = await registerEmail(username, password, userInfo);
       console.log("User registered successfully:", newUser);
-      // Optionally, you can redirect to a success page or do something else upon successful registration
+      navigate('/');
     } catch (error) {
       console.error("Error registering user:", error.message);
-      // Handle error (e.g., show error message to user)
+      setErrorMessage(error.message);
     }
   };
 
@@ -107,7 +113,7 @@ const Signup = () => {
               />
             </div>
           </div>
-          <label>Giới</label>
+          <label>Giới tính</label>
           <div className='gender_options'>
             <select
               value={gender}
@@ -170,10 +176,9 @@ const Signup = () => {
           disabled={!isFormValid}
           onClick={handleSignup}
         >
-        <Link to='/'>
           Đăng ký
-        </Link>
         </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       <p className='signup-login'>Đã có tài khoản?
         <span
           onClick={handleClick}

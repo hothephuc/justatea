@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './css/LoginSignup.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { signInGoogle, resetPassword, signInEmail } from '../server/auth';
 
@@ -13,6 +13,7 @@ const LoginSignup = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     setClicked(true);
@@ -22,26 +23,29 @@ const LoginSignup = () => {
   };
 
   const handleLogin = async () => {
-    try{
+    try {
       await signInEmail(username, password);
       console.log('Sign in successful');
-    }catch(error){
-      setErrorMessage('Email or passwords are incorrect')
+      navigate('/')
+    } catch (error) {
+      setErrorMessage('Email or passwords are incorrect');
     }
   };
 
   const handleGoogleSignIn = async () => {
     try {
-      const google_user = await signInGoogle();
-      // json object, if there is this user in database will return full data 
-      //otherwise onely 3 fields got from google uid,email,name are returned
+      const googleUser = await signInGoogle();
       console.log('Google sign-in successful');
-      console.log(google_user);
-      if(Object.keys(google_user).length === 3){
-        // 3 fields means there isnt data of this user in database yet
+      console.log(googleUser);
+
+      if (Object.keys(googleUser).length === 3) {
+        navigate('/');
+      } else {
+        navigate('/ChangeProfile');
       }
     } catch (error) {
       console.error('Google sign-in error:', error);
+      setErrorMessage('Không thể đăng nhập bằng google');
     }
   };
 
@@ -51,9 +55,9 @@ const LoginSignup = () => {
       console.log('Password reset email sent successfully');
     } catch (error) {
       console.error('Error sending password reset email:', error);
+      setErrorMessage('Mật khẩu hoặc email đăng nhập không đúng.')
     }
   };
-
 
   return (
     <div className={`loginsignup ${showResetPassword ? 'expanded' : ''}`}>
@@ -125,15 +129,8 @@ const LoginSignup = () => {
         )}
         <hr/>
         <div className='Single-col Social-icon d-flex justify-content-evenly'>
-          <div onClick={() => window.location.href = 'https://facebook.com'}>
-            <Link to='/ChangeProfile'>
-              <FontAwesomeIcon icon={faFacebook} />
-            </Link>
-          </div>
           <div onClick={handleGoogleSignIn}>
-            <Link to='/ChangeProfile'>
-              <FontAwesomeIcon icon={faGoogle} />
-            </Link>
+            <FontAwesomeIcon icon={faGoogle} />
           </div>   
         </div>
       </div>

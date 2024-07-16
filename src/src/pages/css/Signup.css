@@ -23,11 +23,12 @@
     display: flex;
     flex-direction: column;
     gap: 0px;
-    margin-top: 30px;
 }
 .signup-fields .name-fields {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 0px;
+    margin-top: 30px;
   }
   
 .signup-fields .name-fields input {
@@ -35,22 +36,16 @@
 }
 
 .gender_dropdown {
-    font-size: 1.2em;
+    font-size: 18px;
     padding: 10px;
     width: 100%;
     box-sizing: border-box; 
-    border: none;   
-    outline: none;   
-}
-
-.gender_dropdown:focus {
-    border: none; 
-    outline:none;
-
+    border: 2px solid black;  
+    outline: none;  
 }
 
 .dob{
-    font-size: 1.2em; 
+    font-size: 18px;
     padding: 10px;    
     width: 100%;      
     box-sizing: border-box;
