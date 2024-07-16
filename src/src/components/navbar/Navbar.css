@@ -33,7 +33,7 @@
   justify-content: center;
   gap: 0px;
   cursor: pointer;
-  position: relative; /* Cần thiết để thanh hr hoạt động đúng */
+  position: relative; /* Necessary for hr to work correctly */
 }
 
 .nav-menu li:hover {
@@ -43,17 +43,17 @@
 
 .nav-menu li hr {
   position: absolute;
-  bottom: -15px;
+  bottom: -15px; 
   width: 100%;
   border: none;
   height: 3px;
   background: #f6edd9;
   border-radius: 10px;
-  display: none; /* Ẩn thanh hr theo mặc định */
+  display: none; 
 }
 
-.nav-menu li:hover hr {
-  display: block; /* Hiển thị thanh hr khi hover */
+.nav-menu li:hover hr, .nav-menu li.active hr {
+  display: block; /* Show hr on hover and when active */
 }
 
 .nav-logo {

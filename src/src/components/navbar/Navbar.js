@@ -20,6 +20,7 @@ const Navbar = () => {
     checkAuthState().then((authState) => {
       if (authState) {
         setUser(authState.user);
+        console.log("user online")
       } else {
         setUser(null);
       }
@@ -31,7 +32,7 @@ const Navbar = () => {
   // Hàm xử lý đăng xuất
   const handleLogout = async () => {
     try {
-      await signOutUser();  /
+      await signOutUser();
       setUser(null);
       navigate('/');  
     } catch (error) {
@@ -50,24 +51,24 @@ const Navbar = () => {
           <img src={logo} alt="JustaTea Logo" />
         </div>
         <li onClick={() => { setMenu('home'); showNavbar(); }}>
-          <Link to="/" className={menu === 'home' ? 'active' : ''} aria-label="Home">Trang chủ</Link>
-          <hr className={menu === 'home' ? 'active' : 'inactive'} />
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/">Trang chủ</Link>
+          {menu === 'home' ? <hr/> : null}
         </li>
         <li onClick={() => { setMenu('product'); showNavbar(); }}>
-          <Link to="/Menu" className={menu === 'product' ? 'active' : ''} aria-label="Menu">Thực đơn</Link>
-          <hr className={menu === 'product' ? 'active' : 'inactive'} />
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Menu">Thực đơn</Link>
+          {menu === 'product' ? <hr/> : null}
         </li>
         <li onClick={() => { setMenu('about'); showNavbar(); }}>
-          <Link to="/About" className={menu === 'about' ? 'active' : ''} aria-label="About Us">Về chúng tôi</Link>
-          <hr className={menu === 'about' ? 'active' : 'inactive'} />
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/About">Về chúng tôi</Link>
+          {menu === 'about' ? <hr/> : null}
         </li>
         <li onClick={() => { setMenu('picture'); showNavbar(); }}>
-          <Link to="/Picture" className={menu === 'picture' ? 'active' : ''} aria-label="Pictures">Hình ảnh</Link>
-          <hr className={menu === 'picture' ? 'active' : 'inactive'} />
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
+          {menu === 'picture' ? <hr/> : null}
         </li>
         <li onClick={() => { setMenu('contact'); showNavbar(); }}>
-          <Link to="/Contact" className={menu === 'contact' ? 'active' : ''} aria-label="Contact">Liên hệ</Link>
-          <hr className={menu === 'contact' ? 'active' : 'inactive'} />
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
+          {menu === 'contact' ? <hr/> : null}
         </li>
         <div className="nav-login-button">
           {user ? (
