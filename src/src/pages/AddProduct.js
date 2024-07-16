@@ -3,16 +3,12 @@ import './css/AddProduct.css';
 import { uploadProductInfo } from '../server/data-handle';
 
 const AddProduct = () => {
-  const [image,setImage] = useState(false);
-    const imageHandler = (e) => {
-        setImage(e.target.files[0]);
-    }
   const [productInfo, setProductInfo] = useState({
     name: '',
     price: '',
     category: 'Tea', // Initialize category as an empty string
     description: '',
-    image: null,
+    image: '',
   });
 
   const handleChange = (e) => {
@@ -87,15 +83,15 @@ const AddProduct = () => {
             <p>Hình ảnh</p>
             <div className='add-product-image'>
                 <label htmlFor='file-input'>
-                    <img src={image?URL.createObjectURL(image):"https://static.thenounproject.com/png/187803-200.png"} alt=""></img>
+                    <img src={productInfo.image?URL.createObjectURL(productInfo.image):"https://static.thenounproject.com/png/187803-200.png"} alt=""></img>
                 </label>
-                <input onChange={imageHandler} type="file" name="image" id="file-input" hidden/>
+                <input onChange={handleChange} type="file" name="image" id="file-input" hidden/>
             </div>
         </div>
           <button 
             type="submit"
-            className={productInfo.name && productInfo.price && productInfo.description && image? "active":""}
-            disabled={!productInfo.name || productInfo.price || productInfo.description || !image}
+            className={productInfo.name && productInfo.price && productInfo.description && productInfo.image? "active":""}
+            disabled={!productInfo.name || !productInfo.price || !productInfo.description || !productInfo.image}
           >Thêm sản phẩm</button>
         </form>
       </div>
