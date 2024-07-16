@@ -34,7 +34,8 @@ const Navbar = () => {
     try {
       await signOutUser();
       setUser(null);
-      navigate('/');  
+      navigate('/'); 
+      window.location.reload(); 
     } catch (error) {
       console.error('Error during sign out:', error);
     }

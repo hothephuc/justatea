@@ -27,6 +27,7 @@ const LoginSignup = () => {
       await signInEmail(username, password);
       console.log('Sign in successful');
       navigate('/')
+      window.location.reload(); 
     } catch (error) {
       setErrorMessage('Email or passwords are incorrect');
     }
