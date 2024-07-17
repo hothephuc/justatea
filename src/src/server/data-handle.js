@@ -90,7 +90,7 @@ export async function uploadProductInfo(productInfo, imageFile) {
         await setDoc(productRef, {
             name: productInfo.name,
             price: productInfo.price,
-            category: productInfo.category,
+            tag: productInfo.category,
             description: productInfo.description,
             imageUrl: imageUrl,
             timestamp: new Date() // Add current timestamp
