@@ -1,5 +1,5 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc,getFirestore, updateDoc } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 const db = getFirestore(app);
@@ -26,6 +26,12 @@ export async function getUserDocument(uid){
 //     add: '123 Main St, Anytown, USA'
 // };
 
+export async function setAdmin(uid){
+    await updateDoc(doc(db,"users",uid),{
+        role: "Admin"
+    });
+}
+
 export async function addUserDoc(user, uid){
     await setDoc(doc(db,"users",uid),{
         fullname: user.name,
@@ -33,11 +39,11 @@ export async function addUserDoc(user, uid){
         gender:user.gender,
         email: user.email,
         phone: user.phone,
-        address: user.add
+        address: user.add,
+        role: "Costumer"
     });
+
 }
-
-
 
 // Function to upload product information and image (dont accept duplicate product name)
 export async function uploadProductInfo(productInfo, imageFile) {
