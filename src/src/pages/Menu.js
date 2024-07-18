@@ -4,6 +4,7 @@ import Item from '../components/item/Item.js'
 import './css/Menu.css'
 import banner from '../components/assets/banner.jpg'
 import menu_category from '../components/assets/Category.js'
+import searchIcon from '../components/assets/search-icon.png'; // Assuming you have a search icon
 
 const Menu = () => {
   const { product_data } = useContext(MenuContext);
@@ -39,7 +40,8 @@ const Menu = () => {
 
   const filteredProducts = product_data.filter(item =>
     (category === "All" || item.tag === category) &&
-    item.name.toLowerCase().includes(searchQuery) &&
+    (item.name.toLowerCase().includes(searchQuery) || 
+     item.description.toLowerCase().includes(searchQuery)) && // assuming each item has a description
     filterByPrice(item)
   );
 
@@ -53,28 +55,33 @@ const Menu = () => {
     <div className='menu'>
       <img className='banner' src={banner} alt="" />
       <h1 className='menu-header'>Thực đơn</h1>
-      <form className='search-form' onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchInput}
-          onChange={handleSearchInputChange}
-          className='search-bar'
-        />
-        <button type="submit" className='search-button'>Search</button>
-      </form>
-      <div className='filter-sort'>
-        <select onChange={handleSortChange} value={sortOrder} className='sort-dropdown'>
-          <option value="default">Sort by Price</option>
-          <option value="asc">Low to High</option>
-          <option value="desc">High to Low</option>
-        </select>
-        <select onChange={handlePriceFilterChange} value={priceFilter} className='filter-dropdown'>
-          <option value="all">All Prices</option>
-          <option value="below20">Below 20000</option>
-          <option value="20to50">20000 - 50000</option>
-          <option value="above50">Above 50000</option>
-        </select>
+      <div className='search-icon-wrapper'>
+        <img src={searchIcon} alt="Search" className='search-icon' />
+        <div className='search-form-wrapper'>
+          <form className='search-form' onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchInput}
+              onChange={handleSearchInputChange}
+              className='search-bar'
+            />
+            <button type="submit" className='search-button'>Search</button>
+          </form>
+          <div className='filter-sort'>
+            <select onChange={handleSortChange} value={sortOrder} className='sort-dropdown'>
+              <option value="default">Sort by Price</option>
+              <option value="asc">Low to High</option>
+              <option value="desc">High to Low</option>
+            </select>
+            <select onChange={handlePriceFilterChange} value={priceFilter} className='filter-dropdown'>
+              <option value="all">All Prices</option>
+              <option value="below20">Dưới 20000</option>
+              <option value="20to50">20000 - 50000</option>
+              <option value="above50">Trên 50000</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div className='category'>
         {menu_category.map((item, index) => (
