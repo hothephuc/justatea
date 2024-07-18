@@ -109,3 +109,30 @@ export async function uploadProductInfo(productInfo, imageFile) {
         }
     }
 }
+
+/**
+ * Retrieves product information from Firestore.
+ * 
+ * @param {string} productId - The document ID of the product.
+ * @returns {Promise<Object>} - A promise that resolves to the product information.
+ * @throws {Error} - Throws an error if the product retrieval fails.
+ */
+export async function retrieveProductInfo(productId) {
+    try {
+        // Create a document reference for the specified product ID
+        const productRef = doc(db, "products", productId);
+
+        // Get the document
+        const productDoc = await getDoc(productRef);
+
+        if (!productDoc.exists()) {
+            throw new Error("Product not found");
+        }
+
+        // Return the product data
+        return productDoc.data();
+    } catch (error) {
+        console.error("Error retrieving product information:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
