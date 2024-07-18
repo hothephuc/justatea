@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './css/AddProduct.css';
 import { uploadProductInfo } from '../server/data-handle';
+import menu_category from '../components/assets/Category';
 
 const AddProduct = () => {
   const [productInfo, setProductInfo] = useState({
@@ -64,9 +65,14 @@ const AddProduct = () => {
               value={productInfo.category}
               onChange={handleChange}
             >
-              <option value="Tea">Tea</option>
+              {/* <option value="Tea">Tea</option>
               <option value="Cafe">Cafe</option>
-              <option value="Food">Food</option>
+              <option value="Food">Food</option> */}
+              {menu_category.map((item,index)=>{
+              return(
+                <option value={item.category_name} key={index}>{item.category_name}</option>
+              )
+              })}
             </select>
           </div>
           <div className='add-product-fields'>
