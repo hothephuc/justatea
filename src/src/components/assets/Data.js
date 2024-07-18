@@ -8,28 +8,28 @@ let product_data=[
         id:1,
         name:"Espresso",
         image:p1_img,
-        price: 100000,
+        price: 10000,
         tag: "Cafe"
     },
     {
         id:2,
         name:"Matcha",
         image:p2_img,
-        price: 100000,
+        price: 300000,
         tag: "Tea"
     },
     {
         id:3,
         name:"Latte",
         image:p3_img,
-        price: 100000,
+        price: 40000,
         tag: "Cafe"
     },
     {
         id:4,
         name:"Tea",
         image:p4_img,
-        price: 100000,
+        price: 50000,
         tag: "Tea"
     }
 ];
