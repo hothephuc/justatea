@@ -5,7 +5,7 @@ import Profile from './Profile'
 const Home = () => {
   return (
     <div>
-      <Profile/>
+      <Hero></Hero>
     </div>
   )
 }
