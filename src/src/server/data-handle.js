@@ -27,6 +27,7 @@ export async function getUserDocument(uid){
 //     add: '123 Main St, Anytown, USA'
 // };
 
+
 export async function updateUserDoc(user,uid){
     await updateDoc(doc(db,'users',uid),{
         fullname :user.name,
@@ -34,6 +35,11 @@ export async function updateUserDoc(user,uid){
         gender:user.gender,
         phone:user.phone,
         address: user.add
+    });
+}
+export async function setAdmin(uid){
+    await updateDoc(doc(db,"users",uid),{
+        role: "Admin"
     });
 }
 
@@ -44,11 +50,11 @@ export async function addUserDoc(user, uid){
         gender:user.gender,
         email: user.email,
         phone: user.phone,
-        address: user.add
+        address: user.add,
+        role: "Costumer"
     });
+
 }
-
-
 
 // Function to upload product information and image (dont accept duplicate product name)
 export async function uploadProductInfo(productInfo, imageFile) {
