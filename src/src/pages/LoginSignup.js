@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { signInGoogle, resetPassword, signInEmail } from '../server/auth';
+import { MDBInput } from 'mdb-react-ui-kit';
 
 const LoginSignup = () => {
   const [username, setUsername] = useState("");
@@ -41,8 +42,10 @@ const LoginSignup = () => {
 
       if (Object.keys(googleUser).length === 3) {
         navigate('/');
+        window.reload.location();
       } else {
         navigate('/ChangeProfile');
+        window.reload.location();
       }
     } catch (error) {
       console.error('Google sign-in error:', error);

@@ -1,7 +1,8 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc,getFirestore,updateDoc } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
+
 const db = getFirestore(app);
 const storage = getStorage(app);
 
@@ -25,6 +26,16 @@ export async function getUserDocument(uid){
 //     email: 'john.doe@example.com',
 //     add: '123 Main St, Anytown, USA'
 // };
+
+export async function updateUserDoc(user,uid){
+    await updateDoc(doc(db,'users',uid),{
+        fullname :user.name,
+        dob: user.dob,
+        gender:user.gender,
+        phone:user.phone,
+        address: user.add
+    });
+}
 
 export async function addUserDoc(user, uid){
     await setDoc(doc(db,"users",uid),{

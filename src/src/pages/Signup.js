@@ -70,7 +70,6 @@ const Signup = () => {
 
   const handleSignup = async (event) => {
     event.preventDefault(); // Prevent form submission
-    console.log('Gender:', gender);
     if (!isFormValid){
       console.log("Form is invalid!")
       return; // Ensure form is valid before proceeding
@@ -120,6 +119,7 @@ const Signup = () => {
               onChange={(event) => setGender(event.target.value)}
               className='gender_dropdown'
             >
+              <option value='Chọn giới tính'></option>
               <option value='male'>Nam</option>
               <option value='female'>Nữ</option>
               <option value='Khác'>Khác</option>

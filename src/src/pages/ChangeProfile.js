@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../pages/css/ChangeProfile.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { updateUserDoc } from '../server/data-handle';
+import { getAuth } from 'firebase/auth';
 
 const ChangeProfile = () => {
   const [fullName, setFullName] = useState("");
@@ -8,13 +10,48 @@ const ChangeProfile = () => {
   const [dob, setDob] = useState("");
   const [phoneNum, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
+  const navigate = useNavigate();
 
   const isFormValid =  fullName && gender && dob && phoneNum && address;
+
+  const handleSubmit = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+    if (uid && isFormValid) {
+        const userData = {
+            name: fullName,
+            dob:dob,
+            gender:gender,
+            email: '',
+            phone: phoneNum,
+            add: address
+        };
+        try {
+            await updateUserDoc(userData, uid);
+            alert('Profile updated successfully!');
+            console.log(userData.name)
+            console.log(userData.dob)
+            console.log(userData.gender)
+            console.log(userData.email)
+            console.log(userData.phone)
+            console.log(userData.add)
+            navigate('/');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Error updating profile. Please try again.');
+        }
+    } else {
+        alert('Please fill in all fields and make sure you are logged in.');
+    }
+};
 
   return (
     <div className='change-profile'>
       <div className='changeProfile-container'>
-        <h1>Đăng kí người dùng</h1>
+        <h1>Nhập thông tin </h1>
         <div className='changeProfile-fields'>
           <div className='name-fields'>
             <div>
@@ -62,10 +99,8 @@ const ChangeProfile = () => {
             onChange={(event) => setAddress(event.target.value)}
           />
         </div>
-        <button className='button' disabled={!isFormValid}>
-          <Link to={isFormValid ? '/' : '#'}>
-            Đăng ký
-          </Link>
+        <button className='button' disabled={!isFormValid} onClick={handleSubmit}>
+            Cập nhật
         </button>
       </div>
     </div>

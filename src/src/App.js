@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Product from "./pages/Product";
 import ChangeProfile from "./pages/ChangeProfile";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='LoginSignup' element={<LoginSignup/>}/>
         <Route path='/Signup' element={<Signup/>}/>
         <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
+        <Route path='/Profile' element={<Profile/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>
