@@ -4,6 +4,7 @@ import Item from '../components/item/Item.js'
 import './css/Menu.css'
 import banner from '../components/assets/banner.jpg'
 import menu_category from  '../components/assets/Category.js'
+import { Link } from 'react-router-dom'
 
 const Menu = () => {
   const {product_data}=useContext(MenuContext);
@@ -30,6 +31,9 @@ const Menu = () => {
           } 
         })}
       </div>
+      <Link to='/AddProduct' style={{ textDecoration: 'none' }}>
+        <button className='add-product-button'>Thêm sản phẩm</button>
+      </Link>
     </div>
   )
 }

@@ -43,7 +43,15 @@ export async function signInGoogle() {
   });
 }
 
-
+/**
+ * Registers a new user with email and password, and saves additional user information to Firestore.
+ * 
+ * @param {string} email - The email address of the user to be registered.
+ * @param {string} password - The password for the new user account.
+ * @param {Object} userInfo - Additional information about the user.
+ * @returns {Promise<Object>} - A promise that resolves to the user object if registration is successful.
+ * @throws {Error} - Throws an error if registration fails or if the email/password is invalid.
+ */
 export async function registerEmail(email, password, userInfo) {
   // Validate email and password
   if (!validateEmail(email)) {
@@ -77,7 +85,14 @@ export async function registerEmail(email, password, userInfo) {
   }
 }
 
-
+/**
+ * Signs in a user with email and password, and retrieves the user data from Firestore.
+ * 
+ * @param {string} email - The email address of the user attempting to sign in.
+ * @param {string} password - The password of the user attempting to sign in.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the user and user data if sign-in is successful.
+ * @throws {Error} - Throws an error if sign-in fails.
+ */
 export async function signInEmail(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -112,6 +127,12 @@ export async function signInEmail(email, password) {
   }
 }
 
+/**
+ * Signs out the currently authenticated user.
+ * 
+ * @returns {Promise<void>} - A promise that resolves when the user is successfully signed out.
+ * @throws {Error} - Throws an error if sign-out fails.
+ */
 export async function signOutUser() {
   try {
     await signOut(auth);
@@ -122,7 +143,13 @@ export async function signOutUser() {
   }
 }
 
-// Need to verify new password using validate password function 
+/**
+ * Sends a password reset email to the user.
+ * 
+ * @param {string} email - The email address of the user requesting a password reset.
+ * @returns {Promise<void>} - A promise that resolves when the password reset email is successfully sent.
+ * @throws {Error} - Throws an error if the email format is invalid or if sending the password reset email fails.
+ */
 export async function resetPassword(email) {
   // Validate email
   if (!validateEmail(email)) {
