@@ -38,10 +38,17 @@ const Menu = () => {
     if (priceFilter === "above50") return item.price > 50000;
   };
 
+  // const filteredProducts = product_data.filter(item =>
+  //   (category === "All" || item.tag === category) &&
+  //   (item.name.toLowerCase().includes(searchQuery) || 
+  //    item.description.toLowerCase().includes(searchQuery)) && // assuming each item has a description
+  //   filterByPrice(item)
+  // );
+
   const filteredProducts = product_data.filter(item =>
     (category === "All" || item.tag === category) &&
-    (item.name.toLowerCase().includes(searchQuery) || 
-     item.description.toLowerCase().includes(searchQuery)) && // assuming each item has a description
+    ((item.name && item.name.toLowerCase().includes(searchQuery)) || 
+     (item.tag && item.tag.toLowerCase().includes(searchQuery))) && // assuming each item has a description
     filterByPrice(item)
   );
 
