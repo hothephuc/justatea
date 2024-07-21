@@ -52,7 +52,7 @@ const Menu = () => {
   const filteredProducts = productData.filter(item =>
     (category === "All" || item.tag === category) &&
     ((item.name && item.name.toLowerCase().includes(searchQuery)) || 
-     (item.tag && item.tag.toLowerCase().includes(searchQuery))) &&
+    (item.tag && item.tag.toLowerCase().includes(searchQuery))) &&
     filterByPrice(item)
   );
 
@@ -109,7 +109,7 @@ const Menu = () => {
       <hr />
       <div className='menu-items'>
         {sortedProducts.map((item, i) => (
-          <Item key={i} id={item.id} name={item.name} image={item.image} price={item.price} tag={item.tag} />
+          <Item key={i} id={item.id} name={item.name} imageUrl={item.imageUrl} price={item.price} tag={item.tag} />
         ))}
       </div>
       <Link to='/AddProduct' style={{ textDecoration: 'none' }}>
