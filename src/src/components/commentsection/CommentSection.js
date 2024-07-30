@@ -2,14 +2,14 @@ import React,  {useState} from 'react'
 import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
-import userData from '../assets/user.js';
+import user_data from '../assets/user.js';
 
 const CommentSection = ({ productID }) => {
     const [comments, setComments] = useState(comment_data);
     
     const [newComment, setNewComment] = useState('');
     const productComments = comments.filter(comment => comment.productID === productID);
-    const currentUser=userData.find(user=>user.userID===3)
+    const currentUser=user_data.find(user=>user.userID===3)
 
     const addComment = (newComment) => {
       setComments(prevComments => [...prevComments, newComment]);
@@ -17,7 +17,7 @@ const CommentSection = ({ productID }) => {
 
     const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
-        e.preventDefault(); // Ngăn chặn hành động mặc định (như submit form nếu có)
+        e.preventDefault(); 
         handleAddComment();
       }
     };

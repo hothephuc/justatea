@@ -1,9 +1,9 @@
 import React from 'react'
-import userData from '../assets/user'
+import user_data from '../assets/user'
 import './Comment.css'
 
 const Comment = ({comment}) => {
-    const user=userData.find(user=>user.userID===comment.userID)
+    const user=user_data.find(user=>user.userID===comment.userID)
   return (
     <div className='comment'>
       <img src={user.avatar} alt={user.name}/>
