@@ -1,5 +1,5 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore,updateDoc } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 
@@ -18,23 +18,13 @@ export async function getUserDocument(uid){
     }
 }
 
-// the user pass into the addUserDoc function need to have all the attributes. Example: 
-// const user = {
-//     name: 'John Doe',
-//     dob: '1990-01-01',
-//     gender: 'male',
-//     email: 'john.doe@example.com',
-//     add: '123 Main St, Anytown, USA'
-// };
-
-
 export async function updateUserDoc(user,uid){
     await updateDoc(doc(db,'users',uid),{
         fullname :user.name,
         dob: user.dob,
         gender:user.gender,
         phone:user.phone,
-        address: user.add
+        address: user.add, 
     });
 }
 export async function setAdmin(uid){
@@ -43,18 +33,39 @@ export async function setAdmin(uid){
     });
 }
 
-export async function addUserDoc(user, uid){
-    await setDoc(doc(db,"users",uid),{
-        fullname: user.name,
-        dob: user.dob,
-        gender:user.gender,
-        email: user.email,
-        phone: user.phone,
-        address: user.add,
-        role: "Costumer"
-    });
+/**
+ * Adds a user document to Firestore.
+ * 
+ * @param {Object} user - The user object containing user information.
+ * @param {string} uid - The unique user ID.
+ * @param {File} [imageFile] - The image file for the user's avatar (optional).
+ * @returns {Promise<void>} - A promise that resolves when the user document is added.
+ * @throws {Error} - Throws an error if the document creation fails.
+ */
+export async function addUserDoc(user, uid, imageFile = null) {
+    try {
+        // Upload avatar image and get the URL (or an empty string if no image is provided)
+        const imageUrl = await upload_image_ava(imageFile, uid);
 
+        // Set user document in Firestore
+        await setDoc(doc(db, "users", uid), {
+            fullname: user.name,
+            dob: user.dob,
+            gender: user.gender,
+            email: user.email,
+            phone: user.phone,
+            address: user.add,
+            role: "Customer",
+            imageUrl: imageUrl // Add the image URL to the user document
+        });
+
+        console.log("User document added successfully");
+    } catch (error) {
+        console.error("Error adding user document:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
 }
+
 /**
  * Uploads an image to Firebase Storage and returns its download URL.
  * 
@@ -79,6 +90,22 @@ async function uploadImage(imageFile, storagePath) {
     }
 }
 
+
+/**
+ * Uploads an avatar image to Firebase Storage and returns its download URL.
+ * 
+ * @param {File} imageFile - The image file to be uploaded.
+ * @param {string} userId - The user ID to construct the storage path.
+ * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded avatar.
+ * @throws {Error} - Throws an error if the image upload fails.
+ */
+async function upload_image_ava(imageFile, userId) {
+    if (imageFile) {
+        const storagePath = `avatars/${userId}`;
+        return await uploadImage(imageFile, storagePath);
+    }
+    return ""; // Return an empty string if no image file is provided
+}
 
 /**
  * Uploads product information and an image to Firebase.
@@ -150,6 +177,37 @@ export async function retrieveProductInfo(productId) {
         return productDoc.data();
     } catch (error) {
         console.error("Error retrieving product information:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
+
+/**
+ * Uploads a product comment to Firestore.
+ * 
+ * @param {Object} comment - The comment object containing comment details.
+ * @param {string} comment.ProductID - The ID of the product being reviewed.
+ * @param {string} comment.CustomerID - The ID of the customer making the review.
+ * @param {string} comment.Comment - The comment text.
+ * @returns {Promise<void>} - A promise that resolves when the comment is uploaded.
+ * @throws {Error} - Throws an error if the document creation fails.
+ */
+export async function uploadComment(comment) 
+{
+    try {
+        // Create a new document reference in the "comments" collection
+        const commentRef = doc(collection(db, "comments"));
+
+        // Add document with comment information to Firestore
+        await setDoc(commentRef, {
+            ProductID: comment.ProductID,
+            CustomerID: comment.CustomerID,
+            Comment: comment.Comment,
+            dateCreated: serverTimestamp() // Add current timestamp
+        });
+
+        console.log("Comment uploaded successfully with ID:", commentRef.id);
+    } catch (error) {
+        console.error("Error uploading comment:", error);
         throw error; // Throw the error for handling in the caller function
     }
 }

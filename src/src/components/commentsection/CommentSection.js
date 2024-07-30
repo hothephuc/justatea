@@ -3,7 +3,7 @@ import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
 import user_data from '../assets/user.js';
-
+import { uploadComment } from '../../server/data-handle.js';
 const CommentSection = ({ productID }) => {
     const [comments, setComments] = useState(comment_data);
     
