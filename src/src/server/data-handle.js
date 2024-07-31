@@ -1,5 +1,5 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 
@@ -199,9 +199,9 @@ export async function uploadComment(comment)
 
         // Add document with comment information to Firestore
         await setDoc(commentRef, {
-            ProductID: comment.ProductID,
-            CustomerID: comment.CustomerID,
-            Comment: comment.Comment,
+            productID: comment.productID,
+            userID: comment.userID,
+            text: comment.text,
             dateCreated: serverTimestamp() // Add current timestamp
         });
 
@@ -211,3 +211,38 @@ export async function uploadComment(comment)
         throw error; // Throw the error for handling in the caller function
     }
 }
+
+export const fetchUserByID = async (userID) => {
+    const userDoc = doc(db, 'users', userID);
+    const userSnapshot = await getDoc(userDoc);
+    if (userSnapshot.exists()) {
+      return { id: userSnapshot.id, ...userSnapshot.data() };
+    } else {
+      throw new Error('User not found');
+    }
+};
+
+export const fetchComments = async () => {
+    try {
+        const commentsCollection = collection(db, 'comments');
+        const commentsSnapshot = await getDocs(commentsCollection);
+        const commentsList = commentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return commentsList;
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        throw error;
+    }
+};
+
+export const fetchCommentsByProductID = async (productID) => {
+    try {
+        const collectionRef = collection(db, 'comments'); // Tạo tham chiếu tới bộ sưu tập
+        const q = query(collectionRef, where('productID', '==', productID)); // Tạo truy vấn để lọc tài liệu
+        const snapshot = await getDocs(q); // Lấy các tài liệu từ bộ sưu tập với truy vấn
+        const documentsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Ánh xạ các tài liệu thành một mảng các đối tượng
+        return documentsList; // Trả về mảng các đối tượng tài liệu
+    } catch (error) {
+        console.error('Error fetching documents:', error); // Ghi nhật ký lỗi
+        throw error; // Ném lỗi để xử lý bởi hàm gọi
+    }
+};

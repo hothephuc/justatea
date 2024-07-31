@@ -1,15 +1,37 @@
-import React,  {useState} from 'react'
+import React,  {useState, useEffect} from 'react'
 import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
 import user_data from '../assets/user.js';
-import { uploadComment } from '../../server/data-handle.js';
+import { fetchComments, fetchCommentsByProductID, fetchUserByID, uploadComment} from '../../server/data-handle.js';
+import { checkAuthState } from '../../server/auth.js';
+import { Timestamp } from 'firebase/firestore';
 const CommentSection = ({ productID }) => {
-    const [comments, setComments] = useState(comment_data);
-    
+    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
-    const productComments = comments.filter(comment => comment.productID === productID);
-    const currentUser=user_data.find(user=>user.userID===3)
+    const [currentUser, setCurrentUser] = useState('');
+
+    useEffect(() => {
+      const getCurrentUser = async () => {
+        const authState = await checkAuthState();
+        if (authState && authState.user) {
+          const uid = authState.user.uid;
+          const user = await fetchUserByID(uid);
+          setCurrentUser(user);
+        }
+      };
+  
+      getCurrentUser();
+    }, []);
+
+    useEffect(() => {
+      const getComment = async () => {
+        const comment = await fetchCommentsByProductID(productID);
+        setComments(comment);
+      };
+  
+      getComment();
+    }, []);
 
     const addComment = (newComment) => {
       setComments(prevComments => [...prevComments, newComment]);
@@ -31,15 +53,17 @@ const CommentSection = ({ productID }) => {
       
       const comment = {
         productID: productID,
-        userID: currentUser.userID,
+        userID: currentUser.id,
         text: newComment,
       };
+
       addComment(comment);
       setNewComment('');
+      uploadComment(comment);
     };
     
     const getCommentCount = () => {
-      return productComments.length;
+      return comments.length;
     };
 
     let commentCount=getCommentCount();
@@ -47,20 +71,26 @@ const CommentSection = ({ productID }) => {
   return (
     <div className='commentsection'>
         <div className='commentsection-header'>Bình luận ({commentCount})</div>
-        <div className='enter-comment'></div>
-        {productComments.map((item, index)=>(
+        <div className='all-comment'>
+        {comments.map((item, index)=>(
             <Comment key={index} comment={item}/>
         ))}
-        <div className='commentsection-input'>
-        <img src={currentUser.avatar}/>
-        <input
-          type="text"
-          value={newComment}
-          onChange={handleCommentChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Nhập bình luận..."
-        />
-        {/* <button onClick={handleAddComment}>Nhập</button> */}
+        </div>
+        <div className='enter-comment'>
+        {currentUser?(
+          <div className='commentsection-input'>
+          <img src={currentUser.imageUrl}/>
+          <input
+            type="text"
+            value={newComment}
+            onChange={handleCommentChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Nhập bình luận..."
+          />
+          </div>
+          ):(
+          <p style={{marginRight:10, fontWeight:400,}}>Vui lòng đăng nhập để bình luận</p>
+        )}
         </div>
     </div>
   )
