@@ -1,9 +1,7 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
-
-import { getDocs } from 'firebase/firestore';
 
 const db = getFirestore(app);
 const storage = getStorage(app);
