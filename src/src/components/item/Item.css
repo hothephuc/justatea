@@ -8,7 +8,8 @@
 }
 
 .item img{
-    width: 100%;
+    width: 250px;
+    height: 250px;
 }
 
 .item-info{
@@ -17,7 +18,7 @@
 }
 
 .item-info h{
-    font-size: 22px;
+    font-size: 16px;
     color: black;
     font-weight: 600;
 }

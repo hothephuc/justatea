@@ -1,19 +1,29 @@
-import React, { useContext, useState } from 'react'
-import { MenuContext } from '../context/MenuContext.js'
-import Item from '../components/item/Item.js'
-import './css/Menu.css'
-import banner from '../components/assets/banner.jpg'
-import menu_category from '../components/assets/Category.js'
+import React, { useContext, useState, useEffect } from 'react';
+import { MenuContext } from '../context/MenuContext.js';
+import Item from '../components/item/Item.js';
+import './css/Menu.css';
+import banner from '../components/assets/banner.jpg';
+import menu_category from '../components/assets/Category.js';
 import searchIcon from '../components/assets/search-icon.png'; // Assuming you have a search icon
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { fetchProducts } from '../server/data-handle';
 
 const Menu = () => {
-  const { product_data } = useContext(MenuContext);
+  const [productData, setProductData] = useState([]);
   const [category, setCategory] = useState("All");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
   const [priceFilter, setPriceFilter] = useState("all");
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const products = await fetchProducts();
+      setProductData(products);
+    };
+
+    getProducts();
+  }, []);
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -39,17 +49,10 @@ const Menu = () => {
     if (priceFilter === "above50") return item.price > 50000;
   };
 
-  // const filteredProducts = product_data.filter(item =>
-  //   (category === "All" || item.tag === category) &&
-  //   (item.name.toLowerCase().includes(searchQuery) || 
-  //    item.description.toLowerCase().includes(searchQuery)) && // assuming each item has a description
-  //   filterByPrice(item)
-  // );
-
-  const filteredProducts = product_data.filter(item =>
+  const filteredProducts = productData.filter(item =>
     (category === "All" || item.tag === category) &&
     ((item.name && item.name.toLowerCase().includes(searchQuery)) || 
-     (item.tag && item.tag.toLowerCase().includes(searchQuery))) && // assuming each item has a description
+    (item.tag && item.tag.toLowerCase().includes(searchQuery))) &&
     filterByPrice(item)
   );
 
@@ -106,7 +109,7 @@ const Menu = () => {
       <hr />
       <div className='menu-items'>
         {sortedProducts.map((item, i) => (
-          <Item key={i} id={item.id} name={item.name} image={item.image} price={item.price} tag={item.tag} />
+          <Item key={i} id={item.id} name={item.name} imageUrl={item.imageUrl} price={item.price} tag={item.tag} />
         ))}
       </div>
       <Link to='/AddProduct' style={{ textDecoration: 'none' }}>

@@ -3,6 +3,8 @@ import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 
+import { getDocs } from 'firebase/firestore';
+
 const db = getFirestore(app);
 const storage = getStorage(app);
 
@@ -181,6 +183,22 @@ export async function retrieveProductInfo(productId) {
     }
 }
 
+export const fetchProducts = async () => {
+    const productsCollection = collection(db, 'products');
+    const productsSnapshot = await getDocs(productsCollection);
+    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return productsList;
+  };
+
+  export const fetchProductByID = async (productID) => {
+    const productDoc = doc(db, 'products', productID);
+    const productSnapshot = await getDoc(productDoc);
+    if (productSnapshot.exists()) {
+      return { id: productSnapshot.id, ...productSnapshot.data() };
+    } else {
+      throw new Error('Product not found');
+    }
+  };
 /**
  * Uploads a product comment to Firestore.
  * 
