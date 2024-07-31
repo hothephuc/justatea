@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Product from "./pages/Product";
 import ChangeProfile from "./pages/ChangeProfile";
+import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path="/Menu" element={<Menu/>}/>
           <Route path='Menu/:productID' element={<Product/>}/>
+          <Route path='/AddProduct' element={<AddProduct/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/About' element={<About/>}/>

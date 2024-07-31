@@ -1,5 +1,5 @@
 import { app } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc,getFirestore,updateDoc } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 
@@ -18,23 +18,13 @@ export async function getUserDocument(uid){
     }
 }
 
-// the user pass into the addUserDoc function need to have all the attributes. Example: 
-// const user = {
-//     name: 'John Doe',
-//     dob: '1990-01-01',
-//     gender: 'male',
-//     email: 'john.doe@example.com',
-//     add: '123 Main St, Anytown, USA'
-// };
-
-
 export async function updateUserDoc(user,uid){
     await updateDoc(doc(db,'users',uid),{
         fullname :user.name,
         dob: user.dob,
         gender:user.gender,
         phone:user.phone,
-        address: user.add
+        address: user.add, 
     });
 }
 export async function setAdmin(uid){
@@ -43,29 +33,49 @@ export async function setAdmin(uid){
     });
 }
 
-export async function addUserDoc(user, uid){
-    await setDoc(doc(db,"users",uid),{
-        fullname: user.name,
-        dob: user.dob,
-        gender:user.gender,
-        email: user.email,
-        phone: user.phone,
-        address: user.add,
-        role: "Costumer"
-    });
+/**
+ * Adds a user document to Firestore.
+ * 
+ * @param {Object} user - The user object containing user information.
+ * @param {string} uid - The unique user ID.
+ * @param {File} [imageFile] - The image file for the user's avatar (optional).
+ * @returns {Promise<void>} - A promise that resolves when the user document is added.
+ * @throws {Error} - Throws an error if the document creation fails.
+ */
+export async function addUserDoc(user, uid, imageFile = null) {
+    try {
+        // Upload avatar image and get the URL (or an empty string if no image is provided)
+        const imageUrl = await upload_image_ava(imageFile, uid);
 
+        // Set user document in Firestore
+        await setDoc(doc(db, "users", uid), {
+            fullname: user.name,
+            dob: user.dob,
+            gender: user.gender,
+            email: user.email,
+            phone: user.phone,
+            address: user.add,
+            role: "Customer",
+            imageUrl: imageUrl // Add the image URL to the user document
+        });
+
+        console.log("User document added successfully");
+    } catch (error) {
+        console.error("Error adding user document:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
 }
 
-// Function to upload product information and image (dont accept duplicate product name)
-export async function uploadProductInfo(productInfo, imageFile) {
+/**
+ * Uploads an image to Firebase Storage and returns its download URL.
+ * 
+ * @param {File} imageFile - The image file to be uploaded.
+ * @param {string} storagePath - The path in Firebase Storage where the image will be stored.
+ * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded image.
+ * @throws {Error} - Throws an error if the image upload fails.
+ */
+async function uploadImage(imageFile, storagePath) {
     try {
-       
-        // Determine tag type
-        const tagType = getTagType(productInfo.tag);
-
-        // Construct storage path based on tag type and product name
-        const storagePath = `photos/${tagType}/${productInfo.name}/${imageFile.name}`;
-
         // Upload image file to Firebase Storage
         const storageRef = ref(storage, storagePath);
         const snapshot = await uploadBytes(storageRef, imageFile);
@@ -73,18 +83,65 @@ export async function uploadProductInfo(productInfo, imageFile) {
         // Get download URL of the uploaded image
         const imageUrl = await getDownloadURL(snapshot.ref);
 
+        return imageUrl;
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        throw error;
+    }
+}
+
+
+/**
+ * Uploads an avatar image to Firebase Storage and returns its download URL.
+ * 
+ * @param {File} imageFile - The image file to be uploaded.
+ * @param {string} userId - The user ID to construct the storage path.
+ * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded avatar.
+ * @throws {Error} - Throws an error if the image upload fails.
+ */
+async function upload_image_ava(imageFile, userId) {
+    if (imageFile) {
+        const storagePath = `avatars/${userId}`;
+        return await uploadImage(imageFile, storagePath);
+    }
+    return ""; // Return an empty string if no image file is provided
+}
+
+/**
+ * Uploads product information and an image to Firebase.
+ * 
+ * @param {Object} productInfo - The product information.
+ * @param {string} productInfo.name - The name of the product.
+ * @param {number} productInfo.price - The price of the product.
+ * @param {string} productInfo.category - The category of the product.
+ * @param {string} productInfo.description - The description of the product.
+ * @param {File} imageFile - The image file of the product.
+ * @returns {Promise<string>} - A promise that resolves to the document ID of the uploaded product.
+ * @throws {Error} - Throws an error if the product upload fails.
+ */
+export async function uploadProductInfo(productInfo, imageFile) {
+    try {
+        // Construct storage path based on category and product name
+        const storagePath = `photos/${productInfo.category}/${productInfo.name}`;
+
+        // Upload image and get the URL
+        const imageUrl = await uploadImage(imageFile, storagePath);
+
+        // Create a new document reference in the "products" collection
+        const productRef = doc(collection(db, "products"));
+
         // Add document with product information to Firestore
-        const docRef = await setDoc(collection(db, "products"), {
+        await setDoc(productRef, {
             name: productInfo.name,
             price: productInfo.price,
-            ingredients: productInfo.ingredients,
-            tag: productInfo.tag,
+            tag: productInfo.category,
+            description: productInfo.description,
             imageUrl: imageUrl,
             timestamp: new Date() // Add current timestamp
         });
 
-        console.log("Product information uploaded successfully with ID:", docRef.id);
-        return docRef.id; // Return the document ID if needed
+        console.log("Product information uploaded successfully with ID:", productRef.id);
+        return productRef.id; // Return the document ID if needed
     } catch (error) {
         if (error.message === "DuplicateProductName") {
             // Handle duplicate product name error on the frontend
@@ -96,3 +153,112 @@ export async function uploadProductInfo(productInfo, imageFile) {
         }
     }
 }
+
+/**
+ * Retrieves product information from Firestore.
+ * 
+ * @param {string} productId - The document ID of the product.
+ * @returns {Promise<Object>} - A promise that resolves to the product information.
+ * @throws {Error} - Throws an error if the product retrieval fails.
+ */
+export async function retrieveProductInfo(productId) {
+    try {
+        // Create a document reference for the specified product ID
+        const productRef = doc(db, "products", productId);
+
+        // Get the document
+        const productDoc = await getDoc(productRef);
+
+        if (!productDoc.exists()) {
+            throw new Error("Product not found");
+        }
+
+        // Return the product data
+        return productDoc.data();
+    } catch (error) {
+        console.error("Error retrieving product information:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
+
+export const fetchProducts = async () => {
+    const productsCollection = collection(db, 'products');
+    const productsSnapshot = await getDocs(productsCollection);
+    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return productsList;
+  };
+
+  export const fetchProductByID = async (productID) => {
+    const productDoc = doc(db, 'products', productID);
+    const productSnapshot = await getDoc(productDoc);
+    if (productSnapshot.exists()) {
+      return { id: productSnapshot.id, ...productSnapshot.data() };
+    } else {
+      throw new Error('Product not found');
+    }
+  };
+/**
+ * Uploads a product comment to Firestore.
+ * 
+ * @param {Object} comment - The comment object containing comment details.
+ * @param {string} comment.ProductID - The ID of the product being reviewed.
+ * @param {string} comment.CustomerID - The ID of the customer making the review.
+ * @param {string} comment.Comment - The comment text.
+ * @returns {Promise<void>} - A promise that resolves when the comment is uploaded.
+ * @throws {Error} - Throws an error if the document creation fails.
+ */
+export async function uploadComment(comment) 
+{
+    try {
+        // Create a new document reference in the "comments" collection
+        const commentRef = doc(collection(db, "comments"));
+
+        // Add document with comment information to Firestore
+        await setDoc(commentRef, {
+            productID: comment.productID,
+            userID: comment.userID,
+            text: comment.text,
+            dateCreated: serverTimestamp() // Add current timestamp
+        });
+
+        console.log("Comment uploaded successfully with ID:", commentRef.id);
+    } catch (error) {
+        console.error("Error uploading comment:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
+
+export const fetchUserByID = async (userID) => {
+    const userDoc = doc(db, 'users', userID);
+    const userSnapshot = await getDoc(userDoc);
+    if (userSnapshot.exists()) {
+      return { id: userSnapshot.id, ...userSnapshot.data() };
+    } else {
+      throw new Error('User not found');
+    }
+};
+
+export const fetchComments = async () => {
+    try {
+        const commentsCollection = collection(db, 'comments');
+        const commentsSnapshot = await getDocs(commentsCollection);
+        const commentsList = commentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return commentsList;
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        throw error;
+    }
+};
+
+export const fetchCommentsByProductID = async (productID) => {
+    try {
+        const collectionRef = collection(db, 'comments'); // Tạo tham chiếu tới bộ sưu tập
+        const q = query(collectionRef, where('productID', '==', productID)); // Tạo truy vấn để lọc tài liệu
+        const snapshot = await getDocs(q); // Lấy các tài liệu từ bộ sưu tập với truy vấn
+        const documentsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Ánh xạ các tài liệu thành một mảng các đối tượng
+        return documentsList; // Trả về mảng các đối tượng tài liệu
+    } catch (error) {
+        console.error('Error fetching documents:', error); // Ghi nhật ký lỗi
+        throw error; // Ném lỗi để xử lý bởi hàm gọi
+    }
+};
