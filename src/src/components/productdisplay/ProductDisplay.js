@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './ProductDisplay.css';
+import { updateCustomerCart } from '../../server/data-handle';
 
 const ProductDisplay = ({ product }) => {
+  const uid = "1tgiarIADGa9tPBAIDyvZOnVQar1"; // Example UID
+  const productID = "30tfW2KBtQHxeXuCsrBl"; // Product ID variable
   const [selectedSize, setSelectedSize] = useState('Vừa');
   const [selectedToppings, setSelectedToppings] = useState([]);
   const [price, setPrice] = useState(Number(product.price)); // Ensure the price is a number
@@ -17,12 +20,10 @@ const ProductDisplay = ({ product }) => {
   };
 
   const handleToppingSelection = (topping) => {
-    let newToppings;
-    if (selectedToppings.includes(topping)) {
-      newToppings = selectedToppings.filter((t) => t !== topping);
-    } else {
-      newToppings = [...selectedToppings, topping];
-    }
+    const newToppings = selectedToppings.includes(topping)
+      ? selectedToppings.filter((t) => t !== topping)
+      : [...selectedToppings, topping];
+
     setSelectedToppings(newToppings);
     updatePrice(selectedSize, newToppings);
   };
@@ -34,6 +35,23 @@ const ProductDisplay = ({ product }) => {
     }
     newPrice += toppings.length * 5000;
     setPrice(newPrice);
+  };
+
+  const handleAddToCart = async () => {
+    const newCustomerCart = {
+      ProductList: [productID], // Use productID variable
+      quantityList: [1], // Set initial quantity for the added product
+      sizeList: [selectedSize], // Add the selected size
+      toppingList: selectedToppings.length > 0 ? [selectedToppings.join('-')] : [null], // Join toppings into a string
+    };
+
+    try {
+      await updateCustomerCart(uid, productID, newCustomerCart); // Pass product ID as well
+      alert("Sản phẩm đã được thêm vào giỏ hàng!");
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng.");
+    }
   };
 
   return (
@@ -88,7 +106,7 @@ const ProductDisplay = ({ product }) => {
             </div>
           </div>
         </div>
-        <button>Thêm vào giỏ hàng</button>
+        <button onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
       </div>
     </div>
   );
