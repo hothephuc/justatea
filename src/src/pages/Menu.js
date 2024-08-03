@@ -9,21 +9,23 @@ import { Link } from 'react-router-dom';
 import { fetchProducts } from '../server/data-handle';
 
 const Menu = () => {
-  const [productData, setProductData] = useState([]);
+  // const [productData, setProductData] = useState([]);
   const [category, setCategory] = useState("All");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
   const [priceFilter, setPriceFilter] = useState("all");
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const products = await fetchProducts();
-      setProductData(products);
-    };
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     const products = await fetchProducts();
+  //     setProductData(products);
+  //   };
 
-    getProducts();
-  }, []);
+  //   getProducts();
+  // }, []);
+
+  const {productData} = useContext(MenuContext)
 
   const handleSearchInputChange = (e) => {
     setSearchInput(e.target.value);
