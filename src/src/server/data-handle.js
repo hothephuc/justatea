@@ -262,3 +262,112 @@ export const fetchCommentsByProductID = async (productID) => {
         throw error; // Ném lỗi để xử lý bởi hàm gọi
     }
 };
+
+
+/**
+ * Updates the CustomerCart fields for a user with the role "Customer".
+ *
+ * This function updates the `CustomerCart` field of a user document in Firestore.
+ * It ensures that only users with the role "Customer" have their cart fields updated.
+ *
+ * @param {string} uid - The unique identifier of the user.
+ * @param {string} productID - The ID of the product to be added/updated in the cart.
+ * @param {Object} newCustomerCart - The new cart data to be updated.
+ * @param {Array} newCustomerCart.ProductList - An array of product IDs corresponding to products in the cart.
+ * @param {Array} newCustomerCart.quantityList - An array of quantities corresponding to the products in the cart.
+ * @param {Array} newCustomerCart.sizeList - An array of sizes representing sizes corresponding to the products in the cart.
+ * @param {Array} newCustomerCart.toppingList - An array of toppings, each containing toppings for the corresponding product in the cart.
+ * @param {Array} newCustomerCart.priceList - An array of prices corresponding to the products in the cart.
+ *
+ * @throws Will throw an error if the update operation fails.
+ */
+export async function updateCustomerCart(uid, productID, newCustomerCart) {
+    try {
+        // Fetch the user data using uid
+        const userData = await getUserDocument(uid);
+        console.log("Fetched user data:", userData);
+        
+        // Check if the user exists and extract the role
+        if (userData && userData.role === "Customer") {
+            console.log("User is a customer. Preparing to update cart.");
+            
+            // Prepare the updated cart data, initializing fields if necessary
+            const updatedCart = {
+                cart: {
+                    ProductList: [
+                        ...(userData.cart?.ProductList || []), // Use existing ProductList or initialize to empty array
+                        productID // Append new productID
+                    ],
+                    quantityList: [
+                        ...(userData.cart?.quantityList || []), // Use existing quantityList or initialize to empty array
+                        newCustomerCart.quantityList[0] // Append new quantity
+                    ],
+                    sizeList: [
+                        ...(userData.cart?.sizeList || []), // Use existing sizeList or initialize to empty array
+                        newCustomerCart.sizeList[0] // Append new size
+                    ],
+                    toppingList: [
+                        ...(userData.cart?.toppingList || []), // Use existing toppingList or initialize to empty array
+                        newCustomerCart.toppingList[0] // Append new topping array
+                    ],
+                    priceList: [
+                        ...(userData.cart?.priceList || []), // Use existing priceList or initialize to empty array
+                        newCustomerCart.priceList[0] // Append new price
+                    ]
+                }
+            };
+
+            console.log("Updated cart data:", updatedCart);
+
+            // Update user document in Firestore with merged data
+            const userDocRef = doc(db, "users", uid);
+            await setDoc(userDocRef, updatedCart, { merge: true });
+
+            console.log("Customer cart updated successfully");
+        } else {
+            console.log("User does not exist or role is not 'Customer'. No update performed.");
+        }
+    } catch (error) {
+        console.error("Error updating customer cart:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
+
+/**
+ * Retrieves the CustomerCart fields for a user with the role "Customer".
+ *
+ * This function fetches the cart data of a user from Firestore and returns it if the user has the role "Customer".
+ *
+ * @param {string} uid - The unique identifier of the user.
+ * @returns {Promise<Object|null>} The cart data if the user is a customer, otherwise null.
+ *
+ * @throws Will throw an error if the retrieval operation fails.
+ */
+export async function retrieveCart(uid) {
+    try {
+        // Fetch the user data using uid
+        const userData = await getUserDocument(uid);
+        console.log("Fetched user data:", userData);
+        
+        // Check if the user exists and has the role "Customer"
+        if (userData && userData.role === "Customer") {
+            const userDocRef = doc(db, "users", uid);
+            const userDoc = await getDoc(userDocRef);
+            
+            if (userDoc.exists()) {
+                const cartData = userDoc.data().cart || {};
+                console.log("Retrieved cart data:", cartData);
+                return cartData; // Return the cart data
+            } else {
+                console.log("No cart data found for the user.");
+                return null; // No cart data found
+            }
+        } else {
+            console.log("User does not exist or role is not 'Customer'.");
+            return null; // User is not a customer
+        }
+    } catch (error) {
+        console.error("Error retrieving customer cart:", error);
+        throw error; // Throw the error for handling in the caller function
+    }
+}
