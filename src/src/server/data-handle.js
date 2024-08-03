@@ -277,6 +277,7 @@ export const fetchCommentsByProductID = async (productID) => {
  * @param {Array} newCustomerCart.quantityList - An array of quantities corresponding to the products in the cart.
  * @param {Array} newCustomerCart.sizeList - An array of sizes representing sizes corresponding to the products in the cart.
  * @param {Array} newCustomerCart.toppingList - An array of toppings, each containing toppings for the corresponding product in the cart.
+ * @param {Array} newCustomerCart.priceList - An array of prices corresponding to the products in the cart.
  *
  * @throws Will throw an error if the update operation fails.
  */
@@ -308,6 +309,10 @@ export async function updateCustomerCart(uid, productID, newCustomerCart) {
                     toppingList: [
                         ...(userData.cart?.toppingList || []), // Use existing toppingList or initialize to empty array
                         newCustomerCart.toppingList[0] // Append new topping array
+                    ],
+                    priceList: [
+                        ...(userData.cart?.priceList || []), // Use existing priceList or initialize to empty array
+                        newCustomerCart.priceList[0] // Append new price
                     ]
                 }
             };
