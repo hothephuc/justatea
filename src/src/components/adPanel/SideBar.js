@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom';
+import CustomerList from './CustomerList'
 import 
 {BsCart3, BsGrid1X2Fill, BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, 
   BsListCheck, BsMenuButtonWideFill, BsFillGearFill}
@@ -14,7 +16,7 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
 
         <ul className='sidebar-list'>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/src/src/pages/Admin.js">
                     <BsGrid1X2Fill className='icon'/> Dashboard
                 </a>
             </li>
@@ -29,9 +31,9 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="./CustomerList.js">
+                <Link to ='/CustomerList'>
                     <BsPeopleFill className='icon'/> Customers
-                </a>
+                </Link>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">

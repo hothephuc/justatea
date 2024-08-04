@@ -19,8 +19,6 @@ const Navbar = () => {
     checkAuthState().then((authState) => {
       if (authState) {
         setUser(authState.user);
-        console.log("user online");
-        console.log(user.imageUrl)
       } else {
         setUser(null);
       }

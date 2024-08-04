@@ -129,18 +129,22 @@ body {
 
 .card:first-child {
   background-color: #90af87;
+  color: #f6edd9;
 }
 
 .card:nth-child(2) {
   background-color:#90af87;
+  color: #f6edd9;
 }
 
 .card:nth-child(3) {
   background-color: #90af87;
+  color: #f6edd9;
 }
 
 .card:nth-child(4) {
   background-color: #90af87;
+  color: #f6edd9;
 }
 
 .card-inner {

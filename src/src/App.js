@@ -15,6 +15,7 @@ import ChangeProfile from "./pages/ChangeProfile";
 import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import CustomerList from "./components/adPanel/CustomerList";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
         <Route path='/Profile' element={<Profile/>}/>
         <Route path='/Admin' element={<Admin/>}/>
+        <Route path='/CustomerList' element={<CustomerList/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>
