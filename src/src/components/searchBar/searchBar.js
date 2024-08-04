@@ -14,7 +14,7 @@ const SearchBar = ({ onSearchSubmit }) => {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     onSearchSubmit(searchInput.toLowerCase());
-    navigate('/search'); // Redirect to search page
+    navigate('/menu'); // Redirect to search page
   };
 
   return (
