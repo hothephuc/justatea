@@ -21,12 +21,14 @@ export async function getUserDocument(uid){
 }
 
 export async function updateUserDoc(user,uid){
+    
     await updateDoc(doc(db,'users',uid),{
         fullname :user.name,
         dob: user.dob,
         gender:user.gender,
         phone:user.phone,
-        address: user.add, 
+        address: user.add,
+        imageUrl: user.imageUrl, 
     });
 }
 export async function setAdmin(uid){
@@ -35,19 +37,42 @@ export async function setAdmin(uid){
     });
 }
 
+export async function updateUserPhone(uid, phone) {
+    const userDoc = doc(db, 'users', uid);
+
+    await updateDoc(userDoc, {
+        phone: phone
+    });
+}
+
+export async function updateUserAddress(uid, address) {
+    const userDoc = doc(db, 'users', uid);
+
+    await updateDoc(userDoc, {
+        address: address
+    });
+}
+
+export async function updateUserImgUrl(uid, imgUrl) {
+    const userDoc = doc(db, 'users', uid);
+
+    await updateDoc(userDoc, {
+        imageUrl: imgUrl
+    });
+}
+
 /**
  * Adds a user document to Firestore.
  * 
  * @param {Object} user - The user object containing user information.
  * @param {string} uid - The unique user ID.
- * @param {File} [imageFile] - The image file for the user's avatar (optional).
  * @returns {Promise<void>} - A promise that resolves when the user document is added.
  * @throws {Error} - Throws an error if the document creation fails.
  */
-export async function addUserDoc(user, uid, imageFile = null) {
+export async function addUserDoc(user, uid) {
     try {
         // Upload avatar image and get the URL (or an empty string if no image is provided)
-        const imageUrl = await upload_image_ava(imageFile, uid);
+        // const imageUrl = await upload_image_ava(imageFile, uid);
 
         // Set user document in Firestore
         await setDoc(doc(db, "users", uid), {
@@ -58,7 +83,7 @@ export async function addUserDoc(user, uid, imageFile = null) {
             phone: user.phone,
             address: user.add,
             role: "Customer",
-            imageUrl: imageUrl // Add the image URL to the user document
+            imageUrl: "" 
         });
 
         console.log("User document added successfully");
@@ -76,7 +101,7 @@ export async function addUserDoc(user, uid, imageFile = null) {
  * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded image.
  * @throws {Error} - Throws an error if the image upload fails.
  */
-async function uploadImage(imageFile, storagePath) {
+export async function uploadImage(imageFile, storagePath) {
     try {
         // Upload image file to Firebase Storage
         const storageRef = ref(storage, storagePath);
@@ -101,7 +126,16 @@ async function uploadImage(imageFile, storagePath) {
  * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded avatar.
  * @throws {Error} - Throws an error if the image upload fails.
  */
-async function upload_image_ava(imageFile, userId) {
+
+export async function upload_image_slide(imageFile){
+    if(imageFile){
+        const storagePath ='slide';
+        return await uploadImage(imageFile,storagePath);
+    }
+    return "";
+}
+
+export async function upload_image_ava(imageFile, userId) {
     if (imageFile) {
         const storagePath = `avatars/${userId}`;
         return await uploadImage(imageFile, storagePath);
@@ -245,15 +279,27 @@ export async function uploadComment(comment)
     }
 }
 
-export const fetchUserByID = async (userID) => {
-    const userDoc = doc(db, 'users', userID);
-    const userSnapshot = await getDoc(userDoc);
-    if (userSnapshot.exists()) {
-      return { id: userSnapshot.id, ...userSnapshot.data() };
-    } else {
-      throw new Error('User not found');
-    }
-};
+export async function fetchUsers() {
+    try{
+        const usersCollection = collection(db, 'users');
+    const usersSnapshot = await getDocs(usersCollection);
+    const usersList = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return usersList;
+    }catch(error){
+        console.error('Error fetching users:', error)
+        throw error;
+    }  
+}
+
+// export const fetchUserByID = async (userID) => {
+//     const userDoc = doc(db, 'users', userID);
+//     const userSnapshot = await getDoc(userDoc);
+//     if (userSnapshot.exists()) {
+//       return { id: userSnapshot.id, ...userSnapshot.data() };
+//     } else {
+//       throw new Error('User not found');
+//     }
+// };
 
 export const fetchComments = async () => {
     try {

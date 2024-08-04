@@ -17,17 +17,17 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const fetchAuthState = async () => {
-      try {
-        const authState = await checkAuthState();
-        setUser(authState ? authState.user : null);
-        console.log(authState ? "User online" : "User offline");
-      } catch (error) {
-        console.error('Error checking auth state:', error);
+    checkAuthState().then((authState) => {
+      if (authState) {
+        setUser(authState.user);
+        console.log("user online");
+        console.log(user.imageUrl)
+      } else {
+        setUser(null);
       }
-    };
-
-    fetchAuthState();
+    }).catch((error) => {
+      console.error('Error checking auth state:', error);
+    });
   }, []);
 
   const handleSearchSubmit = (searchInput) => {
@@ -38,6 +38,12 @@ const Navbar = () => {
   const handleMenuClick = (menuItem) => {
     setMenu(menuItem);
     showNavbar();
+  };
+
+  const handleClick = () => {
+    setMenu('login');
+    showNavbar();
+    navigate('/LoginSignup');
   };
 
   return (
@@ -72,13 +78,13 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
           {menu === 'contact' && <hr />}
         </li>
-        <div className="nav-login-button">
+        <div>
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-            <Link to="/LoginSignup" aria-label="Login">
-              <button onClick={() => handleMenuClick('login')}>Đăng nhập</button>
-            </Link>
+            <button className="nav-login-button" onClick={handleClick}>
+              Đăng nhập
+            </button>
           )}
         </div>
       </ul>
