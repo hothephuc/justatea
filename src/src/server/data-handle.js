@@ -3,7 +3,7 @@ import { collection, doc, setDoc, getDoc,getFirestore,updateDoc, serverTimestamp
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
 
-import { getDocs } from 'firebase/firestore';
+// import { getDocs } from 'firebase/firestore';
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -183,20 +183,35 @@ export async function retrieveProductInfo(productId) {
     }
 }
 
-export const fetchProducts = async () => {
-    const productsCollection = collection(db, 'products');
-    const productsSnapshot = await getDocs(productsCollection);
-    const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return productsList;
+export const fetchProducts = async (searchQuery = "") => {
+    try {
+      const productsCollection = collection(db, 'products');
+      // Create a query to filter products based on the search query
+      const q = searchQuery
+        ? query(productsCollection, where('name', '>=', searchQuery), where('name', '<=', searchQuery + '\uf8ff'))
+        : productsCollection;
+  
+      const productsSnapshot = await getDocs(q);
+      const productsList = productsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return productsList;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
   };
 
   export const fetchProductByID = async (productID) => {
-    const productDoc = doc(db, 'products', productID);
-    const productSnapshot = await getDoc(productDoc);
-    if (productSnapshot.exists()) {
-      return { id: productSnapshot.id, ...productSnapshot.data() };
-    } else {
-      throw new Error('Product not found');
+    try {
+      const productDoc = doc(db, 'products', productID);
+      const productSnapshot = await getDoc(productDoc);
+      if (productSnapshot.exists()) {
+        return { id: productSnapshot.id, ...productSnapshot.data() };
+      } else {
+        throw new Error('Product not found');
+      }
+    } catch (error) {
+      console.error('Error fetching product by ID:', error);
+      throw error;
     }
   };
 /**

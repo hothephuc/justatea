@@ -11,8 +11,8 @@ const Item = ({ id, name, imageUrl, price, tag }) => {
             <h>{name}</h>
             <p>{price}đ</p>
         </div>
-      </Link>
     </div> 
+    </Link>
  
   )
 }

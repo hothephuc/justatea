@@ -1,39 +1,45 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MenuContext } from '../context/MenuContext.js';
+// src/pages/Menu.js
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Item from '../components/item/Item.js';
 import './css/Menu.css';
 import banner from '../components/assets/banner.jpg';
 import menu_category from '../components/assets/Category.js';
-import searchIcon from '../components/assets/search-icon.png'; // Assuming you have a search icon
 import { Link } from 'react-router-dom';
 import { fetchProducts } from '../server/data-handle';
 
 const Menu = () => {
   const [productData, setProductData] = useState([]);
   const [category, setCategory] = useState("All");
-  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
   const [priceFilter, setPriceFilter] = useState("all");
 
+  const location = useLocation();
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const query = params.get('query') || "";
+    setSearchQuery(query.toLowerCase());
+  }, [location.search]);
+
   useEffect(() => {
     const getProducts = async () => {
-      const products = await fetchProducts();
-      setProductData(products);
+      try {
+        const products = await fetchProducts(); // Fetch all products
+        const filteredProducts = products.filter(product =>
+          product.name.toLowerCase().includes(searchQuery) ||
+          product.tag.toLowerCase().includes(searchQuery)
+        );
+        setProductData(filteredProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
 
     getProducts();
-  }, []);
+  }, [searchQuery]); // Fetch products whenever searchQuery changes
 
-  const handleSearchInputChange = (e) => {
-    setSearchInput(e.target.value);
-  };
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    setSearchQuery(searchInput.toLowerCase());
-  };
-
+  
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };
@@ -47,12 +53,11 @@ const Menu = () => {
     if (priceFilter === "below20") return item.price < 20000;
     if (priceFilter === "20to50") return item.price >= 20000 && item.price <= 50000;
     if (priceFilter === "above50") return item.price > 50000;
+    return false; // Ensure all cases are handled
   };
 
   const filteredProducts = productData.filter(item =>
     (category === "All" || item.tag === category) &&
-    ((item.name && item.name.toLowerCase().includes(searchQuery)) || 
-    (item.tag && item.tag.toLowerCase().includes(searchQuery))) &&
     filterByPrice(item)
   );
 
@@ -66,33 +71,18 @@ const Menu = () => {
     <div className='menu'>
       <img className='banner' src={banner} alt="" />
       <h1 className='menu-header'>Thực đơn</h1>
-      <div className='search-icon-wrapper'>
-        <img src={searchIcon} alt="Search" className='search-icon' />
-        <div className='search-form-wrapper'>
-          <form className='search-form' onSubmit={handleSearchSubmit}>
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchInput}
-              onChange={handleSearchInputChange}
-              className='search-bar'
-            />
-            <button type="submit" className='search-button'>Search</button>
-          </form>
-          <div className='filter-sort'>
-            <select onChange={handleSortChange} value={sortOrder} className='sort-dropdown'>
-              <option value="default">Sort by Price</option>
-              <option value="asc">Low to High</option>
-              <option value="desc">High to Low</option>
-            </select>
-            <select onChange={handlePriceFilterChange} value={priceFilter} className='filter-dropdown'>
-              <option value="all">All Prices</option>
-              <option value="below20">Dưới 20000</option>
-              <option value="20to50">20000 - 50000</option>
-              <option value="above50">Trên 50000</option>
-            </select>
-          </div>
-        </div>
+      <div className='filter-sort'>
+        <select onChange={handleSortChange} value={sortOrder} className='sort-dropdown'>
+          <option value="default">Sort by Price</option>
+          <option value="asc">Low to High</option>
+          <option value="desc">High to Low</option>
+        </select>
+        <select onChange={handlePriceFilterChange} value={priceFilter} className='filter-dropdown'>
+          <option value="all">All Prices</option>
+          <option value="below20">Dưới 20000</option>
+          <option value="20to50">20000 - 50000</option>
+          <option value="above50">Trên 50000</option>
+        </select>
       </div>
       <div className='category'>
         {menu_category.map((item, index) => (
@@ -108,9 +98,13 @@ const Menu = () => {
       </div>
       <hr />
       <div className='menu-items'>
-        {sortedProducts.map((item, i) => (
-          <Item key={i} id={item.id} name={item.name} imageUrl={item.imageUrl} price={item.price} tag={item.tag} />
-        ))}
+        {sortedProducts.length > 0 ? (
+          sortedProducts.map((item, i) => (
+            <Item key={i} id={item.id} name={item.name} imageUrl={item.imageUrl} price={item.price} tag={item.tag} />
+          ))
+        ) : (
+          <p>No products found matching your search criteria.</p>
+        )}
       </div>
       <Link to='/AddProduct' style={{ textDecoration: 'none' }}>
         <button className='add-product-button'>Thêm sản phẩm</button>

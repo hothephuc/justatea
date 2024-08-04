@@ -1,0 +1,48 @@
+/* src/searchBar/SearchBar.css */
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  /* Add any additional styling you need */
+}
+
+.search-form {
+  display: flex;
+  width: 100%;
+  /* Make sure the search bar takes up the desired space */
+}
+
+.search-bar {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.search-button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  /* Add a box shadow for better visibility */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+  /* Add a darker shadow on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style for the icon inside the button */
+.search-button img {
+  width: 16px; /* Set the desired width */
+  height: 16px; /* Set the desired height */
+  margin-right: 8px;
+  /* Adjust as needed for alignment */
+}

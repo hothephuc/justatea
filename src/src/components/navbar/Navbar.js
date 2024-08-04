@@ -4,6 +4,7 @@ import logo from '../assets/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { checkAuthState } from '../../server/auth';
 import DropdownMenu from './DropDownMenu';
+import SearchBar from '../searchBar/searchBar';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
@@ -16,56 +17,68 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    checkAuthState().then((authState) => {
-      if (authState) {
-        setUser(authState.user);
-        console.log("user online");
-      } else {
-        setUser(null);
+    const fetchAuthState = async () => {
+      try {
+        const authState = await checkAuthState();
+        setUser(authState ? authState.user : null);
+        console.log(authState ? "User online" : "User offline");
+      } catch (error) {
+        console.error('Error checking auth state:', error);
       }
-    }).catch((error) => {
-      console.error('Error checking auth state:', error);
-    });
+    };
+
+    fetchAuthState();
   }, []);
+
+  const handleSearchSubmit = (searchInput) => {
+    // Construct the search URL with the query
+    const searchUrl = `/menu?query=${searchInput.toLowerCase()}`;
+    window.location.href = searchUrl; // Using window.location.href to redirect
+  };
+  const handleMenuClick = (menuItem) => {
+    setMenu(menuItem);
+    showNavbar();
+  };
 
   return (
     <div className="navbar">
       <ul className="nav-menu" ref={navRef}>
-        <div className="nav-logo">
-          <Link to='/' style={{ textDecoration: 'none', border: 'none', display: 'flex', alignItems: 'center' }}>
+        <li className="nav-logo">
+          <Link to="/" style={{ textDecoration: 'none', border: 'none', display: 'flex', alignItems: 'center' }}>
             <img src={logo} alt="JustaTea Logo" className="nav-logo-img" />
             <p>JustaTea</p>
           </Link>
-        </div>
-        <li onClick={() => { setMenu('home'); showNavbar(); }}>
+        </li>
+        <li>
+          <SearchBar onSearchSubmit={handleSearchSubmit} />
+        </li>
+        <li onClick={() => handleMenuClick('home')}>
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/">Trang chủ</Link>
-          {menu === 'home' ? <hr /> : null}
+          {menu === 'home' && <hr />}
         </li>
-        <li onClick={() => { setMenu('product'); showNavbar(); }}>
+        <li onClick={() => handleMenuClick('product')}>
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Menu">Thực đơn</Link>
-          {menu === 'product' ? <hr /> : null}
+          {menu === 'product' && <hr />}
         </li>
-        <li onClick={() => { setMenu('about'); showNavbar(); }}>
+        <li onClick={() => handleMenuClick('about')}>
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/About">Về chúng tôi</Link>
-          {menu === 'about' ? <hr /> : null}
+          {menu === 'about' && <hr />}
         </li>
-        <li onClick={() => { setMenu('picture'); showNavbar(); }}>
+        <li onClick={() => handleMenuClick('picture')}>
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
-          {menu === 'picture' ? <hr /> : null}
+          {menu === 'picture' && <hr />}
         </li>
-        <li onClick={() => { setMenu('contact'); showNavbar(); }}>
+        <li onClick={() => handleMenuClick('contact')}>
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
-          {menu === 'contact' ? <hr /> : null}
+          {menu === 'contact' && <hr />}
         </li>
         <div className="nav-login-button">
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-
             <Link to="/LoginSignup" aria-label="Login">
-              <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
+              <button onClick={() => handleMenuClick('login')}>Đăng nhập</button>
             </Link>
-
           )}
         </div>
       </ul>

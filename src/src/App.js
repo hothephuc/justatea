@@ -1,8 +1,7 @@
-
-//import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
-import {BrowserRouter,Routes,Route} from 'react-router-dom';
 import LoginSignup from "./pages/LoginSignup";
 import About from "./pages/About";
 import Picture from "./pages/Picture";
@@ -14,26 +13,28 @@ import Product from "./pages/Product";
 import ChangeProfile from "./pages/ChangeProfile";
 import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
+import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 
 function App() {
   return (
     <div>
       <BrowserRouter>
-      <Navbar/>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path="/Menu" element={<Menu/>}/>
-          <Route path='Menu/:productID' element={<Product/>}/>
-          <Route path='/AddProduct' element={<AddProduct/>}/>
-        <Route path='/Contact' element={<Contact/>}/>
-        <Route path='/Picture' element={<Picture/>}/>
-        <Route path='/About' element={<About/>}/>
-        <Route path='LoginSignup' element={<LoginSignup/>}/>
-        <Route path='/Signup' element={<Signup/>}/>
-        <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
-        <Route path='/Profile' element={<Profile/>}/>
-      </Routes>
-      <Footer/>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/Menu' element={<Menu />} />
+          <Route path='/Menu/:productID' element={<Product />} />
+          <Route path='/AddProduct' element={<AddProduct />} />
+          <Route path='/Contact' element={<Contact />} />
+          <Route path='/Picture' element={<Picture />} />
+          <Route path='/About' element={<About />} />
+          <Route path='/LoginSignup' element={<LoginSignup />} />
+          <Route path='/Signup' element={<Signup />} />
+          <Route path='/ChangeProfile' element={<ChangeProfile />} />
+          <Route path='/Profile' element={<Profile />} />
+          <Route path='/payment' element={<PaymentPage />} /> {/* Add PaymentPage route */}
+        </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );
