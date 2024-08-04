@@ -4,6 +4,17 @@ import {validateEmail, validatePassword} from "./utils"
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();
 
+export function getCurrentUserUID() {
+    const auth = getAuth(); // Lấy instance của Firebase Authentication
+    const user = auth.currentUser; // Lấy người dùng hiện tại
+
+    if (user) {
+        return user.uid; // Trả về uid của người dùng hiện tại
+    } else {
+        console.error('No user is currently signed in');
+        return null;
+    }
+}
 export async function signInGoogle() {
   return new Promise((resolve, reject) => {
       signInWithPopup(auth, ggProvider)

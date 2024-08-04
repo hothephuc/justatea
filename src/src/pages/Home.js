@@ -1,10 +1,11 @@
 import React from 'react'
 import Hero from '../components/hero/Hero'
-import Profile from './Profile'
+import Admin from './Admin'
 
 const Home = () => {
   return (
     <div>
+      {/* <Admin></Admin> */}
       <Hero></Hero>
     </div>
   )

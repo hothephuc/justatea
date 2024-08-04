@@ -3,7 +3,7 @@ import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
 import user_data from '../assets/user.js';
-import { fetchComments, fetchCommentsByProductID, fetchUserByID, uploadComment} from '../../server/data-handle.js';
+import { fetchComments, fetchCommentsByProductID,getUserDocument, uploadComment} from '../../server/data-handle.js';
 import { checkAuthState } from '../../server/auth.js';
 import { Timestamp } from 'firebase/firestore';
 const CommentSection = ({ productID }) => {
@@ -16,7 +16,7 @@ const CommentSection = ({ productID }) => {
         const authState = await checkAuthState();
         if (authState && authState.user) {
           const uid = authState.user.uid;
-          const user = await fetchUserByID(uid);
+          const user = await getUserDocument(uid);
           setCurrentUser(user);
         }
       };

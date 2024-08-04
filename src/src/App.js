@@ -14,6 +14,7 @@ import Product from "./pages/Product";
 import ChangeProfile from "./pages/ChangeProfile";
 import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -23,8 +24,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path="/Menu" element={<Menu/>}/>
-          <Route path='Menu/:productID' element={<Product/>}/>
-          <Route path='/AddProduct' element={<AddProduct/>}/>
+        <Route path='Menu/:productID' element={<Product/>}/>
+        <Route path='/AddProduct' element={<AddProduct/>}/>
         <Route path='/Contact' element={<Contact/>}/>
         <Route path='/Picture' element={<Picture/>}/>
         <Route path='/About' element={<About/>}/>
@@ -32,6 +33,7 @@ function App() {
         <Route path='/Signup' element={<Signup/>}/>
         <Route path='/ChangeProfile' element={<ChangeProfile/>}/>
         <Route path='/Profile' element={<Profile/>}/>
+        <Route path='/Admin' element={<Admin/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>

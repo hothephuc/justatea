@@ -20,6 +20,7 @@ const Navbar = () => {
       if (authState) {
         setUser(authState.user);
         console.log("user online");
+        console.log(user.imageUrl)
       } else {
         setUser(null);
       }
@@ -27,6 +28,12 @@ const Navbar = () => {
       console.error('Error checking auth state:', error);
     });
   }, []);
+
+  const handleClick = () => {
+    setMenu('login');
+    showNavbar();
+    navigate('/LoginSignup');
+  };
 
   return (
     <div className="navbar">
@@ -57,15 +64,13 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
           {menu === 'contact' ? <hr /> : null}
         </li>
-        <div className="nav-login-button">
+        <div>
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-
-            <Link to="/LoginSignup" aria-label="Login">
-              <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
-            </Link>
-
+            <button className="nav-login-button" onClick={handleClick}>
+              Đăng nhập
+            </button>
           )}
         </div>
       </ul>

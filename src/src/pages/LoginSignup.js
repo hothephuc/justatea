@@ -41,10 +41,10 @@ const LoginSignup = () => {
       console.log(googleUser);
 
       if (Object.keys(googleUser).length === 3) {
-        navigate('/');
+        navigate('/ChangeProfile');
         window.reload.location();
       } else {
-        navigate('/ChangeProfile');
+        navigate('/');
         window.reload.location();
       }
     } catch (error) {
