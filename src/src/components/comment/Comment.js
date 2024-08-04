@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import user_data from '../assets/user'
 import './Comment.css'
-import { fetchUserByID } from '../../server/data-handle'
+import { fetchUserByID, getUserDocument } from '../../server/data-handle'
 
 const Comment = ({comment}) => {
     //const user=user_data.find(user=>user.userID===comment.userID)
     const [user,setUser]=useState("");
     useEffect(() => {
       const getUser = async () => {
-        const user = await fetchUserByID(comment.userID);
+        const user = await getUserDocument(comment.userID);
         setUser(user);
       };
   
       getUser();
     }, []);
+
   return (
     <div className='comment'>
       <img src={user.imageUrl} alt={user.fullname}/>

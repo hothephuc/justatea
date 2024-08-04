@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { fetchProducts } from '../server/data-handle';
 
 const Menu = () => {
-  const [productData, setProductData] = useState([]);
+  // const [productData, setProductData] = useState([]);
   const [category, setCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("default");
@@ -40,6 +40,19 @@ const Menu = () => {
   }, [searchQuery]); // Fetch products whenever searchQuery changes
 
   
+
+
+  const {productData} = useContext(MenuContext)
+
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setSearchQuery(searchInput.toLowerCase());
+  };
+
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };

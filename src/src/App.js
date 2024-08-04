@@ -13,6 +13,7 @@ import Product from "./pages/Product";
 import ChangeProfile from "./pages/ChangeProfile";
 import AddProduct from "./pages/AddProduct";
 import Profile from "./pages/Profile";
+import Cart from "./pages/Cart"
 import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path='/Signup' element={<Signup />} />
           <Route path='/ChangeProfile' element={<ChangeProfile />} />
           <Route path='/Profile' element={<Profile />} />
+        <Route path="/Cart" element={<Cart/>}/>
           <Route path='/payment' element={<PaymentPage />} /> {/* Add PaymentPage route */}
         </Routes>
         <Footer />
