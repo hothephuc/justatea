@@ -61,7 +61,7 @@ const ProductDisplay = ({ product }) => {
       quantityList: [1], // Set initial quantity for the added product
       sizeList: [selectedSize], // Add the selected size
       toppingList: selectedToppings.length > 0 ? [selectedToppings.join(',')] : [null], // Join toppings into a string
-      priceList: [0] // Set initial price to 0
+      priceList: [price] // Set initial price to 0
     };
     
 

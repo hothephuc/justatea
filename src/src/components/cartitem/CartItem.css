@@ -12,9 +12,9 @@
 
 .cart-items-header{
     display:grid;
-    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 1fr 2fr 1fr 1fr 1fr 1fr;
     align-items: center;
-    gap: 120px;
+    gap: 50px;
     padding: 10px 0px;
     color: black;
     font-size: 18px;
@@ -30,8 +30,16 @@
 
 .cart-item-icon{
     width: 100px;
+    height: 100px;
     cursor:pointer;
     align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.cart-item-icon img{
+    max-width: 100px;
+    max-height: 100px;
 }
 
 .cart-item-quanity{

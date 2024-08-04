@@ -1,17 +1,29 @@
 import React, { useContext, useState, useEffect } from 'react'
 import './CartItem.css'
 import { MenuContext } from '../../context/MenuContext'
-import { fetchProducts } from '../../server/data-handle'
+import { retrieveCart, modifyItemQuantity, removeItemFromCart, getUserDocument } from '../../server/data-handle'
+import { checkAuthState } from '../../server/auth'
 
-const CartItem = () => { 
+const CartItem = (uid) => { 
     const {productData}=useContext(MenuContext)
-
-    const Cart = [
-      { productID: '1FzKKYy6JhoBDykPujyl', quantity: 1, price: 20000 },
-      { productID: 'GxRLEiU7YPjSb6QdsF8J', quantity: 1, price: 30000 },
-    ];
-
     const [cartProducts, setCartProducts] = useState([]);
+    const [cart, setCart] = useState({
+      ProductList: [],
+      priceList: [],
+      quantityList: [],
+      sizeList: [],
+      toppingList: []
+    });
+
+    useEffect(() => {
+      const getCart = async () => {
+        const cart = await retrieveCart(uid.uid);
+        setCart(cart);
+      };
+  
+      getCart();
+    }, []);
+
 
     const getProductById = (productId) => {
       const product = productData.find(product => product.id === productId);
@@ -23,14 +35,66 @@ const CartItem = () => {
     };
 
     useEffect(() => {
-      if (productData.length > 0) { // Chỉ chạy khi productData có dữ liệu
-        const productsInCart = Cart.map(item => {
-          const product = getProductById(item.productID);
-          return { ...product, quantity: item.quantity, price: item.price };
-        }).filter(product => product !== null); // Lọc các sản phẩm không tìm thấy
+      if (productData.length > 0 && cart.ProductList.length > 0) {
+        const productsInCart = cart.ProductList.map((productId, index) => {
+          const product = getProductById(productId);
+          if (product) {
+            const { name, imageUrl } = product;
+            return {
+              id: productId,
+              name,
+              imageUrl,
+              price: cart.priceList[index],
+              quantity: cart.quantityList[index],
+              size: cart.sizeList[index],
+              toppings: cart.toppingList[index]
+            };
+          }
+          return null;
+        }).filter(product => product !== null);
+  
         setCartProducts(productsInCart);
       }
-    }, [productData]); // Thêm productData vào dependency array
+    }, [productData, cart]);
+
+    const handleQuantityChange = async (index, action) => {
+      const updatedCartProducts = cartProducts.map((product, i) => {
+          if (i === index) {
+              const newQuantity = action === "increase" ? product.quantity + 1 : product.quantity - 1;
+              return { ...product, quantity: newQuantity > 0 ? newQuantity : 1 }; // Ensure quantity does not go below 1
+          }
+          return product;
+      });
+
+      setCartProducts(updatedCartProducts);
+
+      // Update the quantity in the database
+      await modifyItemQuantity(uid.uid, index, action);
+    };
+
+    const handleRemoveItem = async (index) => {
+      const updatedCartProducts = cartProducts.filter((_, i) => i !== index);
+
+      setCartProducts(updatedCartProducts);
+
+      // Remove the item from the database
+      await removeItemFromCart(uid.uid, index);
+
+      // Also update the cart state to keep it in sync
+      const updatedCart = {
+          ProductList: cart.ProductList.filter((_, i) => i !== index),
+          priceList: cart.priceList.filter((_, i) => i !== index),
+          quantityList: cart.quantityList.filter((_, i) => i !== index),
+          sizeList: cart.sizeList.filter((_, i) => i !== index),
+          toppingList: cart.toppingList.filter((_, i) => i !== index)
+      };
+
+      setCart(updatedCart);
+  };
+
+  const totalPrice = cartProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
+  const shippingFee = 15000;
+  const finalPrice = totalPrice + shippingFee;
 
   return (
     <div className='cart-items'>
@@ -38,6 +102,8 @@ const CartItem = () => {
         <div className='cart-items-header'>
           <p>Sản phẩm</p>
           <p>Tên sản phẩm</p>
+          <p>Kích cỡ</p>
+          <p>Topping</p>
           <p>Giá</p>
           <p>Số lượng</p>
           <p>Tổng cộng</p>
@@ -45,17 +111,23 @@ const CartItem = () => {
         </div>
         <hr/>     
         <div>
-          {cartProducts.map((product)=>(
+          {cartProducts.map((product, index)=>(
           <div className='cart-items-item cart-items-header'>
-            <img className='cart-item-icon' src={product.imageUrl} alt=""/>
+            <div className='cart-item-icon'>
+              <img src={product.imageUrl} alt=""/>
+            </div>
             <p>{product.name}</p>
+            <p>{product.size}</p>
+            <div>
+            {product.toppings?(<p>{product.toppings}</p>):(<p>Không</p>)}
+            </div>
             <p>{product.price}đ</p>
             <button className='cart-item-quanity'>{product.quantity}</button>
             <p>{product.price*product.quantity}đ</p>
             <div>
-            <button className='change-button'>+</button>
-            <button className='change-button'>-</button>
-            <button className='change-button'>x</button>
+            <button className='change-button' onClick={()=>handleQuantityChange(index, "increase")}>+</button>
+            <button className='change-button' onClick={()=>handleQuantityChange(index, "decrease")}>-</button>
+            <button className='change-button' onClick={()=>handleRemoveItem(index)}>x</button>
             </div>
           </div>
           ))}
@@ -68,17 +140,17 @@ const CartItem = () => {
           <h2>Tổng giá tiền</h2>
           <div className='cart-items-total-price'>
             <p>Tổng giá tiền sản phẩm</p>
-            <p>{0}đ</p>
+            <p>{totalPrice}đ</p>
           </div>
             
           <div className='cart-items-total-price'>
             <p>Phí giao hàng</p>
-            <p>{10000}đ</p>
+            <p>{shippingFee}đ</p>
           </div>
             
           <div className='cart-items-total-price'>
             <p>Đơn giá</p>
-            <p>{10000}đ</p>
+            <p>{finalPrice}đ</p>
           </div>
           <button>Đi đến mục thanh toán</button>
         </div>
