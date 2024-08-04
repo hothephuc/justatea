@@ -29,7 +29,7 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="./CustomerList.js">
                     <BsPeopleFill className='icon'/> Customers
                 </a>
             </li>

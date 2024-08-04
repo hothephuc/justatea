@@ -2,6 +2,7 @@ import { app } from "../config/firebase-config";
 import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getTagType } from "./utils";
+import noavatar from "../components/assets/noavatar.png";
 
 const db = getFirestore(app);
 const storage = getStorage(app);
@@ -81,7 +82,7 @@ export async function addUserDoc(user, uid) {
             phone: user.phone,
             address: user.add,
             role: "Customer",
-            imageUrl: "" 
+            imageUrl: noavatar 
         });
 
         console.log("User document added successfully");
@@ -231,6 +232,20 @@ export const fetchProducts = async () => {
       throw new Error('Product not found');
     }
   };
+
+  export async function fetchUsers() {
+    try{
+        const usersCollection = collection(db, 'users');
+    const usersSnapshot = await getDocs(usersCollection);
+    const usersList = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return usersList;
+    }catch(error){
+        console.error('Error fetching users:', error)
+        throw error;
+    }  
+}
+
+
 /**
  * Uploads a product comment to Firestore.
  * 
@@ -262,17 +277,6 @@ export async function uploadComment(comment)
     }
 }
 
-export async function fetchUsers() {
-    try{
-        const usersCollection = collection(db, 'users');
-    const usersSnapshot = await getDocs(usersCollection);
-    const usersList = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return usersList;
-    }catch(error){
-        console.error('Error fetching users:', error)
-        throw error;
-    }  
-}
 
 // export const fetchUserByID = async (userID) => {
 //     const userDoc = doc(db, 'users', userID);
