@@ -78,13 +78,15 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
           {menu === 'contact' && <hr />}
         </li>
-        <div>
+        <div className="nav-login-button">
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-            <button className="nav-login-button" onClick={handleClick}>
-              Đăng nhập
-            </button>
+
+            <Link to="/LoginSignup" aria-label="Login">
+              <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
+            </Link>
+
           )}
         </div>
       </ul>
