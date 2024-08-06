@@ -1,6 +1,6 @@
 class CustomerCart {
     constructor() {
-      this.cartList = [];
+      this.productList = [];
       this.quantityList = [];
       this.sizeList = [];
       this.toppingList = [];
