@@ -1,9 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
 import './CartItem.css'
 import { MenuContext } from '../../context/MenuContext'
-import { retrieveCart, modifyItemQuantity, removeItemFromCart, getUserDocument } from '../../server/data-handle'
 import { checkAuthState } from '../../server/auth'
-
+import CartController from '../../controller/Cart'
 const CartItem = (uid) => { 
     const {productData}=useContext(MenuContext)
     const [cartProducts, setCartProducts] = useState([]);
@@ -17,7 +16,7 @@ const CartItem = (uid) => {
 
     useEffect(() => {
       const getCart = async () => {
-        const cart = await retrieveCart(uid.uid);
+        const cart = await CartController.retrieveCart(uid.uid);
         setCart(cart);
       };
   
@@ -69,7 +68,7 @@ const CartItem = (uid) => {
       setCartProducts(updatedCartProducts);
 
       // Update the quantity in the database
-      await modifyItemQuantity(uid.uid, index, action);
+      await CartController.modifyItemQuantity(uid.uid, index, action);
     };
 
     const handleRemoveItem = async (index) => {
@@ -78,7 +77,7 @@ const CartItem = (uid) => {
       setCartProducts(updatedCartProducts);
 
       // Remove the item from the database
-      await removeItemFromCart(uid.uid, index);
+      await CartController.removeItemFromCart(uid.uid, index);
 
       // Also update the cart state to keep it in sync
       const updatedCart = {
