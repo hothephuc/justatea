@@ -37,29 +37,29 @@ export async function setAdmin(uid){
     });
 }
 
-export async function updateUserPhone(uid, phone) {
-    const userDoc = doc(db, 'users', uid);
+// export async function updateUserPhone(uid, phone) {
+//     const userDoc = doc(db, 'users', uid);
 
-    await updateDoc(userDoc, {
-        phone: phone
-    });
-}
+//     await updateDoc(userDoc, {
+//         phone: phone
+//     });
+// }
 
-export async function updateUserAddress(uid, address) {
-    const userDoc = doc(db, 'users', uid);
+// export async function updateUserAddress(uid, address) {
+//     const userDoc = doc(db, 'users', uid);
 
-    await updateDoc(userDoc, {
-        address: address
-    });
-}
+//     await updateDoc(userDoc, {
+//         address: address
+//     });
+// }
 
-export async function updateUserImgUrl(uid, imgUrl) {
-    const userDoc = doc(db, 'users', uid);
+// export async function updateUserImgUrl(uid, imgUrl) {
+//     const userDoc = doc(db, 'users', uid);
 
-    await updateDoc(userDoc, {
-        imageUrl: imgUrl
-    });
-}
+//     await updateDoc(userDoc, {
+//         imageUrl: imgUrl
+//     });
+// }
 
 /**
  * Adds a user document to Firestore.
@@ -135,60 +135,60 @@ export async function upload_image_slide(imageFile){
     return "";
 }
 
-export async function upload_image_ava(imageFile, userId) {
-    if (imageFile) {
-        const storagePath = `avatars/${userId}`;
-        return await uploadImage(imageFile, storagePath);
-    }
-    return ""; // Return an empty string if no image file is provided
-}
+// export async function upload_image_ava(imageFile, userId) {
+//     if (imageFile) {
+//         const storagePath = `avatars/${userId}`;
+//         return await uploadImage(imageFile, storagePath);
+//     }
+//     return ""; // Return an empty string if no image file is provided
+// }
 
-/**
- * Uploads product information and an image to Firebase.
- * 
- * @param {Object} productInfo - The product information.
- * @param {string} productInfo.name - The name of the product.
- * @param {number} productInfo.price - The price of the product.
- * @param {string} productInfo.category - The category of the product.
- * @param {string} productInfo.description - The description of the product.
- * @param {File} imageFile - The image file of the product.
- * @returns {Promise<string>} - A promise that resolves to the document ID of the uploaded product.
- * @throws {Error} - Throws an error if the product upload fails.
- */
-export async function uploadProductInfo(productInfo, imageFile) {
-    try {
-        // Construct storage path based on category and product name
-        const storagePath = `photos/${productInfo.category}/${productInfo.name}`;
+// /**
+//  * Uploads product information and an image to Firebase.
+//  * 
+//  * @param {Object} productInfo - The product information.
+//  * @param {string} productInfo.name - The name of the product.
+//  * @param {number} productInfo.price - The price of the product.
+//  * @param {string} productInfo.category - The category of the product.
+//  * @param {string} productInfo.description - The description of the product.
+//  * @param {File} imageFile - The image file of the product.
+//  * @returns {Promise<string>} - A promise that resolves to the document ID of the uploaded product.
+//  * @throws {Error} - Throws an error if the product upload fails.
+//  */
+// export async function uploadProductInfo(productInfo, imageFile) {
+//     try {
+//         // Construct storage path based on category and product name
+//         const storagePath = `photos/${productInfo.category}/${productInfo.name}`;
 
-        // Upload image and get the URL
-        const imageUrl = await uploadImage(imageFile, storagePath);
+//         // Upload image and get the URL
+//         const imageUrl = await uploadImage(imageFile, storagePath);
 
-        // Create a new document reference in the "products" collection
-        const productRef = doc(collection(db, "products"));
+//         // Create a new document reference in the "products" collection
+//         const productRef = doc(collection(db, "products"));
 
-        // Add document with product information to Firestore
-        await setDoc(productRef, {
-            name: productInfo.name,
-            price: productInfo.price,
-            tag: productInfo.category,
-            description: productInfo.description,
-            imageUrl: imageUrl,
-            timestamp: new Date() // Add current timestamp
-        });
+//         // Add document with product information to Firestore
+//         await setDoc(productRef, {
+//             name: productInfo.name,
+//             price: productInfo.price,
+//             tag: productInfo.category,
+//             description: productInfo.description,
+//             imageUrl: imageUrl,
+//             timestamp: new Date() // Add current timestamp
+//         });
 
-        console.log("Product information uploaded successfully with ID:", productRef.id);
-        return productRef.id; // Return the document ID if needed
-    } catch (error) {
-        if (error.message === "DuplicateProductName") {
-            // Handle duplicate product name error on the frontend
-            console.error("Error: Product name already exists");
-            throw new Error("Product name already exists");
-        } else {
-            console.error("Error uploading product information:", error);
-            throw error; // Throw the error for handling in the caller function
-        }
-    }
-}
+//         console.log("Product information uploaded successfully with ID:", productRef.id);
+//         return productRef.id; // Return the document ID if needed
+//     } catch (error) {
+//         if (error.message === "DuplicateProductName") {
+//             // Handle duplicate product name error on the frontend
+//             console.error("Error: Product name already exists");
+//             throw new Error("Product name already exists");
+//         } else {
+//             console.error("Error uploading product information:", error);
+//             throw error; // Throw the error for handling in the caller function
+//         }
+//     }
+// }
 
 /**
  * Retrieves product information from Firestore.

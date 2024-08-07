@@ -7,6 +7,7 @@ import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getUserDocument, updateUserPhone, updateUserAddress, updateUserImgUrl, upload_image_ava } from '../server/data-handle';
 import { getCurrentUserUID } from '../server/auth';
 import { checkAuthState } from '../server/auth';
+import CustomerController from '../controller/Customer';
 import noavatar from "../components/assets/noavatar.png"
 
 const Profile = () => {
@@ -51,20 +52,20 @@ const Profile = () => {
             const updates = [];
 
             if (tempData.phone !== userData.phone) {
-                updates.push(updateUserPhone(uid, tempData.phone));
+                updates.push(CustomerController.updateUserPhone(uid, tempData.phone));
             }
             if (tempData.address !== userData.address) {
-                updates.push(updateUserAddress(uid, tempData.address));
+                updates.push(CustomerController.updateUserAddress(uid, tempData.address));
             }
             if (imageFile) {
                 // Upload image and get the URL
-                const imageUrl = await upload_image_ava(imageFile, uid);
+                const imageUrl = await CustomerController.upload_image_ava(imageFile, uid);
                 if (tempData.imageUrl !== imageUrl) {
-                    updates.push(updateUserImgUrl(uid, imageUrl));
+                    updates.push(CustomerController.updateUserImgUrl(uid, imageUrl));
                     setTempData({ ...tempData, imageUrl }); // Update tempData with new image URL
                 }
             } else if (tempData.imageUrl !== userData.imageUrl) {
-                updates.push(updateUserImgUrl(uid, tempData.imageUrl));
+                updates.push(CustomerController.updateUserImgUrl(uid, tempData.imageUrl));
             }
 
             await Promise.all(updates);

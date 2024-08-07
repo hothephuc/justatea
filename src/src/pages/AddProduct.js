@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './css/AddProduct.css';
 import { uploadProductInfo } from '../server/data-handle';
 import menu_category from '../components/assets/Category';
-
+import AdminController from '../controller/Admin';
 const AddProduct = () => {
   const [productInfo, setProductInfo] = useState({
     name: '',
@@ -24,7 +24,7 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await uploadProductInfo(productInfo, productInfo.image);
+      await AdminController.uploadProductInfo(productInfo, productInfo.image);
       alert('Product uploaded successfully');
     } catch (error) {
       console.error('Error uploading product:', error);
