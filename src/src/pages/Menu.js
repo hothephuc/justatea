@@ -6,7 +6,7 @@ import './css/Menu.css';
 import banner from '../components/assets/banner.jpg';
 import menu_category from '../components/assets/Category.js';
 import { Link } from 'react-router-dom';
-import { fetchProducts } from '../server/data-handle';
+import ProductController from '../controller/Product.js';
 
 
 const Menu = () => {
@@ -26,7 +26,7 @@ const Menu = () => {
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const products = await fetchProducts(); // Fetch all products
+        const products = await ProductController.fetchProducts(); // Fetch all products
         const filteredProducts = products.filter(product =>
           product.name.toLowerCase().includes(searchQuery) ||
           product.tag.toLowerCase().includes(searchQuery)

@@ -3,8 +3,8 @@ import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
 import user_data from '../assets/user.js';
-import { fetchComments,fetchUserByID, fetchCommentsByProductID, getUserDocument, uploadComment} from '../../server/data-handle.js';
-
+import {getUserDocument} from '../../server/data-handle.js';
+import CommentController from '../../controller/Comment.js';
 import { checkAuthState } from '../../server/auth.js';
 import { Timestamp } from 'firebase/firestore';
 const CommentSection = ({ productID }) => {
@@ -29,7 +29,7 @@ const CommentSection = ({ productID }) => {
 
     useEffect(() => {
       const getComment = async () => {
-        const comment = await fetchCommentsByProductID(productID);
+        const comment = await CommentController.fetchCommentsByProductID(productID);
         setComments(comment);
       };
   
@@ -62,7 +62,7 @@ const CommentSection = ({ productID }) => {
 
       addComment(comment);
       setNewComment('');
-      uploadComment(comment);
+      CommentController.uploadComment(comment);
     };
     
     const getCommentCount = () => {
