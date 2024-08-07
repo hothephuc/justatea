@@ -1,3 +1,4 @@
+import { uploadImage } from "./Utils";
 class AdminController {
     /**
      * Uploads product information and an image to Firebase.
