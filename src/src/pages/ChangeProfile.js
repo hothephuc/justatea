@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import '../pages/css/ChangeProfile.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { updateUserDoc } from '../server/data-handle';
+
 import { getAuth } from 'firebase/auth';
+import CustomerController from '../controller/Customer';
 
 const ChangeProfile = () => {
   const [fullName, setFullName] = useState("");
@@ -29,7 +30,7 @@ const ChangeProfile = () => {
             add: address
         };
         try {
-            await updateUserDoc(userData, uid);
+            await CustomerController.updateUserDoc(userData, uid);
             alert('Profile updated successfully!');
             console.log(userData.name)
             console.log(userData.dob)

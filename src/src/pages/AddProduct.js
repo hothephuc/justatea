@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './css/AddProduct.css';
-import { uploadProductInfo } from '../server/data-handle';
 import menu_category from '../components/assets/Category';
 import AdminController from '../controller/Admin';
 const AddProduct = () => {

@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, getAuth, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,onAuthStateChanged } from "firebase/auth";
-import { addUserDoc, getUserDocument } from "./data-handle";
+import { addUserDoc, getUserDocument } from "../controller/Utils.js";
 import {validateEmail, validatePassword} from "./utils"
 const auth = getAuth();
 const ggProvider = new GoogleAuthProvider();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './Comment.css'
-import { getUserDocument} from '../../server/data-handle'
+import { getUserDocument} from '../../controller/Utils.js'
 
 const Comment = ({comment}) => {
     //const user=user_data.find(user=>user.userID===comment.userID)

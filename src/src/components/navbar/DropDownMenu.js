@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOutUser, checkAuthState } from '../../server/auth';
-import { getUserDocument } from '../../server/data-handle';
+import { getUserDocument} from '../../controller/Utils.js'
 import './DropDownMenu.css';
 import noavatar from "../assets/noavatar.png";
 

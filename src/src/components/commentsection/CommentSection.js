@@ -3,7 +3,7 @@ import comment_data from '../assets/CommentData.js'
 import Comment from '../comment/Comment.js';
 import './CommentSection.css'
 import user_data from '../assets/user.js';
-import {getUserDocument} from '../../server/data-handle.js';
+import { getUserDocument} from '../../controller/Utils.js'
 import CommentController from '../../controller/Comment.js';
 import { checkAuthState } from '../../server/auth.js';
 import { Timestamp } from 'firebase/firestore';
@@ -18,7 +18,7 @@ const CommentSection = ({ productID }) => {
         if (authState && authState.user) {
           const uid = authState.user.uid;
           const user = await getUserDocument(uid);
-          setCurrentUser(user);
+          setCurrentUser({...user, uid});
         }
       };
   
@@ -56,7 +56,7 @@ const CommentSection = ({ productID }) => {
       
       const comment = {
         productID: productID,
-        userID: currentUser.userID,
+        userID: currentUser.uid,
         text: newComment,
       };
 

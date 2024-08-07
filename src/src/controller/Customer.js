@@ -31,12 +31,25 @@ class CustomerController {
         });
     }
 
+
+    static async  updateUserDoc(user,uid){
+    
+        await updateDoc(doc(db,'users',uid),{
+            fullname :user.name,
+            dob: user.dob,
+            gender:user.gender,
+            phone:user.phone,
+            address: user.add,
+            imageUrl: user.imageUrl, 
+        });
+    }
+
     static async upload_image_ava(imageFile, userId) {
     if (imageFile) {
         const storagePath = `avatars/${userId}`;
         return await uploadImage(imageFile, storagePath);
     }
-    return ""; // Return an empty string if no image file is provided
+
 }
 
 }

@@ -4,7 +4,7 @@ import './css/Profile.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { getUserDocument, updateUserPhone, updateUserAddress, updateUserImgUrl, upload_image_ava } from '../server/data-handle';
+import { getUserDocument} from '../../src/controller/Utils.js'
 import { getCurrentUserUID } from '../server/auth';
 import { checkAuthState } from '../server/auth';
 import CustomerController from '../controller/Customer';

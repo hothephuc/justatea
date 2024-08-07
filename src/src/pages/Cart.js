@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import './css/Cart.css'
 import CartItem from '../components/cartitem/CartItem'
 import { checkAuthState} from '../server/auth'
-import { fetchUserByID } from '../server/data-handle'
+
 
 const Cart = () => {
     const[uid,setUID]=useState(null)
