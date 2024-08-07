@@ -1,7 +1,6 @@
 import React, {createContext, useState, useEffect} from 'react'
-import { fetchProducts } from '../server/data-handle.js';
 import { checkAuthState } from '../server/auth.js';
-
+import ProductController from '../controller/Product.js';
 export const MenuContext = createContext(null);
 
 const MenuContextProvider= (props) => {
@@ -9,7 +8,7 @@ const MenuContextProvider= (props) => {
     
     useEffect(() => {
         const getProducts = async () => {
-          const products = await fetchProducts();
+          const products = await ProductController.fetchProducts();
           setProductData(products);
         };
     
