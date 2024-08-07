@@ -1,3 +1,7 @@
+import { app, db } from "../config/firebase-config";
+import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { uploadImage } from "./Utils";
 class AdminController {
     /**
      * Uploads product information and an image to Firebase.

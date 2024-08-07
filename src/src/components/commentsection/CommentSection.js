@@ -56,7 +56,7 @@ const CommentSection = ({ productID }) => {
       
       const comment = {
         productID: productID,
-        userID: currentUser.id,
+        userID: currentUser.userID,
         text: newComment,
       };
 
