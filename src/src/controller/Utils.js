@@ -1,6 +1,5 @@
 import { app,storage } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
     /**
      * Uploads an image to Firebase Storage and returns its download URL.
