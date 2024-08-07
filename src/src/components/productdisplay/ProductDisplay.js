@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ProductDisplay.css';
-import { updateCustomerCart } from '../../server/data-handle';
 import { checkAuthState } from '../../server/auth'; // Adjust the import path accordingly
-
+import CartController from '../../controller/Cart';
 const ProductDisplay = ({ product }) => {
   const [uid, setUid] = useState(null); // State to hold user ID
   const productID = product.id; // Product ID variable
@@ -66,7 +65,7 @@ const ProductDisplay = ({ product }) => {
     
 
     try {
-      await updateCustomerCart(uid, productID, newCustomerCart); // Pass product ID as well
+      await CartController.updateCustomerCart(uid, productID, newCustomerCart); // Pass product ID as well
       alert("Sản phẩm đã được thêm vào giỏ hàng!");
     } catch (error) {
       console.error("Error adding product to cart:", error);
