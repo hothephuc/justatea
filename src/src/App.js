@@ -16,7 +16,8 @@ import Profile from "./pages/Profile";
 import Cart from "./pages/Cart"
 import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 import Admin from "./pages/Admin";
-
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 function App() {
   return (
     <div>
@@ -36,7 +37,9 @@ function App() {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Admin' element={<Admin/>}/>
           <Route path="/Cart" element={<Cart/>}/>
-          <Route path='/payment' element={<PaymentPage />} /> {/* Add PaymentPage route */}
+          <Route path='/payment' element={<PaymentPage />} /> 
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-fail" element={<PaymentFailure />} />
         </Routes>
         <Footer />
       </BrowserRouter>

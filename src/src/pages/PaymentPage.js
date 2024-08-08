@@ -8,16 +8,17 @@ const PaymentPage = () => {
 
   useEffect(() => {
     const initiatePayment = async () => {
-      const { amount } = queryString.parse(location.search);
+      const { amount, userId } = queryString.parse(location.search);
 
-      if (!amount) {
-        console.error('Payment amount is required');
+      if (!amount || !userId) {
+        console.error('Payment amount and user ID are required');
         return;
       }
 
       try {
         const response = await axios.post('/payment', {
           amount: amount,
+          userId: userId, // Include userId in the request body
         });
 
         if (response.data && response.data.payUrl) {
