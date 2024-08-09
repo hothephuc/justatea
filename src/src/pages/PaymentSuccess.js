@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { db, collection, addDoc } from '../firebase';
+import {  doc, setDoc, getDoc, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { motion } from 'framer-motion';
 
 const PaymentSuccess = () => {
@@ -27,14 +28,27 @@ const PaymentSuccess = () => {
 
     const handlePaymentStatus = async () => {
       try {
-        await addDoc(collection(db, 'payments'), status);
+        // Add the payment status to the payments collection and get the document reference
+        const paymentDocRef = await addDoc(collection(db, 'payments'), status);
+    
+        // Check if the payment was successful
         if (status.resultCode !== 0) {
+          // Redirect to the payment failure page if the payment was not successful
           navigate('/payment-fail', { state: { status } });
+        } else {
+          // Update the order's paymentInfo and orderStatus fields
+          await updateDoc(doc(db, 'orders', orderId), {
+            paymentInfo: {
+              paymentDocId: paymentDocRef.id // Save the ID of the payment document
+            },
+            orderStatus: 'Paid' // Update order status to 'Paid'
+          });
         }
       } catch (error) {
-        console.error("Error adding document: ", error);
+        console.error("Error handling payment status: ", error);
       }
     };
+    
 
     handlePaymentStatus();
   }, [location.search, navigate]);

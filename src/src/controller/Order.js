@@ -57,54 +57,54 @@ class OrderController
         }
     }
 
-/**
- * Hàm này trả về mảng class Order 
- * Retrieves the user's order array from the "users" collection and returns an array of Order objects.
- *
- * @param {string} uid - The unique identifier of the user.
- * @returns {Promise<Order[]>} An array of Order objects, or an empty array if not found.
- */
-static async getUserOrders(uid) 
-{
-    try {
-        const userDocRef = doc(db, "users", uid);
-        const userDoc = await getDoc(userDocRef);
-        
-        // Check if user document exists and contains Order IDs
-        if (userDoc.exists() && userDoc.data().Order) {
-            const orderIDs = userDoc.data().Order;
-            const orders = await Promise.all(orderIDs.map(async (orderId) => {
-                const orderDocRef = doc(db, "orders", orderId);
-                const orderDoc = await getDoc(orderDocRef);
-                
-                // If order document exists, create an Order instance
-                if (orderDoc.exists()) {
-                    const orderData = orderDoc.data();
-                    
-                    return new Order(
-                        orderId, // Pass the Firestore-generated OrderID
-                        orderData['orderList'], // Use bracket notation
-                        orderData['orderStatus'], // Use bracket notation
-                        orderData['dateCreated'].toDate(), // Use bracket notation
-                        orderData['dateShipped'] ? orderData['dateShipped'].toDate() : null, // Check if dateShipped exists
-                        orderData['paymentInfo'], // Use bracket notation
-                        orderData['contactInfo'], // Use bracket notation
-                        orderData['totalPrice'] // Use bracket notation
-                    );
-                }
-                return null; // Return null if the order doesn't exist
-            }));
+    /**
+     * Hàm này trả về mảng class Order, có thể xài hàm này để show user history 
+     * Retrieves the user's order array from the "users" collection and returns an array of Order objects.
+     *
+     * @param {string} uid - The unique identifier of the user.
+     * @returns {Promise<Order[]>} An array of Order objects, or an empty array if not found.
+     */
+    static async getUserOrders(uid) 
+    {
+        try {
+            const userDocRef = doc(db, "users", uid);
+            const userDoc = await getDoc(userDocRef);
             
-            // Filter out any null values from the orders array
-            return orders.filter(order => order !== null);
+            // Check if user document exists and contains Order IDs
+            if (userDoc.exists() && userDoc.data().Order) {
+                const orderIDs = userDoc.data().Order;
+                const orders = await Promise.all(orderIDs.map(async (orderId) => {
+                    const orderDocRef = doc(db, "orders", orderId);
+                    const orderDoc = await getDoc(orderDocRef);
+                    
+                    // If order document exists, create an Order instance
+                    if (orderDoc.exists()) {
+                        const orderData = orderDoc.data();
+                        
+                        return new Order(
+                            orderId, // Pass the Firestore-generated OrderID
+                            orderData['orderList'], // Use bracket notation
+                            orderData['orderStatus'], // Use bracket notation
+                            orderData['dateCreated'].toDate(), // Use bracket notation
+                            orderData['dateShipped'] ? orderData['dateShipped'].toDate() : null, // Check if dateShipped exists
+                            orderData['paymentInfo'], // Use bracket notation
+                            orderData['contactInfo'], // Use bracket notation
+                            orderData['totalPrice'] // Use bracket notation
+                        );
+                    }
+                    return null; // Return null if the order doesn't exist
+                }));
+                
+                // Filter out any null values from the orders array
+                return orders.filter(order => order !== null);
+            }
+            
+            return []; // Return an empty array if no orders found
+        } catch (error) {
+            console.error("Error retrieving user orders:", error);
+            throw error;
         }
-        
-        return []; // Return an empty array if no orders found
-    } catch (error) {
-        console.error("Error retrieving user orders:", error);
-        throw error;
     }
-}
 
 
     
@@ -149,47 +149,52 @@ static async getUserOrders(uid)
         }
     }
 
-//     /**
-//      * Allows the user to select or enter a shipping address.
-//      *
-//      * @param {string} uid - The unique identifier of the user.
-//      * @param {Object} newAddress - Optional. The new address entered by the user.
-//      * 
-//      * @returns {Promise<Object>} - Returns the selected or newly entered address.
-//      * 
-//      * @throws Will throw an error if the retrieval or update operation fails.
-//      */
-//     static async chooseAddress(uid, newAddress = null) {
-//         try {
-//             const userDocRef = doc(db, "users", uid);
-//             const userDoc = await getDoc(userDocRef);
+        /**
+     * Allows the user to select an address by index and updates the current ContactInfo in the order.
+     *
+     * @param {string} uid - The unique identifier of the user.
+     * @param {string} orderId - The unique identifier of the order.
+     * @param {number} index - The index of the selected address in the saved addresses array.
+     * 
+     * @returns {Promise<void>} - Returns a promise that resolves when the operation is complete.
+     * 
+     * @throws Will throw an error if the retrieval or update operation fails.
+     */
+    static async chooseAddress(uid, orderId, index) 
+    {
+        try {
+            // Reference to the user document
+            const userDocRef = doc(db, "users", uid);
+            const userDoc = await getDoc(userDocRef);
 
-//             if (!userDoc.exists()) {
-//                 throw new Error("User not found");
-//             }
+            if (!userDoc.exists()) {
+                throw new Error("User not found");
+            }
 
-//             const userData = userDoc.data();
-//             const savedAddresses = userData.SavedAddresses || []; // Assume you have a SavedAddresses field in your user data
+            const userData = userDoc.data();
+            const savedAddresses = userData.ContactInfo || []; // Assume SavedAddresses is an array of ContactInfo
 
-//             if (newAddress) {
-//                 // If a new address is provided, update the user's saved addresses
-//                 savedAddresses.push(newAddress);
-//                 await updateDoc(userDocRef, {
-//                     SavedAddresses: savedAddresses
-//                 });
-//                 return newAddress; // Return the newly entered address
-//             }
+            if (index < 0 || index >= savedAddresses.length) {
+                throw new Error("Invalid address index");
+            }
 
-//             // If no new address is provided, allow the user to select from saved addresses
-//             // Here you can implement logic to prompt the user to select an address
-//             // For simplicity, let's just return the first saved address as an example
-//             return savedAddresses.length > 0 ? savedAddresses[0] : null; // Return the first saved address or null if none exist
-//         } catch (error) {
-//             console.error("Error choosing address:", error);
-//             throw error;
-//         }
-//     }
+            // Get the selected address based on the index
+            const selectedAddress = savedAddresses[index];
 
+            // Reference to the order document
+            const orderDocRef = doc(db, "orders", orderId);
+
+            // Update the order with the selected address
+            await updateDoc(orderDocRef, {
+                contactInfo: selectedAddress
+            });
+
+            console.log("Address updated successfully in the order.");
+        } catch (error) {
+            console.error("Error choosing address:", error);
+            throw error;
+        }
+    }
 
     /**
          * Lets the user apply a discount voucher to their order.
@@ -240,6 +245,25 @@ static async getUserOrders(uid)
         } catch (error) {
             console.error("Error applying voucher:", error);
             throw error;
+        }
+    }
+
+
+        /**
+     * Places an order and initiates the payment process by redirecting the user to the payment page.
+     *
+     * @param {string} uid - The unique identifier of the user.
+     * @param {number} amount - The total amount for the order.
+     * @param {string} orderId - The unique identifier of the pre-created order.
+     */
+    static async placeOrder(uid, amount, orderId) 
+    {
+        try {
+            // Redirect to the PaymentPage with the required parameters
+            window.location.href = `/payment?amount=${amount}&userId=${uid}&orderId=${orderId}`;
+        } catch (error) {
+            console.error("Error redirecting to payment page:", error);
+            throw new Error("Failed to initiate payment. Please try again.");
         }
     }
 

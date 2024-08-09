@@ -14,7 +14,6 @@ const CartItem = ({ uid }) => {
         sizeList: [],
         toppingList: []
     });
-
     const [paymentInfo, setPaymentInfo] = useState({}); // Set your payment info structure here
     const [contactInfo, setContactInfo] = useState({}); // Initialize with fake data
 
@@ -93,17 +92,31 @@ const CartItem = ({ uid }) => {
     const shippingFee = 15000;
     const finalPrice = totalPrice + shippingFee;
 
-    const handleCreateOrder = async () => {
-      try {
-          // Call OrderController.createOrder with the necessary parameters
-          console.log("Final price: " + finalPrice)
-          await OrderController.createOrder(uid, cart, paymentInfo, contactInfo, finalPrice);
-          alert("Order created successfully!");
-      } catch (error) {
-          console.error("Error creating order:", error);
-          alert("Failed to create order.");
-      }
-  };
+    const handleCreateOrder = async () => { // Hàm này chỉ tạo order và redirect tới trang show order thôi. Còn bước placeOrder gọi ở đây để test payment
+        try {
+            // Call OrderController.createOrder with the necessary parameters
+            await OrderController.createOrder(uid, cart, paymentInfo, contactInfo, finalPrice);
+            
+            // Retrieve the updated list of user orders
+            const orders = await OrderController.getUserOrders(uid);
+    
+            // Find the most recent order (the one just created)
+            const newOrder = orders[orders.length - 1]; // Assuming the latest order is the last one in the array
+    
+            if (newOrder) {
+                // Call the placeOrder method to redirect to the payment page
+                await OrderController.placeOrder(uid, finalPrice, newOrder.orderID);
+            } else {
+                alert("Order not found.");
+            }
+    
+            alert("Order created successfully!");
+        } catch (error) {
+            console.error("Error creating order:", error);
+            alert("Failed to create order.");
+        }
+    };
+    
 
     return (
         <div className='cart-items'>
