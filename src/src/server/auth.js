@@ -182,30 +182,24 @@ export async function resetPassword(email) {
 export function checkAuthState() {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log('User is signed in:', user);
+      try {
+        if (user) {
+          console.log('Người dùng đã đăng nhập:', user);
 
-        let userData = await getUserDocument(user.uid);
-
-        if (!userData) {
-          // Nếu tài liệu người dùng không tồn tại, tạo tài liệu mới
-          const newUserData = {
-            name: user.displayName || '',
-            dob: '',  // Giá trị mặc định hoặc để trống
-            gender: '',  // Giá trị mặc định hoặc để trống
-            email: user.email || '',
-            phone: '',  // Giá trị mặc định hoặc để trống
-            add: ''  // Giá trị mặc định hoặc để trống
-          };
-
-          await addUserDoc(newUserData, user.uid);
-          userData = newUserData;
+          let userData = await getUserDocument(user.uid);
+          if (!userData) {
+            console.log('Dữ liệu người dùng không tồn tại.');
+            resolve({ user, userData: null });
+          } else {
+            resolve({ user, userData });
+          }
+        } else {
+          console.log('Không có người dùng nào đăng nhập.');
+          resolve(null);
         }
-
-        resolve({ user, userData });
-      } else {
-        console.log('No user is signed in.');
-        resolve(null);
+      } catch (error) {
+        console.error('Lỗi khi kiểm tra trạng thái xác thực:', error);
+        reject(error); // Từ chối promise nếu có lỗi
       }
     });
   });

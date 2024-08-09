@@ -8,7 +8,8 @@ import SearchBar from '../searchBar/searchBar';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null); // Initially null to handle loading state
+  const [loading, setLoading] = useState(true); // Loading state
   const navRef = useRef();
   const navigate = useNavigate();
 
@@ -17,24 +18,30 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    checkAuthState().then((authState) => {
-      if (authState) {
-        setUser(authState.user);
-        console.log("user online");
-        console.log(user.imageUrl)
-      } else {
-        setUser(null);
+    const fetchUser = async () => {
+      try {
+        const authState = await checkAuthState();
+        console.log('Auth state:', authState);
+        if (authState && authState.user) {
+          setUser(authState);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error checking auth state:', error);
+      } finally {
+        setLoading(false); // End loading state
       }
-    }).catch((error) => {
-      console.error('Error checking auth state:', error);
-    });
+    };
+
+    fetchUser();
   }, []);
 
   const handleSearchSubmit = (searchInput) => {
-    // Construct the search URL with the query
     const searchUrl = `/menu?query=${searchInput.toLowerCase()}`;
-    window.location.href = searchUrl; // Using window.location.href to redirect
+    window.location.href = searchUrl;
   };
+
   const handleMenuClick = (menuItem) => {
     setMenu(menuItem);
     showNavbar();
@@ -45,6 +52,11 @@ const Navbar = () => {
     showNavbar();
     navigate('/LoginSignup');
   };
+
+  if (loading) {
+    // Render a loading screen while waiting for user data
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="navbar">
@@ -78,15 +90,13 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
           {menu === 'contact' && <hr />}
         </li>
-        <div className="nav-login-button">
+        <div>
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-
             <Link to="/LoginSignup" aria-label="Login">
-              <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
+              <button className="nav-login-button" onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
             </Link>
-
           )}
         </div>
       </ul>

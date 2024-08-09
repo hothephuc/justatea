@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import Cart from "./pages/Cart"
 import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 import Admin from "./pages/Admin";
+import CustomerList from './components/adPanel/CustomerList';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path='/Admin' element={<Admin/>}/>
           <Route path="/Cart" element={<Cart/>}/>
           <Route path='/payment' element={<PaymentPage />} /> {/* Add PaymentPage route */}
+          <Route path='/CustomerList' element={<CustomerList/>} />
         </Routes>
         <Footer />
       </BrowserRouter>

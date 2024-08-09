@@ -1,52 +1,36 @@
-import React from "react";
-import '../hero/ImageSlider.css'
-import {Fade,Zoom,Slide} from 'react-slideshow-image'
-import slide from "../assets/slide.jpg";
-import slide2 from "../assets/coffee_date.jpg";
-import slide3 from "../assets/slide3.jpg";
-
-const slideImage = [
-    {
-        url: slide,
-        caption: "First slide"
-    },
-    {
-        url: slide2,
-        caption: "Second slide"
-    },
-    {
-        url: slide3,
-        caption: "Third slide"
-    }
-];
-
-const divStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '400px',
-    backgroundSize: 'cover',
-}
-const spanStyle ={
-    fontSize: '20px',
-    background: "#efefef",
-    color: "#000000",
-}
+import React, { useEffect, useState } from "react";
+import '../hero/ImageSlider.css';
+import { Fade } from 'react-slideshow-image';
+import AdminController from "../../controller/Admin";
 
 function ImageSlider() {
-  return (
-    <div className="slide-container">
-      <Fade>
-        {slideImage.map((image,index)=> (
-            <div key={index}>
-                <div style={{ ...divStyle, backgroundImage: `url(${image.url})` }}>
-                    <span style ={{spanStyle}}>{image.caption}</span>
-                </div>
-            </div>
-        ))}
-      </Fade>
-    </div>
-  )
+    const [slideImages, setSlideImages] = useState([]);
+
+    useEffect(() => {
+        async function fetchSlides() {
+            try {
+                // Fetch all slide image URLs from the controller
+                const slides = await AdminController.fetchAllSlideImageUrls();
+                const formattedSlides = slides.map(url => ({ url })); // Format slides for slider
+                setSlideImages(formattedSlides);
+            } catch (error) {
+                console.error('Error fetching slides:', error);
+            }
+        }
+
+        fetchSlides();
+    }, []);
+
+    return (
+        <div className="slide-container">
+            <Fade>
+                {slideImages.map((image, index) => (
+                    <div key={index} className="slide" style={{ backgroundImage: `url(${image.url})` }}>
+                    </div>
+                ))}
+            </Fade>
+        </div>
+    );
 }
 
-export default ImageSlider
+export default ImageSlider;
