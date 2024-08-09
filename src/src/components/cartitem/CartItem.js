@@ -37,6 +37,7 @@ const CartItem = (uid) => {
       if (productData.length > 0 && cart.ProductList.length > 0) {
         const productsInCart = cart.ProductList.map((productId, index) => {
           const product = getProductById(productId);
+          console.log("ok")
           if (product) {
             const { name, imageUrl } = product;
             return {
