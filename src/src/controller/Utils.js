@@ -62,3 +62,9 @@ import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimesta
             throw error; // Throw the error for handling in the caller function
         }
     }
+
+
+    export async function convertToDateWithNoon(dateString) {
+        const [month, day, year] = dateString.split('-').map(Number);
+        return new Date(year, month - 1, day, 12, 0, 0);
+    }
