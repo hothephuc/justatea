@@ -89,7 +89,7 @@ const Navbar = () => {
         </li>
         <li>
           <Link to="/Cart" style={{ textDecoration: 'none', border: 'none' }} aria-label="Cart">
-            <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#f6edd9' }} />
+          <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#f6edd9', fontSize: '28px' }} />
           </Link>
         </li>
         <div>
