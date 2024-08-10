@@ -4,6 +4,7 @@ import CartController from '../controller/Cart'
 import "./css/Checkout.css"
 import { getUserDocument} from '../controller/Utils.js'
 import { checkAuthState } from '../server/auth.js';
+import VoucherController from '../controller/Voucher.js';
 
 const Checkout = () => {
     let uid='Hp7OWQUtIQdi0KyJS2V2uu4I1p92'
@@ -95,21 +96,35 @@ const Checkout = () => {
     setPaymentMethod(e);
   }
 
+  const [discount, setDiscount]=useState(0)
   const totalPrice = cartProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
   const shippingFee = 15000;
-  const finalPrice = totalPrice + shippingFee;
-
-  //const [voucher,setVoucher]=useState('')
-  const [discount, setDiscount]=useState(0)
+  const finalPrice = totalPrice + shippingFee - discount;
   const [voucherID, setVoucherID]=useState("")
   const [voucher,setVoucher]=useState({
     Content:"",
     DataExpỉed:"",
     Discount:"",
-    IsActive:false,
+    IsActive:true,
     IsExpired:false,
     VoucherID:""
   });
+
+  const getVoucher = async() =>{
+    const voucher = await VoucherController.fetchVoucherById(voucherID)
+    if (voucher != null) {
+      setVoucher(voucher)
+      if (voucher.IsExpired==false){
+        setDiscount(totalPrice*voucher.Discount/100)
+      }
+      else{
+        setDiscount(0)
+      }
+    }
+    else{
+      alert("Voucher không đúng");
+    }
+  }
 
   return (
     <div className='checkout'>
@@ -179,7 +194,7 @@ const Checkout = () => {
                   </select>
                 </div>
             </div>
-            <button>Lưu thông tin và thanh toán</button>
+            <button disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
           </div>):(<div></div>)}
           <div className='order-info'>
                 <h1>Tổng số tiền</h1>
@@ -206,8 +221,8 @@ const Checkout = () => {
                     value={voucherID}
                     onChange={(e) => setVoucherID(e.target.value)}
                   />
-                  <button>Kiểm tra</button>
-                  {voucher.IsActive && voucher.IsExpired ?(<p>Mã đã hết hạn</p>):(<p></p>)}
+                  <button onClick={getVoucher} disabled={!voucherID}>Kiểm tra</button>
+                  {voucher.IsActive && voucher.IsExpired ?(<p>Mã đã hết hạn</p>):(<p>{voucher.Content}</p>)}
                 </div>
                 <hr/>
                 {cartProducts.map((product, index)=>(

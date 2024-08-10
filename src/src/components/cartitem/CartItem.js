@@ -22,7 +22,7 @@ const CartItem = (uid) => {
 
     useEffect(() => {
         const getCart = async () => {
-            const cartData = await CartController.retrieveCart(uid);
+            const cartData = await CartController.retrieveCart(uid.uid);
             setCart(cartData);
         };
 
@@ -175,36 +175,12 @@ const CartItem = (uid) => {
                         <p>Đơn giá</p>
                         <p>{finalPrice}đ</p>
                     </div>
-                    <button onClick={handleCreateOrder}>Đi đến mục thanh toán</button>
+                    <Link to='/Checkout' style={{ textDecoration: 'none' }}>
+                    <button>Đi đến mục thanh toán</button>
+                    </Link>
                 </div>
             </div>
-          </div>
-          ))}
-        </div>
-        <hr/>
-      </div>
-      <div className='cart-items-down'>
-        <img src="https://i.redd.it/b1u8f6b8t5491.jpg" alt=""></img>
-        <div className='cart-items-total'>
-          <h2>Tổng giá tiền</h2>
-          <div className='cart-items-total-price'>
-            <p>Tổng giá tiền sản phẩm</p>
-            <p>{totalPrice}đ</p>
-          </div>
-            
-          <div className='cart-items-total-price'>
-            <p>Phí giao hàng</p>
-            <p>{shippingFee}đ</p>
-          </div>
-            
-          <div className='cart-items-total-price'>
-            <p>Đơn giá</p>
-            <p>{finalPrice}đ</p>
-          </div>
-          <Link to='/Checkout' style={{ textDecoration: 'none' }}>
-            <button>Đi đến mục thanh toán</button>
-          </Link>
-        </div>
+    </div>
     );
 }
 
