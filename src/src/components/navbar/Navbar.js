@@ -5,10 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { checkAuthState } from '../../server/auth';
 import DropdownMenu from './DropDownMenu';
 import SearchBar from '../searchBar/searchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navRef = useRef();
   const navigate = useNavigate();
 
@@ -17,24 +20,30 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    checkAuthState().then((authState) => {
-      if (authState) {
-        setUser(authState.user);
-        console.log("user online");
-        console.log(user.imageUrl)
-      } else {
-        setUser(null);
+    const fetchUser = async () => {
+      try {
+        const authState = await checkAuthState();
+        console.log('Auth state:', authState);
+        if (authState && authState.user) {
+          setUser(authState);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error checking auth state:', error);
+      } finally {
+        setLoading(false);
       }
-    }).catch((error) => {
-      console.error('Error checking auth state:', error);
-    });
+    };
+
+    fetchUser();
   }, []);
 
   const handleSearchSubmit = (searchInput) => {
-    // Construct the search URL with the query
     const searchUrl = `/menu?query=${searchInput.toLowerCase()}`;
-    window.location.href = searchUrl; // Using window.location.href to redirect
+    window.location.href = searchUrl;
   };
+
   const handleMenuClick = (menuItem) => {
     setMenu(menuItem);
     showNavbar();
@@ -45,6 +54,10 @@ const Navbar = () => {
     showNavbar();
     navigate('/LoginSignup');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="navbar">
@@ -74,19 +87,18 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
           {menu === 'picture' && <hr />}
         </li>
-        <li onClick={() => handleMenuClick('contact')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
-          {menu === 'contact' && <hr />}
+        <li>
+          <Link to="/Cart" style={{ textDecoration: 'none', border: 'none' }} aria-label="Cart">
+          <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#f6edd9', fontSize: '28px' }} />
+          </Link>
         </li>
-        <div className="nav-login-button">
+        <div>
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-
-            <Link to="/LoginSignup" aria-label="Login">
+            <Link className="nav-login-button" to="/LoginSignup" aria-label="Login" style={{ textDecoration: 'none' }}>
               <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
             </Link>
-
           )}
         </div>
       </ul>

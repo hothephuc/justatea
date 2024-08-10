@@ -65,7 +65,7 @@ const ChangeProfile = () => {
               />
             </div>
           </div>
-          <label>Giới</label>
+          <label>Giới tính</label>
           <div className='gender_options'>
             <select
               value={gender}

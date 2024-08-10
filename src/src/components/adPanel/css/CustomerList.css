@@ -1,0 +1,67 @@
+/* UserTable.css */
+
+/* Container for the table */
+.table-container {
+    color : black;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Basic table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Styling for selected row */
+.selected {
+    background-color: #d0e0ff;
+}
+
+/* Styling for role change buttons */
+.role-change-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.role-change-buttons button {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.role-change-buttons button:hover {
+    background-color:  black;
+}
+
+.role-change-buttons button:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+}

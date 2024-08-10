@@ -39,8 +39,7 @@ class CustomerController {
             dob: user.dob,
             gender:user.gender,
             phone:user.phone,
-            address: user.add,
-            imageUrl: user.imageUrl, 
+            address: user.add
         });
     }
 
@@ -51,7 +50,7 @@ class CustomerController {
     }
 
 }
-
+   
 }
 
 export default CustomerController;

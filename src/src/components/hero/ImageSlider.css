@@ -1,0 +1,54 @@
+.image-gallery {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    max-width: 100%; /* Điều chỉnh kích thước ảnh */
+    max-height: 60%; /* Điều chỉnh kích thước ảnh */
+    display:flex;
+}
+
+.slide.active {
+    display: block;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    width: 30px; /* Giảm chiều rộng của nút mũi tên */
+    height: 30px; /* Giảm chiều cao của nút mũi tên */
+    margin-top: -15px; /* Điều chỉnh để căn giữa theo chiều dọc */
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 20px; /* Giảm kích thước chữ */
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0;
+    text-align: center;
+    line-height: 30px; /* Căn giữa chữ theo chiều dọc */
+    z-index: 100;
+}
+
+.arrow.left {
+    left: 10px; /* Điều chỉnh khoảng cách từ bên trái */
+}
+
+.arrow.right {
+    right: 10px; /* Điều chỉnh khoảng cách từ bên phải */
+}

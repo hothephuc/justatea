@@ -70,7 +70,15 @@
    font-weight: 60px;
    color: red;
 }
-
+.loginsignup-options {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .loginsignup-options span{
+    color : gray,
+  }
 .Social-icon{
     margin-top: 10px;
     margin: auto;
@@ -97,4 +105,26 @@
 .Single-col.Social-icon .fa-google {
     font-size: 1em; 
     color: #4285F4; 
+}
+.hr-text {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color : gray
+}
+
+.hr-text::before,
+.hr-text::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #000;
+}
+
+.hr-text:not(:empty)::before {
+    margin-right: 10px;
+}
+
+.hr-text:not(:empty)::after {
+    margin-left: 10px;
 }

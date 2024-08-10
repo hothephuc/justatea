@@ -40,12 +40,12 @@ const LoginSignup = () => {
       console.log('Google sign-in successful');
       console.log(googleUser);
 
-      if (Object.keys(googleUser).length === 3) {
+      if (googleUser.phone == "") {
         navigate('/ChangeProfile');
-        window.reload.location();
+        window.location.reload();
       } else {
         navigate('/');
-        window.reload.location();
+        window.location.reload();
       }
     } catch (error) {
       console.error('Google sign-in error:', error);
@@ -90,33 +90,29 @@ const LoginSignup = () => {
           Đăng nhập
         </button>
         {errorMessage && <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
-        <p className='loginsignup-signup'>Chưa có tài khoản?
-          <span
-            onClick={handleClick}
-            style={{
-              color: clicked ? 'red' : 'blue', 
-              cursor: 'pointer',
-              textDecoration: clicked ? 'underline' : 'none',
-            }}
-          >
-            <Link to='/Signup'>
-              Đăng ký ngay.
-            </Link>
-          </span>
-        </p>
-        <p className='loginsignup-forgot-password'>
+        <p className='loginsignup-options'>
+        <span
+          onClick={handleClick}
+          style={{
+            color:  'blue',
+            cursor: 'pointer',
+            textDecoration: clicked ? 'underline' : 'none',
+          }}
+        >
+          <Link to='/Signup'>Chưa có tài khoản?</Link>
+        </span>
+        <span
+          onClick={() => setShowResetPassword(!showResetPassword)}
+          style={{
+            color: 'blue',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+        >
           Quên mật khẩu?
-          <span
-            onClick={() => setShowResetPassword(!showResetPassword)}
-            style={{
-              color: showResetPassword ? 'red' : 'blue', 
-              cursor: 'pointer',
-              textDecoration: showResetPassword ? 'underline' : 'none',
-            }}
-          >
-            Nhấp vào đây.
-          </span>
-        </p>
+        </span>
+      </p>
+
         {showResetPassword && (
           <div className='reset-password-field'>
             <label>Nhập email của bạn</label>
@@ -131,7 +127,7 @@ const LoginSignup = () => {
             </button>
           </div>
         )}
-        <hr/>
+        <div class="hr-text">Hoặc</div>
         <div className='Single-col Social-icon d-flex justify-content-evenly'>
           <div onClick={handleGoogleSignIn}>
             <FontAwesomeIcon icon={faGoogle} />

@@ -28,10 +28,12 @@
 .changeProfile-fields .name-fields {
     display: flex;
     gap: 10px;
+    width: 100%;
   }
   
 .changeProfile-fields .name-fields input {
     flex: 1;
+    width: 100%;
 }
 
 .gender_dropdown {
@@ -39,14 +41,14 @@
     padding: 10px;
     width: 100%;
     box-sizing: border-box; 
-    border: none;   
-    outline: none;   
+    border: 1px solid #f6edd9;  
+    outline: none;
+    background-color: white;   
 }
 
 .gender_dropdown:focus {
-    border: none; 
+    border: 1px solid #f6edd9;
     outline:none;
-
 }
 
 .dob{

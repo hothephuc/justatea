@@ -1,35 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signOutUser, checkAuthState } from '../../server/auth';
-import { getUserDocument} from '../../controller/Utils.js'
+import { signOutUser } from '../../server/auth';
 import './DropDownMenu.css';
 import noavatar from "../assets/noavatar.png";
 
-const DropdownMenu = () => {
+const DropdownMenu = ({ user }) => {
+  const [avatar, setAvatar] = useState(null); // Initial state is null, indicating no image loaded yet
+  const [isLoading, setIsLoading] = useState(true); // Loading state to control rendering
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const authState = await checkAuthState();
-        if (authState && authState.user) {
-          const uid = authState.user.uid;
-          const fetchedUserData = await getUserDocument(uid);
-          if (fetchedUserData) {
-            setUserData(fetchedUserData); // Save user data
-          } else {
-            console.error('No user data found');
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+    const userAvatar = user?.userData?.imageUrl;
 
-    fetchUser();
-  }, []);
+    if (userAvatar) {
+      // Preload the avatar image
+      const img = new Image();
+      img.src = userAvatar;
+      img.onload = () => {
+        setAvatar(userAvatar); // Set the avatar after it's loaded
+        setIsLoading(false); // Indicate that loading is complete
+      };
+      img.onerror = () => {
+        setAvatar(noavatar); // Set the default avatar if the image fails to load
+        setIsLoading(false); // Indicate that loading is complete even if there's an error
+      };
+    } else {
+      setAvatar(noavatar); // Set the default avatar if no user avatar is provided
+      setIsLoading(false); // Indicate that loading is complete
+    }
+  }, [user]);
 
   const toggleDropdown = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
@@ -45,11 +45,16 @@ const DropdownMenu = () => {
     }
   };
 
+  if (isLoading) {
+    // Render a loading spinner or some placeholder content while loading
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="dropdown">
       <button className="dropdown-toggle" onClick={toggleDropdown}>
         <img
-          src={userData && userData.imageUrl ? userData.imageUrl : noavatar}
+          src={avatar}
           alt="User Avatar"
           className="user-avatar"
         />
@@ -57,7 +62,7 @@ const DropdownMenu = () => {
       {isOpen && (
         <div className="dropdown-menu show">
           <Link to="/Profile" className="dropdown-item">Tài khoản</Link>
-          {userData && userData.role === 'Admin' && (
+          {user?.userData?.role === 'Admin' && (
             <Link to="/Admin" className="dropdown-item">Quyền admin</Link>
           )}
           <button onClick={handleLogout} className="dropdown-item">Đăng xuất</button>

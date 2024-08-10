@@ -3,6 +3,7 @@ import
 {BsCart3, BsGrid1X2Fill, BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, 
   BsListCheck, BsMenuButtonWideFill, BsFillGearFill}
  from 'react-icons/bs'
+ import { Link, useNavigate } from 'react-router-dom';
 
 function SideBar({openSidebarToggle, OpenSidebar}) {
   return (
@@ -29,9 +30,9 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <Link to ='/CustomerList'>
                     <BsPeopleFill className='icon'/> Customers
-                </a>
+                </Link>
             </li>
             <li className='sidebar-list-item'>
                 <a href="">
@@ -44,9 +45,10 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="./AdSetting.js">
+                <Link to ='/Setting'>
                     <BsFillGearFill className='icon'/> Setting
-                </a>
+                </Link>
+                    
             </li>
         </ul>
     </aside>

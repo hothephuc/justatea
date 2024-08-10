@@ -63,6 +63,11 @@ class AdminController {
         });
     }
 
+    static async setCustomer(uid) {
+        await updateDoc(doc(db, "users", uid), {
+            role: "Customer"
+        });
+    }
     /**
      * Uploads an avatar image to Firebase Storage and returns its download URL.
      * 
@@ -76,6 +81,40 @@ class AdminController {
             return await uploadImage(imageFile, storagePath);
         }
         return "";
+    }
+
+     // Fetch all users
+     static async getAllUsers() {
+        try {
+            const usersCollection = collection(db, 'users');
+            const usersSnapshot = await getDocs(usersCollection);
+            const usersList = usersSnapshot.docs.map(doc => ({id: doc.id,...doc.data()}));
+            return usersList;
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            throw new Error('Unable to fetch users');
+        }
+    }
+
+    static async fetchAllSlideImageUrls() {
+        try {
+            const slideCollection = collection(db, 'slide');
+            const slideSnapshot = await getDocs(slideCollection);
+            const imageUrls = [];
+            
+            slideSnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log('Document data:', data);
+                if (data.imageUrl) {
+                    imageUrls.push(data.imageUrl);
+                }
+            });
+            console.log('Fetched image URLs:', imageUrls); // Log all image URLs
+            return imageUrls;
+        } catch (error) {
+            console.error('Error fetching slide image URLs:', error);
+            throw error;
+        }
     }
 }
 

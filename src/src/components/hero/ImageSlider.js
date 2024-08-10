@@ -1,52 +1,58 @@
-import React from "react";
-import '../hero/ImageSlider.css'
-import {Fade,Zoom,Slide} from 'react-slideshow-image'
-import slide from "../assets/slide.jpg";
-import slide2 from "../assets/coffee_date.jpg";
-import slide3 from "../assets/slide3.jpg";
-
-const slideImage = [
-    {
-        url: slide,
-        caption: "First slide"
-    },
-    {
-        url: slide2,
-        caption: "Second slide"
-    },
-    {
-        url: slide3,
-        caption: "Third slide"
-    }
-];
-
-const divStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '400px',
-    backgroundSize: 'cover',
-}
-const spanStyle ={
-    fontSize: '20px',
-    background: "#efefef",
-    color: "#000000",
-}
+import React, { useEffect, useState } from "react";
+import '../hero/ImageSlider.css';
+import AdminController from "../../controller/Admin";
 
 function ImageSlider() {
-  return (
-    <div className="slide-container">
-      <Fade>
-        {slideImage.map((image,index)=> (
-            <div key={index}>
-                <div style={{ ...divStyle, backgroundImage: `url(${image.url})` }}>
-                    <span style ={{spanStyle}}>{image.caption}</span>
-                </div>
+    const [slideImages, setSlideImages] = useState([]);
+    const [currentSlide, setCurrentSlide] = useState(0);
+
+    useEffect(() => {
+        async function fetchSlides() {
+            try {
+                const slides = await AdminController.fetchAllSlideImageUrls();
+                const formattedSlides = slides.map(url => ({ url }));
+                setSlideImages(formattedSlides);
+                console.log('Fetched images:', formattedSlides);
+            } catch (error) {
+                console.error('Error fetching slides:', error);
+            }
+        }
+
+        fetchSlides();
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prevIndex) => (prevIndex + 1) % slideImages.length);
+        }, 3000); // Change slide every 3 seconds
+
+        return () => clearInterval(interval);
+    }, [slideImages.length]);
+
+    const goToPreviousSlide = () => {
+        setCurrentSlide((prevIndex) => (prevIndex - 1 + slideImages.length) % slideImages.length);
+    };
+
+    const goToNextSlide = () => {
+        setCurrentSlide((prevIndex) => (prevIndex + 1) % slideImages.length);
+    };
+
+    return (
+        <div className="image-gallery">
+            <div className="slideshow-container">
+                {slideImages.map((image, index) => (
+                    <div
+                        key={index}
+                        className={`slide ${index === currentSlide ? 'active' : ''}`}
+                    >
+                        <img src={image.url} alt={`Slide ${index + 1}`} />
+                    </div>
+                ))}
+                <button className="arrow left" onClick={goToPreviousSlide}>&#10094;</button>
+                <button className="arrow right" onClick={goToNextSlide}>&#10095;</button>
             </div>
-        ))}
-      </Fade>
-    </div>
-  )
+        </div>
+    );
 }
 
-export default ImageSlider
+export default ImageSlider;

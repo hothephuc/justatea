@@ -119,7 +119,7 @@ const Signup = () => {
               onChange={(event) => setGender(event.target.value)}
               className='gender_dropdown'
             >
-              <option value='Chọn giới tính'></option>
+              <option value=''>Chọn giới tính</option>
               <option value='Nam'>Nam</option>
               <option value='Nữ'>Nữ</option>
               <option value='Khác'>Khác</option>
