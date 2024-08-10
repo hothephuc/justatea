@@ -40,7 +40,7 @@ const LoginSignup = () => {
       console.log('Google sign-in successful');
       console.log(googleUser);
 
-      if (Object.keys(googleUser).length === 3) {
+      if (googleUser.phone == "") {
         navigate('/ChangeProfile');
         window.reload.location();
       } else {

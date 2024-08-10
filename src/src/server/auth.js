@@ -34,10 +34,16 @@ export async function signInGoogle() {
           else {
               // User does not exist in the database, return new user details
               const userDetails = {
-                  email: user.email,
-                  uid: user.uid,
-                  name: user.displayName
+                name: user.displayName,
+                dob: "",
+                gender: "",
+                email: user.email,
+                phone: "",
+                add: "",
+                role: "Customer",
+                imageUrl: ""    
               };
+              await addUserDoc(userDetails,user.uid)
               resolve(userDetails);
           }
       }).catch((error) => {
