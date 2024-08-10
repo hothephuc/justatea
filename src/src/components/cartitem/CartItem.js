@@ -1,14 +1,12 @@
-
-import React, { useContext, useState, useEffect } from 'react'
-import './CartItem.css'
-import { MenuContext } from '../../context/MenuContext'
-import { checkAuthState } from '../../server/auth'
-import CartController from '../../controller/Cart'
+import React, { useContext, useState, useEffect } from 'react';
+import './CartItem.css';
+import { MenuContext } from '../../context/MenuContext';
+import CartController from '../../controller/Cart';
 import OrderController from '../../controller/Order';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-const CartItem = (uid) => { 
-    const {productData}=useContext(MenuContext)
+const CartItem = ({ uid }) => { 
+    const { productData } = useContext(MenuContext);
     const [cartProducts, setCartProducts] = useState([]);
     const [cart, setCart] = useState({
         ProductList: [],
@@ -17,8 +15,8 @@ const CartItem = (uid) => {
         sizeList: [],
         toppingList: []
     });
-    const [paymentInfo, setPaymentInfo] = useState({}); // Set your payment info structure here
-    const [contactInfo, setContactInfo] = useState({}); // Initialize with fake data
+    const [paymentInfo, setPaymentInfo] = useState({}); 
+    const [contactInfo, setContactInfo] = useState({}); 
 
     useEffect(() => {
         const getCart = async () => {
@@ -66,7 +64,6 @@ const CartItem = (uid) => {
             updatedCartProducts[index].quantity = newQuantity;
             setCartProducts(updatedCartProducts);
 
-            // Update the quantity in the database
             await CartController.modifyItemQuantity(uid, updatedCartProducts[index].id, newQuantity);
         }
     };
@@ -75,10 +72,8 @@ const CartItem = (uid) => {
         const updatedCartProducts = cartProducts.filter((_, i) => i !== index);
         setCartProducts(updatedCartProducts);
 
-        // Remove the item from the database
         await CartController.removeItemFromCart(uid, cart.ProductList[index]);
 
-        // Update the cart state to keep it in sync
         const updatedCart = {
             ProductList: cart.ProductList.filter((_, i) => i !== index),
             priceList: cart.priceList.filter((_, i) => i !== index),
@@ -90,40 +85,32 @@ const CartItem = (uid) => {
         setCart(updatedCart);
     };
 
-    // Calculate total price only once to avoid redundancy
     const totalPrice = cartProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
     const shippingFee = 15000;
     const finalPrice = totalPrice + shippingFee;
 
-    const handleCreateOrder = async () => { // Hàm này chỉ tạo order và redirect tới trang show order thôi. Còn bước placeOrder gọi ở đây để test payment
+    const handleCreateOrder = async () => {
         try {
-            // Call OrderController.createOrder with the necessary parameters
             await OrderController.createOrder(uid, cart, paymentInfo, contactInfo, finalPrice);
-            
-            // Retrieve the updated list of user orders
             const orders = await OrderController.getUserOrders(uid);
-    
-            // Find the most recent order (the one just created)
-            const newOrder = orders[orders.length - 1]; // Assuming the latest order is the last one in the array
-    
+            const newOrder = orders[orders.length - 1];
+
             if (newOrder) {
-                // Call the placeOrder method to redirect to the payment page
                 await OrderController.placeOrder(uid, finalPrice, newOrder.orderID);
             } else {
                 alert("Order not found.");
             }
-    
+
             alert("Order created successfully!");
         } catch (error) {
             console.error("Error creating order:", error);
             alert("Failed to create order.");
         }
     };
-    
 
     return (
         <div className='cart-items'>
-            <div className='car-item-up'>
+            <div className='cart-item-up'>
                 <div className='cart-items-header'>
                     <p>Sản phẩm</p>
                     <p>Tên sản phẩm</p>
@@ -175,37 +162,13 @@ const CartItem = (uid) => {
                         <p>Đơn giá</p>
                         <p>{finalPrice}đ</p>
                     </div>
-                    <button onClick={handleCreateOrder}>Đi đến mục thanh toán</button>
+                    <Link to='/Checkout' style={{ textDecoration: 'none' }}>
+                        <button>Đi đến mục thanh toán</button>
+                    </Link>
                 </div>
             </div>
-          </div>
-          ))}
-        </div>
-        <hr/>
-      </div>
-      <div className='cart-items-down'>
-        <img src="https://i.redd.it/b1u8f6b8t5491.jpg" alt=""></img>
-        <div className='cart-items-total'>
-          <h2>Tổng giá tiền</h2>
-          <div className='cart-items-total-price'>
-            <p>Tổng giá tiền sản phẩm</p>
-            <p>{totalPrice}đ</p>
-          </div>
-            
-          <div className='cart-items-total-price'>
-            <p>Phí giao hàng</p>
-            <p>{shippingFee}đ</p>
-          </div>
-            
-          <div className='cart-items-total-price'>
-            <p>Đơn giá</p>
-            <p>{finalPrice}đ</p>
-          </div>
-          <Link to='/Checkout' style={{ textDecoration: 'none' }}>
-            <button>Đi đến mục thanh toán</button>
-          </Link>
         </div>
     );
-}
+};
 
 export default CartItem;

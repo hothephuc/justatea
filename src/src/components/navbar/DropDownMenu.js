@@ -65,6 +65,8 @@ const DropdownMenu = ({ user }) => {
           {user?.userData?.role === 'Admin' && (
             <Link to="/Admin" className="dropdown-item">Quyền admin</Link>
           )}
+          {/* New Customer Support Section */}
+          <Link to="/chatbot" className="dropdown-item">Hỗ trợ khách hàng</Link>
           <button onClick={handleLogout} className="dropdown-item">Đăng xuất</button>
         </div>
       )}

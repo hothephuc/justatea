@@ -21,6 +21,7 @@ import Setting from './components/adPanel/Setting';
 import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
+import ChatbotPage from "./pages/Chatbot";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path='/payment' element={<PaymentPage />} /> 
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFailure />} />
+          <Route path='/chatbot' element={<ChatbotPage />} />  {/* Add the chatbot route */}
         </Routes>
         <Footer />
       </BrowserRouter>
