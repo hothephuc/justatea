@@ -64,9 +64,6 @@ const AddProduct = () => {
               value={productInfo.category}
               onChange={handleChange}
             >
-              {/* <option value="Tea">Tea</option>
-              <option value="Cafe">Cafe</option>
-              <option value="Food">Food</option> */}
               {menu_category.map((item,index)=>{
               return(
                 <option value={item.category_name} key={index}>{item.category_name}</option>

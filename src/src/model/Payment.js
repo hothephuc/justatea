@@ -1,17 +1,29 @@
 const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
-const app = express();
 
+const functions = require('firebase-functions');
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../config/service_account.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const db = admin.firestore();
+
+const app = express();
 app.use(express.json());
 
 app.post('/payment', async (req, res) => {
-  const { amount } = req.body;
+  const { amount, userId } = req.body;
 
-  if (!amount) {
+  if (!amount || !userId) {
     return res.status(400).json({
       statusCode: 400,
-      message: 'Payment amount is required'
+      message: 'Payment amount and user ID are required'
     });
   }
 
@@ -19,12 +31,12 @@ app.post('/payment', async (req, res) => {
   const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
   const orderInfo = 'pay with MoMo';
   const partnerCode = 'MOMO';
-  const redirectUrl = 'https://your-website.com/payment-success';
-  const ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+  const redirectUrl = 'http://localhost:3000/payment-success';
+  const ipnUrl = 'http://localhost:3001/callback';
   const requestType = 'payWithMethod';
-  const orderId = partnerCode + new Date().getTime();
+  const orderId = `${partnerCode}-${userId}-${new Date().getTime()}`;
   const requestId = orderId;
-  const extraData = '';
+  const extraData = `userId=${userId}`;
   const orderGroupId = '';
   const autoCapture = true;
   const lang = 'vi';
@@ -69,10 +81,12 @@ app.post('/payment', async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       statusCode: 500,
-      message: 'server error'
+      message: 'Server error'
     });
   }
 });
+
+
 
 app.listen(3001, () => {
   console.log('Server is running on port 3001');

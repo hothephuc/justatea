@@ -18,6 +18,9 @@ import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 import Admin from "./pages/Admin";
 import CustomerList from './components/adPanel/CustomerList';
 import Setting from './components/adPanel/Setting';
+import Checkout from './pages/Checkout';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 
 function App() {
   return (
@@ -38,9 +41,12 @@ function App() {
           <Route path='/Profile' element={<Profile />} />
           <Route path='/Admin' element={<Admin/>}/>
           <Route path="/Cart" element={<Cart/>}/>
-          <Route path='/payment' element={<PaymentPage />} /> {/* Add PaymentPage route */}
           <Route path='/CustomerList' element={<CustomerList/>} />
           <Route path='/Setting' element ={<Setting/>} />
+          <Route path="/Checkout" element={<Checkout/>}/>
+          <Route path='/payment' element={<PaymentPage />} /> 
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-fail" element={<PaymentFailure />} />
         </Routes>
         <Footer />
       </BrowserRouter>
