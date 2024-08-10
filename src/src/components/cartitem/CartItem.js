@@ -1,11 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react';
-import './CartItem.css';
-import { MenuContext } from '../../context/MenuContext';
-import CartController from '../../controller/Cart';
-import OrderController from '../../controller/Order';
 
-const CartItem = ({ uid }) => {
-    const { productData } = useContext(MenuContext);
+import React, { useContext, useState, useEffect } from 'react'
+import './CartItem.css'
+import { MenuContext } from '../../context/MenuContext'
+import { checkAuthState } from '../../server/auth'
+import CartController from '../../controller/Cart'
+import OrderController from '../../controller/Order';
+import { Link } from 'react-router-dom'
+
+const CartItem = (uid) => { 
+    const {productData}=useContext(MenuContext)
     const [cartProducts, setCartProducts] = useState([]);
     const [cart, setCart] = useState({
         ProductList: [],
@@ -175,6 +178,32 @@ const CartItem = ({ uid }) => {
                     <button onClick={handleCreateOrder}>Đi đến mục thanh toán</button>
                 </div>
             </div>
+          </div>
+          ))}
+        </div>
+        <hr/>
+      </div>
+      <div className='cart-items-down'>
+        <img src="https://i.redd.it/b1u8f6b8t5491.jpg" alt=""></img>
+        <div className='cart-items-total'>
+          <h2>Tổng giá tiền</h2>
+          <div className='cart-items-total-price'>
+            <p>Tổng giá tiền sản phẩm</p>
+            <p>{totalPrice}đ</p>
+          </div>
+            
+          <div className='cart-items-total-price'>
+            <p>Phí giao hàng</p>
+            <p>{shippingFee}đ</p>
+          </div>
+            
+          <div className='cart-items-total-price'>
+            <p>Đơn giá</p>
+            <p>{finalPrice}đ</p>
+          </div>
+          <Link to='/Checkout' style={{ textDecoration: 'none' }}>
+            <button>Đi đến mục thanh toán</button>
+          </Link>
         </div>
     );
 }
