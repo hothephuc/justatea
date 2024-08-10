@@ -5,11 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { checkAuthState } from '../../server/auth';
 import DropdownMenu from './DropDownMenu';
 import SearchBar from '../searchBar/searchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
   const [menu, setMenu] = useState('home');
-  const [user, setUser] = useState(null); // Initially null to handle loading state
-  const [loading, setLoading] = useState(true); // Loading state
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navRef = useRef();
   const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ const Navbar = () => {
       } catch (error) {
         console.error('Error checking auth state:', error);
       } finally {
-        setLoading(false); // End loading state
+        setLoading(false);
       }
     };
 
@@ -54,7 +56,6 @@ const Navbar = () => {
   };
 
   if (loading) {
-    // Render a loading screen while waiting for user data
     return <div>Loading...</div>;
   }
 
@@ -86,9 +87,10 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
           {menu === 'picture' && <hr />}
         </li>
-        <li onClick={() => handleMenuClick('contact')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Contact">Liên hệ</Link>
-          {menu === 'contact' && <hr />}
+        <li>
+          <Link to="/Cart" style={{ textDecoration: 'none', border: 'none' }} aria-label="Cart">
+            <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#f6edd9' }} />
+          </Link>
         </li>
         <div>
           {user ? (
