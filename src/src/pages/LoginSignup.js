@@ -42,10 +42,10 @@ const LoginSignup = () => {
 
       if (googleUser.phone == "") {
         navigate('/ChangeProfile');
-        window.reload.location();
+        window.location.reload();
       } else {
         navigate('/');
-        window.reload.location();
+        window.location.reload();
       }
     } catch (error) {
       console.error('Google sign-in error:', error);
