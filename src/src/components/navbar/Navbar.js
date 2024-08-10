@@ -94,8 +94,8 @@ const Navbar = () => {
           {user ? (
             <DropdownMenu user={user} />
           ) : (
-            <Link to="/LoginSignup" aria-label="Login">
-              <button className="nav-login-button" onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
+            <Link className="nav-login-button" to="/LoginSignup" aria-label="Login" style={{ textDecoration: 'none' }}>
+              <button onClick={() => { setMenu('login'); showNavbar(); }}>Đăng nhập</button>
             </Link>
           )}
         </div>
