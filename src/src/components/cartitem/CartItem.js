@@ -3,6 +3,8 @@ import './CartItem.css'
 import { MenuContext } from '../../context/MenuContext'
 import { checkAuthState } from '../../server/auth'
 import CartController from '../../controller/Cart'
+import { Link } from 'react-router-dom'
+
 const CartItem = (uid) => { 
     const {productData}=useContext(MenuContext)
     const [cartProducts, setCartProducts] = useState([]);
@@ -151,7 +153,9 @@ const CartItem = (uid) => {
             <p>Đơn giá</p>
             <p>{finalPrice}đ</p>
           </div>
-          <button>Đi đến mục thanh toán</button>
+          <Link to='/Checkout' style={{ textDecoration: 'none' }}>
+            <button>Đi đến mục thanh toán</button>
+          </Link>
         </div>
       </div>
     </div>
