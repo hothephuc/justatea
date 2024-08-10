@@ -95,15 +95,16 @@ class AdminController {
             throw new Error('Unable to fetch users');
         }
     }
-    
+
     static async fetchAllSlideImageUrls() {
         try {
             const slideCollection = collection(db, 'slide');
             const slideSnapshot = await getDocs(slideCollection);
             const imageUrls = [];
-    
+            
             slideSnapshot.forEach((doc) => {
                 const data = doc.data();
+                console.log('Document data:', data);
                 if (data.imageUrl) {
                     imageUrls.push(data.imageUrl);
                 }

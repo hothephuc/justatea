@@ -45,9 +45,10 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="./AdSetting.js">
+                <Link to ='/Setting'>
                     <BsFillGearFill className='icon'/> Setting
-                </a>
+                </Link>
+                    
             </li>
         </ul>
     </aside>

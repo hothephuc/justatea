@@ -7,7 +7,10 @@ import hero_image from "../assets/hero.jpg"
 const Hero = () => {
   return (
     <div>    
-      <ImageSlider/>   
+      <ImageSlider/>
+      <div>
+        
+      </div>
     </div>
   );
 }
