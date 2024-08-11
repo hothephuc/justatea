@@ -4,13 +4,13 @@ import Item from '../item/Item'
 import ProductController from '../../controller/Product'
 import './BestProduct.css'
 import { Link } from 'react-router-dom'
-
+import poster from '../assets/poster.png';
 const BestProduct = () => {
     const [products, setProducts] = useState([]);
     const handleClick = () => {
         window.scrollTo(0, 0);
     };
-    const bestProductID=['8DZraCor04d6ONpKjs5z','B1KTfnCOrnN4QLkEh4J5','mUkCsfg5ci8bT3UJqhvD','KjfJY37qg5di2JvV6PdH']
+    const bestProductID=['8DZraCor04d6ONpKjs5z','B1KTfnCOrnN4QLkEh4J5','KjfJY37qg5di2JvV6PdH','pcjYOgNZBnd3dtnDWJnL']
     useEffect(() => {
         const fetchBestProducts = async () => {
           try {
@@ -36,7 +36,7 @@ const BestProduct = () => {
         </div>
         <hr/>
         <div className='poster'>
-            <img src='https://lh3.googleusercontent.com/gg/AJIvXit23-i20l-Iqdf2DpMXTaMF1gLJRTjGuIfNsM8su1VyGXcPlGyJbO3HdX_byWd4Yjj_f27HS7OCE0_ecWq8YIcLkp5LP4pISi6KkKfpLu08lDUEoSktXpkWqSq2XWDkNZ2us0OdupheBPtnS3BBZymB-RKfPE2e7W2I2Lr0Axn9h7M8J-Dq' 
+            <img src={poster}
             alt=""></img>
             <div className='poster-text'>
                 <h2>Chào mừng đến JustaTea</h2>
