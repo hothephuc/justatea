@@ -41,7 +41,7 @@ const Product = () => {
   return (
     <div>
         <ProductDisplay product={product}/>
-        <DescriptionBox/>
+        {/* <DescriptionBox/> */}
         <CommentSection productID={product.id}/>
     </div>
   );

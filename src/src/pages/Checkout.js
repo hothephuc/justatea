@@ -183,7 +183,7 @@ const Checkout = () => {
                     />
                 </div>
                 <div className='order-field'>
-                  <label>Loại sản phẩm</label>
+                  <label>Phương thức thanh toán</label>
                   <select
                     name="category"
                     value={paymentMethod}
@@ -222,7 +222,7 @@ const Checkout = () => {
                     onChange={(e) => setVoucherID(e.target.value)}
                   />
                   <button onClick={getVoucher} disabled={!voucherID}>Kiểm tra</button>
-                  {voucher.IsActive && voucher.IsExpired ?(<p>Mã đã hết hạn</p>):(<p>{voucher.Content}</p>)}
+                  {voucher.IsActive && voucher.IsExpired ?(<p>Mã đã hết hạn</p>):(<p style={{color:'black'}}>{voucher.Content}</p>)}
                 </div>
                 <hr/>
                 {cartProducts.map((product, index)=>(

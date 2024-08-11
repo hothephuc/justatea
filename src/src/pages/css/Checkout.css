@@ -79,9 +79,9 @@
 }
 
 .apply-voucher button{
-    background: white;
+    background: #5d7a55;
     border: 1px solid #5d7a55;
-    color: #5d7a55;
+    color: white;
 }
 
 .apply-voucher button:hover{
