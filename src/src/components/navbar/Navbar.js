@@ -87,6 +87,11 @@ const Navbar = () => {
           <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
           {menu === 'picture' && <hr />}
         </li>
+        {/* New Customer Support Section */}
+        <li onClick={() => handleMenuClick('support')}>
+          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/chatbot">Hỗ trợ khách hàng</Link>
+          {menu === 'support' && <hr />}
+        </li>
         <li>
           <Link to="/Cart" style={{ textDecoration: 'none', border: 'none' }} aria-label="Cart">
           <FontAwesomeIcon icon={faShoppingCart} style={{ color: '#f6edd9', fontSize: '28px' }} />
