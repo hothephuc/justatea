@@ -20,7 +20,7 @@ function SideBar({openSidebarToggle, OpenSidebar}) {
                 </a>
             </li>
             <li className='sidebar-list-item'>
-                <a href="">
+                <a href="/product-manager   ">
                     <BsFillArchiveFill className='icon'/> Products
                 </a>
             </li>

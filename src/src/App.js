@@ -22,6 +22,7 @@ import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import ChatbotPage from "./pages/Chatbot";
+import ProductMannager from './components/adPanel/ProductManager';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           <Route path='/payment' element={<PaymentPage />} /> 
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFailure />} />
+          <Route path="/product-manager" element={<ProductMannager/>}/>
           <Route path='/chatbot' element={<ChatbotPage />} />  {/* Add the chatbot route */}
         </Routes>
         <Footer />
