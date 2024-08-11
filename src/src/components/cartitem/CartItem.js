@@ -1,14 +1,12 @@
-
-import React, { useContext, useState, useEffect } from 'react'
-import './CartItem.css'
-import { MenuContext } from '../../context/MenuContext'
-import { checkAuthState } from '../../server/auth'
-import CartController from '../../controller/Cart'
+import React, { useContext, useState, useEffect } from 'react';
+import './CartItem.css';
+import { MenuContext } from '../../context/MenuContext';
+import CartController from '../../controller/Cart';
 import OrderController from '../../controller/Order';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-const CartItem = (uid) => { 
-    const {productData}=useContext(MenuContext)
+const CartItem = ({ uid }) => { 
+    const { productData } = useContext(MenuContext);
     const [cartProducts, setCartProducts] = useState([]);
     const [cart, setCart] = useState({
         ProductList: [],
@@ -17,8 +15,8 @@ const CartItem = (uid) => {
         sizeList: [],
         toppingList: []
     });
-    const [paymentInfo, setPaymentInfo] = useState({}); // Set your payment info structure here
-    const [contactInfo, setContactInfo] = useState({}); // Initialize with fake data
+    const [paymentInfo, setPaymentInfo] = useState({}); 
+    const [contactInfo, setContactInfo] = useState({}); 
 
     useEffect(() => {
         const getCart = async () => {
@@ -78,7 +76,7 @@ const CartItem = (uid) => {
         // Remove the item from the database
         await CartController.removeItemFromCart(uid.uid, cart.ProductList[index]);
 
-        // Update the cart state to keep it in sync
+
         const updatedCart = {
             ProductList: cart.ProductList.filter((_, i) => i !== index),
             priceList: cart.priceList.filter((_, i) => i !== index),
@@ -90,7 +88,6 @@ const CartItem = (uid) => {
         setCart(updatedCart);
     };
 
-    // Calculate total price only once to avoid redundancy
     const totalPrice = cartProducts.reduce((total, product) => total + (product.price * product.quantity), 0);
     const shippingFee = 15000;
     const finalPrice = totalPrice + shippingFee;
@@ -101,33 +98,26 @@ const CartItem = (uid) => {
 
     const handleCreateOrder = async () => { // Hàm này chỉ tạo order và redirect tới trang show order thôi. Còn bước placeOrder gọi ở đây để test payment
         try {
-            // Call OrderController.createOrder with the necessary parameters
             await OrderController.createOrder(uid, cart, paymentInfo, contactInfo, finalPrice);
-            
-            // Retrieve the updated list of user orders
             const orders = await OrderController.getUserOrders(uid);
-    
-            // Find the most recent order (the one just created)
-            const newOrder = orders[orders.length - 1]; // Assuming the latest order is the last one in the array
-    
+            const newOrder = orders[orders.length - 1];
+
             if (newOrder) {
-                // Call the placeOrder method to redirect to the payment page
                 await OrderController.placeOrder(uid, finalPrice, newOrder.orderID);
             } else {
                 alert("Order not found.");
             }
-    
+
             alert("Order created successfully!");
         } catch (error) {
             console.error("Error creating order:", error);
             alert("Failed to create order.");
         }
     };
-    
 
     return (
         <div className='cart-items'>
-            <div className='car-item-up'>
+            <div className='cart-item-up'>
                 <div className='cart-items-header'>
                     <p>Sản phẩm</p>
                     <p>Tên sản phẩm</p>
@@ -186,6 +176,6 @@ const CartItem = (uid) => {
             </div>
     </div>
     );
-}
+};
 
 export default CartItem;

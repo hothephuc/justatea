@@ -1,10 +1,3 @@
-const express = require('express');
-const axios = require('axios');
-const crypto = require('crypto');
-
-const functions = require('firebase-functions');
-
-var admin = require("firebase-admin");
 
 var serviceAccount = require("/home/phuc/Desktop/SE_project/justatea/src/src/config/service_account.json");
 
