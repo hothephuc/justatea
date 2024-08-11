@@ -27,7 +27,7 @@ const SearchBar = ({ onSearchSubmit }) => {
           onChange={handleSearchInputChange}
           className='search-bar'
         />
-        <button type="submit" className='search-button'>
+        <button type="submit" className='search-navbar-button'>
           <img src={searchIcon} alt="Search Icon" /> {/* Add icon here */}
           Search
         </button>
