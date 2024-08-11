@@ -1,0 +1,18 @@
+
+.breadcrum{
+    display: flex;
+    margin-top: 50px;
+    margin-left: 220px;
+    font-size: 18px;
+    font-weight: 500;
+    color:#5D7A55;
+}
+
+.breadcrum div{
+    color:#5D7A55;
+}
+
+.breadcrum div:hover{
+    color:#90af87;
+    cursor: pointer;
+}
