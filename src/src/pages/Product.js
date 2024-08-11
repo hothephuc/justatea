@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import ProductDisplay from '../components/productdisplay/ProductDisplay.js'
 import CommentSection from '../components/commentsection/CommentSection.js'
 import ProductController from '../controller/Product.js';
+import DescriptionBox from '../components/descriptionbox/DescriptionBox.js'
 
 const Product = () => {
   const { productID } = useParams();
@@ -40,7 +41,7 @@ const Product = () => {
   return (
     <div>
         <ProductDisplay product={product}/>
-        {/* <DescriptionBox/> */}
+        <DescriptionBox/>
         <CommentSection productID={product.id}/>
     </div>
   );

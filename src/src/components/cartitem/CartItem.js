@@ -95,6 +95,10 @@ const CartItem = (uid) => {
     const shippingFee = 15000;
     const finalPrice = totalPrice + shippingFee;
 
+    const handleClick = () => {
+        window.scrollTo(0, 0);
+    };
+
     const handleCreateOrder = async () => { // Hàm này chỉ tạo order và redirect tới trang show order thôi. Còn bước placeOrder gọi ở đây để test payment
         try {
             // Call OrderController.createOrder with the necessary parameters
@@ -160,7 +164,7 @@ const CartItem = (uid) => {
                 <hr />
             </div>
             <div className='cart-items-down'>
-                <img src="https://i.redd.it/b1u8f6b8t5491.jpg" alt="Promotional" />
+                <img src="https://i.pinimg.com/originals/b7/d5/99/b7d599e139a3eda7d5490245a136cb04.jpg" alt="Promotional" />
                 <div className='cart-items-total'>
                     <h2>Tổng giá tiền</h2>
                     <div className='cart-items-total-price'>
@@ -175,7 +179,7 @@ const CartItem = (uid) => {
                         <p>Đơn giá</p>
                         <p>{finalPrice}đ</p>
                     </div>
-                    <Link to='/Checkout' style={{ textDecoration: 'none' }}>
+                    <Link to='/Checkout' style={{ textDecoration: 'none' }} onClick={handleClick}>
                     <button>Đi đến mục thanh toán</button>
                     </Link>
                 </div>

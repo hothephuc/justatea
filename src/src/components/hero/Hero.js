@@ -8,9 +8,6 @@ const Hero = () => {
   return (
     <div>    
       <ImageSlider/>
-      <div>
-        
-      </div>
     </div>
   );
 }

@@ -80,6 +80,10 @@ const Menu = () => {
     return 0;
   });
 
+  const handleClick = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className='menu'>
       <img className='banner' src={banner} alt="" />
@@ -119,7 +123,7 @@ const Menu = () => {
           <p>No products found matching your search criteria.</p>
         )}
       </div>
-      <Link to='/AddProduct' style={{ textDecoration: 'none' }}>
+      <Link to='/AddProduct' style={{ textDecoration: 'none' }} onClick={handleClick}>
         <button className='add-product-button'>Thêm sản phẩm</button>
       </Link>
     </div>
