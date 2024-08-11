@@ -102,6 +102,7 @@ const ProductDisplay = ({ product }) => {
             </div>
           </div>
         </div>
+        {product.tag!="Food"?(
         <div className='choose-topping'>
           <p>Chọn topping</p>
           <div className='topping-option'>
@@ -124,7 +125,7 @@ const ProductDisplay = ({ product }) => {
               <div>Kem Cheese + 5000đ</div>
             </div>
           </div>
-        </div>
+        </div>):(<div></div>)}
         <button onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
       </div>
     </div>

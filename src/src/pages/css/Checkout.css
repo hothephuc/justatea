@@ -78,6 +78,22 @@
     margin: 10px 0;
 }
 
-.apply-voucher{
-    
+.apply-voucher button{
+    background: #5d7a55;
+    border: 1px solid #5d7a55;
+    color: white;
+}
+
+.apply-voucher button:hover{
+    background: #5d7a55;
+    border: #90af87;
+    color: #f6eed9;
+}
+
+.apply-voucher input{
+    outline: none;
+}
+
+.apply-voucher p{
+    color: red;
 }

@@ -20,7 +20,7 @@ const CartItem = ({ uid }) => {
 
     useEffect(() => {
         const getCart = async () => {
-            const cartData = await CartController.retrieveCart(uid);
+            const cartData = await CartController.retrieveCart(uid.uid);
             setCart(cartData);
         };
 
@@ -64,7 +64,8 @@ const CartItem = ({ uid }) => {
             updatedCartProducts[index].quantity = newQuantity;
             setCartProducts(updatedCartProducts);
 
-            await CartController.modifyItemQuantity(uid, updatedCartProducts[index].id, newQuantity);
+            // Update the quantity in the database
+            await CartController.modifyItemQuantity(uid.uid, updatedCartProducts[index].id, newQuantity);
         }
     };
 
@@ -72,7 +73,9 @@ const CartItem = ({ uid }) => {
         const updatedCartProducts = cartProducts.filter((_, i) => i !== index);
         setCartProducts(updatedCartProducts);
 
-        await CartController.removeItemFromCart(uid, cart.ProductList[index]);
+        // Remove the item from the database
+        await CartController.removeItemFromCart(uid.uid, cart.ProductList[index]);
+
 
         const updatedCart = {
             ProductList: cart.ProductList.filter((_, i) => i !== index),
@@ -89,7 +92,11 @@ const CartItem = ({ uid }) => {
     const shippingFee = 15000;
     const finalPrice = totalPrice + shippingFee;
 
-    const handleCreateOrder = async () => {
+    const handleClick = () => {
+        window.scrollTo(0, 0);
+    };
+
+    const handleCreateOrder = async () => { // Hàm này chỉ tạo order và redirect tới trang show order thôi. Còn bước placeOrder gọi ở đây để test payment
         try {
             await OrderController.createOrder(uid, cart, paymentInfo, contactInfo, finalPrice);
             const orders = await OrderController.getUserOrders(uid);
@@ -147,7 +154,7 @@ const CartItem = ({ uid }) => {
                 <hr />
             </div>
             <div className='cart-items-down'>
-                <img src="https://i.redd.it/b1u8f6b8t5491.jpg" alt="Promotional" />
+                <img src="https://i.pinimg.com/originals/b7/d5/99/b7d599e139a3eda7d5490245a136cb04.jpg" alt="Promotional" />
                 <div className='cart-items-total'>
                     <h2>Tổng giá tiền</h2>
                     <div className='cart-items-total-price'>
@@ -162,12 +169,12 @@ const CartItem = ({ uid }) => {
                         <p>Đơn giá</p>
                         <p>{finalPrice}đ</p>
                     </div>
-                    <Link to='/Checkout' style={{ textDecoration: 'none' }}>
-                        <button>Đi đến mục thanh toán</button>
+                    <Link to='/Checkout' style={{ textDecoration: 'none' }} onClick={handleClick}>
+                    <button>Đi đến mục thanh toán</button>
                     </Link>
                 </div>
             </div>
-        </div>
+    </div>
     );
 };
 

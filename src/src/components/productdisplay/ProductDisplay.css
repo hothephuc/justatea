@@ -1,6 +1,8 @@
 .productdisplay{
     display: flex;
-    margin: 50px 220px;
+    margin: 0px 220px;
+    margin-bottom: 50px;
+    margin-top: 20px;
 }
 
 .productdisplay-left{

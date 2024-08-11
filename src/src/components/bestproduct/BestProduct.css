@@ -1,0 +1,58 @@
+.best-products{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    height: 165vh;
+}
+
+.best-products h1{
+    color: #5d7a55;
+    font-size: 50px;
+    font-weight: 600;
+}
+
+.best-products hr{
+    width: 350px;
+    height: 6px;
+    border-radius: 10px;
+    background: #5d7a55;
+}
+
+.best-products-item{
+    margin-top: 20px;
+    display: flex;
+    gap: 110px;
+}
+
+.poster{
+    margin-top: 30px;
+    display: flex;
+    gap: 120px;
+    width: 1200px;
+}
+
+.poster-text h2{
+    color: #5d7a55;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.poster-text p{
+    font-size: 18px;
+    text-align: justify;
+    color: #5d7a55;
+}
+
+.poster-text button{
+    height: 65px;
+    width: 100%;
+    border-radius: 10px;
+    background: #5d7a55;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #F6edd9;
+    margin-top: 30px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

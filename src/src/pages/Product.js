@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom'
 import ProductDisplay from '../components/productdisplay/ProductDisplay.js'
 import CommentSection from '../components/commentsection/CommentSection.js'
 import ProductController from '../controller/Product.js';
+import DescriptionBox from '../components/descriptionbox/DescriptionBox.js'
+import Breadcrum from '../components/breadcrum/Breadcrum.js';
 
 const Product = () => {
   const { productID } = useParams();
@@ -39,6 +41,7 @@ const Product = () => {
 
   return (
     <div>
+        <Breadcrum product={product}/>
         <ProductDisplay product={product}/>
         {/* <DescriptionBox/> */}
         <CommentSection productID={product.id}/>
