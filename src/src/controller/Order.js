@@ -192,52 +192,6 @@ class OrderController
         }
     }
 
-        /**
-     * Allows the user to select an address by index and updates the current ContactInfo in the order.
-     *
-     * @param {string} uid - The unique identifier of the user.
-     * @param {string} orderId - The unique identifier of the order.
-     * @param {number} index - The index of the selected address in the saved addresses array.
-     * 
-     * @returns {Promise<void>} - Returns a promise that resolves when the operation is complete.
-     * 
-     * @throws Will throw an error if the retrieval or update operation fails.
-     */
-    static async chooseAddress(uid, orderId, index) 
-    {
-        try {
-            // Reference to the user document
-            const userDocRef = doc(db, "users", uid);
-            const userDoc = await getDoc(userDocRef);
-
-            if (!userDoc.exists()) {
-                throw new Error("User not found");
-            }
-
-            const userData = userDoc.data();
-            const savedAddresses = userData.ContactInfo || []; // Assume SavedAddresses is an array of ContactInfo
-
-            if (index < 0 || index >= savedAddresses.length) {
-                throw new Error("Invalid address index");
-            }
-
-            // Get the selected address based on the index
-            const selectedAddress = savedAddresses[index];
-
-            // Reference to the order document
-            const orderDocRef = doc(db, "orders", orderId);
-
-            // Update the order with the selected address
-            await updateDoc(orderDocRef, {
-                contactInfo: selectedAddress
-            });
-
-            console.log("Address updated successfully in the order.");
-        } catch (error) {
-            console.error("Error choosing address:", error);
-            throw error;
-        }
-    }
 
     /**
          * Lets the user apply a discount voucher to their order.
@@ -299,7 +253,7 @@ class OrderController
      * @param {number} amount - The total amount for the order.
      * @param {string} orderId - The unique identifier of the pre-created order.
      */
-    static async placeOrder(uid, amount, orderId) 
+    static async placeOrderMomo(uid, amount, orderId) 
     {
         try {
             // Redirect to the PaymentPage with the required parameters
@@ -309,6 +263,20 @@ class OrderController
             throw new Error("Failed to initiate payment. Please try again.");
         }
     }
+
+    // static async payInCash(orderId) 
+    // {
+    //     try {
+    //         const orderRef = doc(db, 'orders', orderId); // Get a reference to the order document
+    //         await updateDoc(orderRef, {
+    //             orderStatus: "Paid", // Update order status to "Paid"
+    //         });
+    //         console.log("Order status updated to 'Paid'.");
+    //     } catch (error) {
+    //         console.error("Error updating order status:", error);
+    //         throw error; // Rethrow the error for handling in the caller
+    //     }
+    // }
 
 }
 

@@ -5,7 +5,7 @@ import "./css/Checkout.css"
 import { getUserDocument} from '../controller/Utils.js'
 import { checkAuthState } from '../server/auth.js';
 import VoucherController from '../controller/Voucher.js';
-
+import OrderController from '../controller/Order.js';
 const Checkout = () => {
     let uid='Hp7OWQUtIQdi0KyJS2V2uu4I1p92'
     const {productData}=useContext(MenuContext)
@@ -93,7 +93,7 @@ const Checkout = () => {
   const[paymentMethod,setPaymentMethod]=useState("Tiền mặt")
 
   const handlePaymentMethod=(e)=>{
-    setPaymentMethod(e);
+    setPaymentMethod(e.target.value);
   }
 
   const [discount, setDiscount]=useState(0)
@@ -125,6 +125,38 @@ const Checkout = () => {
       alert("Voucher không đúng");
     }
   }
+
+  const handleOrder = async () => {
+    if (!name || !mail || !phone || !address) {
+        alert("Vui lòng điền đầy đủ thông tin giao hàng.");
+        return;
+    }
+
+    const contactInfo = {
+        name,
+        phone,
+        mail,
+        address,
+    };
+
+    try {
+        // Create the order first
+        const orderId = await OrderController.createOrder(uid, cart, paymentMethod, contactInfo, finalPrice);
+
+        if (paymentMethod === "Momo") {
+            // Redirect to the payment page with Momo
+            await OrderController.placeOrderMomo(uid, finalPrice, orderId);
+        } else {
+            // Payment method is cash
+            alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
+            // Redirect to a confirmation page or reset the cart, etc.
+        }
+    } catch (error) {
+        console.error("Error creating order:", error);
+        alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
+    }
+};
+
 
   return (
     <div className='checkout'>
@@ -194,7 +226,7 @@ const Checkout = () => {
                   </select>
                 </div>
             </div>
-            <button disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
+            <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
           </div>):(<div></div>)}
           <div className='order-info'>
                 <h1>Tổng số tiền</h1>
