@@ -1,5 +1,5 @@
 .item{
-    width: 200px;
+    width: 250px;
     border-radius: 15px;  
     justify-content: center;
     /* flex-direction: column;
@@ -18,8 +18,8 @@
 }
 
 .item-info h{
-    font-size: 16px;
-    color: black;
+    font-size: 18px;
+    color:#5D7A55; 
     font-weight: 600;
 }
 

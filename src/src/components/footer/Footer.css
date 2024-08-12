@@ -29,10 +29,21 @@
 .footer-content {
     display: flex;
     justify-content: space-between;
-    width: 80%;
+    width: 90%;
     gap: 50px;
     color: #f6edd9;
-    font-size: 15px;
+    font-size: 16px;
+}
+
+.footer-about{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    gap: 10px;
+}
+
+.footer-about p{
+    line-height: 2.20;
 }
 
 .footer-contact,
@@ -42,11 +53,21 @@
     gap: 10px;
 }
 
+.footer-content h1 {
+    font-size: 22px;
+}
+
+.footer-content p {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
 .footer-social a {
     display: flex;
     align-items: center;
     color: #f6edd9;
     text-decoration: none;
+    margin-bottom: 5px;
 }
 
 .footer-social a:hover {
@@ -64,13 +85,15 @@
     font-family: 'Dancing Script', cursive;
     font-size: 1.5rem;
     color: #f6edd9;
+    margin-top: 10px;
 }
 
 .footer hr {
-    width: 80%;
+    width: 90%;
     border: none;
     border-radius: 10px;
     height: 3px;
     background: #f6edd9;
     margin: 0;
+    margin-bottom: 15px;
 }

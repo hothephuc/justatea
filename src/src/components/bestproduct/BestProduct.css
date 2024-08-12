@@ -22,7 +22,7 @@
 .best-products-item{
     margin-top: 20px;
     display: flex;
-    gap: 110px;
+    gap: 50px; 
 }
 
 .poster{
@@ -55,4 +55,9 @@
     color: #F6edd9;
     margin-top: 30px; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.poster-text button:hover{
+    transform: scale(1.025);
+    transition: 0.6s;
 }
