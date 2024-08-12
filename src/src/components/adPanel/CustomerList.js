@@ -90,7 +90,7 @@ function CustomerList() {
                             <tr
                                 key={user.id}
                                 onClick={() => handleUserClick(user)}
-                                className={selectedUser?.id === user.id ? 'selected' : ''}
+                                className={selectedUser?.id === user.id ? 'customer-selected' : ''}
                             >
                                 <td>{user.fullname}</td>
                                 <td>{user.gender}</td>

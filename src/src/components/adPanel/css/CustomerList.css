@@ -229,7 +229,7 @@ tr:hover {
 }
 
 /* Styling for selected row */
-.selected {
+.customer-selected {
     background-color: #d0e0ff;
 }
 
