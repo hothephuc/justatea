@@ -82,6 +82,7 @@
     background: #5d7a55;
     border: 1px solid #5d7a55;
     color: white;
+    border-radius: 0px 4px 4px 0px;
 }
 
 .apply-voucher button:hover{
@@ -92,6 +93,8 @@
 
 .apply-voucher input{
     outline: none;
+    border-radius: 4px 0px 0px 4px;
+    border: solid 1px;
 }
 
 .apply-voucher p{

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
 import logo from '../assets/logo.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { checkAuthState } from '../../server/auth';
 import DropdownMenu from './DropDownMenu';
 import SearchBar from '../searchBar/searchBar';
@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
+  const location = useLocation();
   const [menu, setMenu] = useState('home');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,11 +45,6 @@ const Navbar = () => {
     window.location.href = searchUrl;
   };
 
-  const handleMenuClick = (menuItem) => {
-    setMenu(menuItem);
-    showNavbar();
-  };
-
   const handleClick = () => {
     setMenu('login');
     showNavbar();
@@ -71,26 +67,26 @@ const Navbar = () => {
         <li>
           <SearchBar onSearchSubmit={handleSearchSubmit} />
         </li>
-        <li onClick={() => handleMenuClick('home')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/">Trang chủ</Link>
-          {menu === 'home' && <hr />}
+        <li>
+          <Link to="/" className="navbar-link">Trang chủ</Link>
+          {location.pathname === '/' ? <hr/>:<></>}
         </li>
-        <li onClick={() => handleMenuClick('product')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Menu">Thực đơn</Link>
-          {menu === 'product' && <hr />}
+        <li>
+          <Link to="/Menu" className="navbar-link">Thực đơn</Link>
+          {location.pathname === '/Menu' ? <hr/>:<></>}
         </li>
-        <li onClick={() => handleMenuClick('about')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/About">Về chúng tôi</Link>
-          {menu === 'about' && <hr />}
+        <li>
+          <Link to="/About" className="navbar-link">Về chúng tôi</Link>
+          {location.pathname === '/About' ? <hr/>:<></>}
         </li>
-        <li onClick={() => handleMenuClick('picture')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Picture">Hình ảnh</Link>
-          {menu === 'picture' && <hr />}
+        <li>
+          <Link to="/Picture" className="navbar-link">Hình ảnh</Link>
+          {location.pathname === '/Picture' ? <hr/>:<></>}
         </li>
         {/* New Customer Support Section */}
-        <li onClick={() => handleMenuClick('support')}>
-          <Link style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/chatbot">Hỗ trợ khách hàng</Link>
-          {menu === 'support' && <hr />}
+        <li>
+          <Link to="/chatbot" className="navbar-link">Hỗ trợ khách hàng</Link>
+          {location.pathname === '/chatbot' ? <hr/>:<></>}
         </li>
         <li>
           <Link to="/Cart" style={{ textDecoration: 'none', border: 'none' }} aria-label="Cart">
