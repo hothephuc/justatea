@@ -158,111 +158,104 @@ const Checkout = () => {
     };
 
     try {
-      const orderId = await OrderController.createOrder(uid, cart, paymentMethod, contactInfo, finalPrice);
-      
-      if (orderId) {
-          console.log("Order ID:", orderId);
-          if (paymentMethod === "Momo") {
-              await OrderController.placeOrderMomo(uid, finalPrice, orderId);
-             
-          } else {
-              alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
-          }
-      } else {
-          console.error("Order ID is undefined.");
-          alert("Failed to create order.");
-      }
-  } catch (error) {
-      console.error("Error creating order:", error);
-      alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
-  }
-  
-  };
+        // Create the order first
+        const orderId = await OrderController.createOrder(uid, cart, paymentMethod, contactInfo, finalPrice);
 
-  console.log(role)
+        if (paymentMethod === "Momo") {
+            // Redirect to the payment page with Momo
+            await OrderController.placeOrderMomo(uid, finalPrice, orderId);
+        } else {
+            // Payment method is cash
+            alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
+            // Redirect to a confirmation page or reset the cart, etc.
+        }
+    } catch (error) {
+        console.error("Error creating order:", error);
+        alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
+    }
+};
+
 
   return (
-    <div>
-      {uid && role==="Customer"?(
-      <div className='checkout'>
-          {contact?(
-          <div className='delivery-info'>
-              <div className='order-options'>
-                  <h1>Thông tin giao hàng</h1>
-                  <div className='delivery-field'>
-                      <label>
-                          <input
-                              type='checkbox'
-                              checked={useDefault}
-                              onChange={handleCheckboxChange}
-                          />
-                          Sử dụng thông tin mặc định
-                      </label>
-                  </div>
-                  <div className='order-field'>
-                      <label>Tên người nhận</label>
-                      <input
-                          type='text'
-                          placeholder='Tên người nhận'
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          disabled={useDefault}
-                      />
-                  </div>
-                  <div className='order-field'>
-                      <label>Số điện thoại</label>
-                      <input
-                          type='text'
-                          placeholder='Số điện thoại'
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          disabled={useDefault}
-                      />
-                  </div>
-                  <div className='order-field'>
-                      <label>Email</label>
-                      <input
-                          type='text'
-                          placeholder='Email'
-                          value={mail}
-                          onChange={(e) => setMail(e.target.value)}
-                          disabled={useDefault}
-                      />
-                  </div>
-                  <div className='order-field'>
-                      <label>Địa chỉ</label>
-                      <input
-                          type='text'
-                          placeholder='Địa chỉ'
-                          value={address}
-                          onChange={(e) => setAddress(e.target.value)}
-                          disabled={useDefault}
-                      />
-                  </div>
-                  <div className='order-field'>
-                    <label>Phương thức thanh toán</label>
-                    <select
-                      name="category"
-                      value={paymentMethod}
-                      onChange={handlePaymentMethod}
-                    >
-                      <option value="Tiền mặt">Tiền mặt</option>
-                      <option value="Momo">Ví điện tử momo</option>
-                    </select>
-                  </div>
-              </div>
-              <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
-            </div>):(<div></div>)}
-            <div className='order-info'>
-              <h1>Tổng số tiền</h1>
-              <div className='order-item-price'>
-                <p>Tổng giá tiền sản phẩm</p>
-                <p>{totalPrice}đ</p>
-              </div>
-              <div className='order-item-price'>
-                <p>Phí giao hàng</p>
-                <p>{shippingFee}đ</p>
-              </div>
+    <div className='checkout'>
+        {contact?(
+        <div className='delivery-info'>
+            <div className='order-options'>
+                <h1>Thông tin giao hàng</h1>
+                <div className='delivery-field'>
+                    <label>
+                        <input
+                            type='checkbox'
+                            checked={useDefault}
+                            onChange={handleCheckboxChange}
+                        />
+                        Sử dụng thông tin mặc định
+                    </label>
+                </div>
+                <div className='order-field'>
+                    <label>Tên người nhận</label>
+                    <input
+                        type='text'
+                        placeholder='Tên người nhận'
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        disabled={useDefault}
+                    />
+                </div>
+                <div className='order-field'>
+                    <label>Số điện thoại</label>
+                    <input
+                        type='text'
+                        placeholder='Số điện thoại'
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        disabled={useDefault}
+                    />
+                </div>
+                <div className='order-field'>
+                    <label>Email</label>
+                    <input
+                        type='text'
+                        placeholder='Email'
+                        value={mail}
+                        onChange={(e) => setMail(e.target.value)}
+                        disabled={useDefault}
+                    />
+                </div>
+                <div className='order-field'>
+                    <label>Địa chỉ</label>
+                    <input
+                        type='text'
+                        placeholder='Địa chỉ'
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                        disabled={useDefault}
+                    />
+                </div>
+                <div className='order-field'>
+                  <label>Phương thức thanh toán</label>
+                  <select
+                    name="category"
+                    value={paymentMethod}
+                    onChange={handlePaymentMethod}
+                  >
+                    <option value="Tiền mặt">Tiền mặt</option>
+                    <option value="Momo">Ví điện tử momo</option>
+                  </select>
+                </div>
+            </div>
+            <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
+          </div>):(<div></div>)}
+          <div className='order-info'>
+                <h1>Tổng số tiền</h1>
+                <div className='order-item-price'>
+                    <p>Tổng giá tiền sản phẩm</p>
+                    <p>{totalPrice}đ</p>
+                </div>
+                <div className='order-item-price'>
+                    <p>Phí giao hàng</p>
+                    <p>{shippingFee}đ</p>
+                </div>
                 <div className='order-item-price'>
                   <p>Giảm giá</p>
                   <p>{discount}đ</p>
