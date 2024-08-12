@@ -40,6 +40,11 @@ class OrderController
                 ...newOrderInstance, 
             });
 
+            await updateDoc(orderDocRef, 
+            {
+                orderID: orderDocRef.id // Set the orderID to the Firestore-generated document ID
+            });
+
             // Update the user's order array with the new OrderID directly
             const userDocRef = doc(db, "users", uid);
             
@@ -86,7 +91,7 @@ class OrderController
                             orderData['orderList'], // Use bracket notation
                             orderData['orderStatus'], // Use bracket notation
                             orderData['dateCreated'].toDate(), // Use bracket notation
-                            orderData['dateShipped'] ? orderData['dateShipped'].toDate() : null, // Check if dateShipped exists
+                            orderData['dateshipped'] ? orderData['dateshipped'].toDate() : null, // Check if dateShipped exists
                             orderData['paymentInfo'], // Use bracket notation
                             orderData['contactInfo'], // Use bracket notation
                             orderData['totalPrice'] // Use bracket notation
@@ -105,6 +110,44 @@ class OrderController
             throw error;
         }
     }
+
+
+
+        /**
+     * Retrieves all orders from the "orders" collection and returns an array of Order objects.
+     *
+     * @returns {Promise<Order[]>} An array of Order objects.
+     */
+    static async getAllOrders() 
+    {
+        try {
+            const ordersCollectionRef = collection(db, "orders");
+            const ordersSnapshot = await getDocs(ordersCollectionRef);
+            
+            // Map over the documents to create Order instances
+            const orders = ordersSnapshot.docs.map(doc => {
+                const orderData = doc.data();
+                const orderId = doc.id; // Firestore-generated OrderID
+                
+                return new Order(
+                    orderId, // Pass the Firestore-generated OrderID
+                    orderData['orderList'], // Use bracket notation
+                    orderData['orderStatus'], // Use bracket notation
+                    orderData['dateCreated'].toDate(), // Use bracket notation
+                    orderData['dateshipped'] ? orderData['dateshipped'].toDate() : null, // Check if dateShipped exists
+                    orderData['paymentInfo'], // Use bracket notation
+                    orderData['contactInfo'], // Use bracket notation
+                    orderData['totalPrice'] // Use bracket notation
+                );
+            });
+
+            return orders; // Return the array of Order objects
+        } catch (error) {
+            console.error("Error retrieving all orders:", error);
+            throw error;
+        }
+    }
+
 
 
     
