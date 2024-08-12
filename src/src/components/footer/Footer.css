@@ -30,6 +30,7 @@
     display: flex;
     justify-content: space-between;
     width: 90%;
+    width: 90%;
     gap: 50px;
     color: #f6edd9;
     font-size: 16px;
@@ -39,13 +40,11 @@
     display: flex;
     flex-direction: column;
     width: 30%;
-    gap: 2px
+    gap: 10px;
 }
 
 .footer-about p{
-    font-size: 16px;
-    line-height: 40px;
-    margin: 0;
+    line-height: 2.20;
 }
 
 .footer-contact,
