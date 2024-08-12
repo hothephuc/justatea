@@ -84,7 +84,7 @@ const ProductMannager = () => {
                             <tr
                                 key={product.id}
                                 onClick={() => handleProductClick(product)}
-                                className={selectedProduct?.id === product.id ? 'selected' : ''}
+                                className={selectedProduct?.id === product.id ? 'productManage-selected' : ''}
                             >
                                 <td>{product.name}</td>
                                 <td>{product.price}</td>

@@ -20,7 +20,7 @@ const CartItem = ({ uid }) => {
 
     useEffect(() => {
         const getCart = async () => {
-            const cartData = await CartController.retrieveCart(uid.uid);
+            const cartData = await CartController.retrieveCart(uid);
             setCart(cartData);
         };
 
@@ -65,7 +65,7 @@ const CartItem = ({ uid }) => {
             setCartProducts(updatedCartProducts);
 
             // Update the quantity in the database
-            await CartController.modifyItemQuantity(uid.uid, updatedCartProducts[index].id, newQuantity);
+            await CartController.modifyItemQuantity(uid, updatedCartProducts[index].id, newQuantity);
         }
     };
 
@@ -74,7 +74,7 @@ const CartItem = ({ uid }) => {
         setCartProducts(updatedCartProducts);
 
         // Remove the item from the database
-        await CartController.removeItemFromCart(uid.uid, cart.ProductList[index]);
+        await CartController.removeItemFromCart(uid, cart.ProductList[index]);
 
 
         const updatedCart = {
