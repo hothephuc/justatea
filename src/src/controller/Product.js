@@ -75,6 +75,7 @@ class ProductController {
             throw error;
         }
     }
+    
 }
 
 export default ProductController;
