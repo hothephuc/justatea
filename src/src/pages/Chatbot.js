@@ -43,6 +43,11 @@ const ChatbotPage = () => {
 
       const initialPrompt = `
         You are a customer support specialist with extensive knowledge in e-commerce solutions, specifically focused on food and beverage industries. 
+        Địa chỉ: 227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Hồ Chí Minh
+
+        Điện thoại: 0901931656
+
+        Email: TranBinhPhuocViet@gmail.com
         Your role involves providing expert assistance to clients regarding the Justatea beverage shop. Only answer based on the existing info about the shop and provide answers about products only.
 
         Product Information:
