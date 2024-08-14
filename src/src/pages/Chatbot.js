@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import ReactMarkdown from 'react-markdown';
 import "../pages/css/Chatbot.css";
@@ -6,9 +6,13 @@ import ProductController from '../controller/Product';
 
 const genAI = new GoogleGenerativeAI("AIzaSyCL3SxaggSY6G5Idx_jGEE9bi4SCHGpn5A");
 
-const extractProductIdFromInput = (input) => {
-  const match = input.match(/product\s(\d+)/i);
-  return match ? match[1] : null;
+// Helper function to format Firestore Timestamp
+const formatTimestamp = (timestamp) => {
+  if (timestamp && timestamp.seconds) {
+    const date = new Date(timestamp.seconds * 1000 + (timestamp.nanoseconds / 1000000));
+    return date.toLocaleString(); // Adjust the format as needed
+  }
+  return 'N/A';
 };
 
 const ChatbotPage = () => {
@@ -18,37 +22,66 @@ const ChatbotPage = () => {
   const [input, setInput] = useState('');
   const [chat, setChat] = useState(null);
   const [loading, setLoading] = useState(false);
+  const chatWindowRef = useRef(null);
+
+  const updateInitialPromptWithMetadata = async () => {
+    try {
+      const products = await ProductController.fetchProducts();
+      console.log("Fetched Products:", products); // Debugging line
+      
+      // Format product details with timestamp conversion
+      const productDetails = products.map(product => 
+        `Product Name: ${product.name}\n` +
+        `Description: ${product.description}\n` +
+        `Price: ${product.price}\n` +
+        `Tag: ${product.tag}\n` +
+        `Image: [View Image](${product.imageUrl})\n` +
+        `Added On: ${formatTimestamp(product.timestamp)}\n`
+      ).join("\n");
+
+      console.log("Formatted Product Details:", productDetails); // Debugging line
+
+      const initialPrompt = `
+        You are a customer support specialist with extensive knowledge in e-commerce solutions, specifically focused on food and beverage industries. 
+        Your role involves providing expert assistance to clients regarding the Justatea beverage shop. Only answer based on the existing info about the shop and provide answers about products only.
+
+        Product Information:
+        ${productDetails}
+
+        Metadata:
+        - Products include detailed descriptions, images, and timestamps for when they were added.
+        - Description: Ingredients or key details about the product.
+        - Image: Link to the product image.
+        - Added On: Timestamp when the product was added.
+
+        Instructions:
+        - Respond with detailed and accurate information.
+        - If a product ID is mentioned, retrieve the product details from the provided product information.
+        - Provide concise, clear, and helpful responses to enhance user experience.
+      `;
+
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const chatInstance = model.startChat({
+        history: [
+          { role: "user", parts: [{ text: initialPrompt }] },
+          { role: "model", parts: [{ text: "Welcome to JustaTea's Customer Support! How can I assist you with our food and beverage services today?" }] },
+        ],
+      });
+      setChat(chatInstance);
+    } catch (error) {
+      console.error("Error initializing chat:", error);
+    }
+  };
 
   useEffect(() => {
-    const initializeChat = async () => {
-      try {
-        const products = await ProductController.fetchProducts();
-        const productDetails = products.map(product => 
-          `Product Name: ${product.name}, Price: ${product.price}, Description: ${product.description}`
-        ).join("\n");
-
-        const initialPrompt = `
-          You are a customer support specialist with extensive knowledge in e-commerce solutions, specifically focused on food and beverage industries. 
-          Your role involves providing expert assistance to clients regarding the Justatea beverage shop.
-          Product Information:
-          ${productDetails}
-        `;
-
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const chatInstance = model.startChat({
-          history: [
-            { role: "user", parts: [{ text: initialPrompt }] },
-            { role: "model", parts: [{ text: "Welcome to JustaTea's Customer Support! How can I assist you with our food and beverage services today?" }] },
-          ],
-        });
-        setChat(chatInstance);
-      } catch (error) {
-        console.error("Error initializing chat:", error);
-      }
-    };
-
-    initializeChat();
+    updateInitialPromptWithMetadata();
   }, []);
+
+  useEffect(() => {
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,8 +109,7 @@ const ChatbotPage = () => {
 
   return (
     <div className="chatbot-page">
-      <h1>Customer Support Chatbot</h1>
-      <div className="chat-window">
+      <div className="chat-window" ref={chatWindowRef}>
         {messages.map((message, index) => (
           <div key={index} className={message.role}>
             <ReactMarkdown>{message.text}</ReactMarkdown>
