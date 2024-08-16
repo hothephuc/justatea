@@ -55,6 +55,7 @@ class OrderController
             });
 
             console.log("Order created and user order list updated successfully:", orderDocRef.id);
+            return generatedOrderID
         } catch (error) 
         {
             console.error("Error creating order and updating user order list:", error);

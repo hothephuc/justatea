@@ -18,9 +18,10 @@ const app = express();
 app.use(express.json());
 
 app.post('/payment', async (req, res) => {
-  const { amount, userId } = req.body;
+  console.log("reqbody", req.body)
+  const { amount, userId, orderId } = req.body;
 
-  if (!amount || !userId) {
+  if (!amount || !userId|| !orderId) {
     return res.status(400).json({
       statusCode: 400,
       message: 'Payment amount and user ID are required'
@@ -34,7 +35,6 @@ app.post('/payment', async (req, res) => {
   const redirectUrl = 'http://localhost:3000/payment-success';
   const ipnUrl = 'http://localhost:3001/callback';
   const requestType = 'payWithMethod';
-  const orderId = `${partnerCode}-${userId}-${new Date().getTime()}`;
   const requestId = orderId;
   const extraData = `userId=${userId}`;
   const orderGroupId = '';
