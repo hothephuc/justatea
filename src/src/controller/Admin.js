@@ -218,6 +218,53 @@ class AdminController {
           console.error('Error fetching vouchers:', error);
           throw error;
         }
+    };
+
+    static async fetchAllOrders(){
+        try{
+            // Reference to the oders collection
+            const orderCollection = collection(db,'orders');
+            // Fetch all documents in the collection
+            const querySnapshot = await getDocs(orderCollection);
+            const orders =[];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log('Document data:', data);
+                if (data) {
+                    orders.push(data);
+                }
+            });
+            console.log('Fetched orders:', orders); // Log all fetched orders
+            return orders;
+        }catch (error) {
+            console.error('Error fetching orders:', error);
+            throw error;
+          }
+    }
+
+    static async fetchAllVouchers() {
+        try {
+          // Reference to the vouchers collection
+          const vouchersCollection = collection(db, 'vouchers');
+    
+          // Fetch all documents in the collection
+          const querySnapshot = await getDocs(vouchersCollection);
+          const vouchers = [];
+          
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            console.log('Document data:', data);
+            if (data) {
+                vouchers.push(data);
+            }
+          });
+          
+          console.log('Fetched vouchers:', vouchers); // Log all fetched vouchers
+          return vouchers;
+        } catch (error) {
+          console.error('Error fetching vouchers:', error);
+          throw error;
+        }
     }
 
     /**
