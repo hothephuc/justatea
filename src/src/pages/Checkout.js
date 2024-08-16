@@ -193,21 +193,24 @@ const Checkout = () => {
     };
 
     try {
-        // Create the order first
-        const orderId = await OrderController.createOrder(uid, cart, paymentMethod, contactInfo, finalPrice);
-
-        if (paymentMethod === "Momo") {
-            // Redirect to the payment page with Momo
-            await OrderController.placeOrderMomo(uid, finalPrice, orderId);
-        } else {
-            // Payment method is cash
-            alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
-            // Redirect to a confirmation page or reset the cart, etc.
-        }
-    } catch (error) {
-        console.error("Error creating order:", error);
-        alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
-    }
+      const orderId = await OrderController.createOrder(uid, cart, paymentMethod, contactInfo, finalPrice);
+      
+      if (orderId) {
+          console.log("Order ID:", orderId);
+          if (paymentMethod === "Momo") {
+              await OrderController.placeOrderMomo(uid, finalPrice, orderId);
+          } else {
+              alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
+          }
+      } else {
+          console.error("Order ID is undefined.");
+          alert("Failed to create order.");
+      }
+  } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
+  }
+  
   };
 
   console.log(role)
