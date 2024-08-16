@@ -75,7 +75,7 @@ function Reports (){
                             <th>Tên người nhận</th>
                             <th>SĐT</th>
                             <th>Địa chỉ</th>
-                            <th>Phương thức thanh toán</th>
+                            <th>Mã thanh toán</th>
                             <th>Tổng giá</th>
                         </tr>
                     </thead>
@@ -93,7 +93,7 @@ function Reports (){
                                 <td>{order?.contactInfo?.name || 'N/A'}</td>
                                 <td>{order?.contactInfo?.phone || 'N/A'}</td>
                                 <td>{order?.contactInfo?.address || 'N/A'}</td>
-                                <td>{order?.paymentInfo ?? 'N/A'}</td>
+                                <td>{order?.paymentInfo.paymentDocId ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
                             </tr>
                         ))}
