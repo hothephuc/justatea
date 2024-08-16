@@ -24,10 +24,9 @@ const BestProduct = () => {
       }, []); 
       console.log(products)
   return (
-    <div className='best-products'>
-            {products.length>0?(<div>
-                <h1>Sản phẩm nổi bật</h1>
-            </div>):(<div></div>)}
+    <div>
+        {products.length>0?(<div className='best-products'>
+        <h1>Sản phẩm nổi bật</h1>
         <hr/>
         <div className='best-products-item'>
             {products.map((item, i)=>{
@@ -60,6 +59,7 @@ const BestProduct = () => {
                 </Link>
             </div>
         </div>
+        </div>):(<div></div>)}
     </div>
   )
 }

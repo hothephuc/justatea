@@ -7,7 +7,41 @@ import { checkAuthState } from '../server/auth.js';
 import VoucherController from '../controller/Voucher.js';
 import OrderController from '../controller/Order.js';
 const Checkout = () => {
-    let uid='Hp7OWQUtIQdi0KyJS2V2uu4I1p92'
+    const[uid,setUID]=useState(null)
+    const[role, setRole]=useState("Admin")
+    const [contact,setContact] = useState([])
+    useEffect(() => {
+      const getContact = async () => {
+        const authState = await checkAuthState();
+        if (authState && authState.user) {
+          const uid = authState.user.uid;
+          const contact = await getUserDocument(uid);
+          setUID(uid)
+          setContact(contact)
+        }
+      };
+  
+      getContact();
+      handleCheckboxChange();
+    }, []);
+
+    useEffect(() => {
+      const getUID = async () => {
+        const authState = await checkAuthState();
+        if (authState && authState.user) {
+          const uid = authState.user.uid
+          setRole(authState.userData.role)
+          setUID(uid);
+          const cart = await CartController.retrieveCart(uid);
+          if (cart){
+            setCart(cart);
+          }
+        }
+      };
+
+      getUID();
+    }, []);
+
     const {productData}=useContext(MenuContext)
     const [cartProducts, setCartProducts] = useState([]);
     const [cart, setCart] = useState({
@@ -18,14 +52,13 @@ const Checkout = () => {
       toppingList: []
     });
 
-    useEffect(() => {
-      const getCart = async () => {
-        const cart = await CartController.retrieveCart(uid);
-        setCart(cart);
-      };
-      getCart();
-    }, []);
-
+    // useEffect(() => {
+    //   const getCart = async () => {
+    //     const cart = await CartController.retrieveCart(uid);
+    //     setCart(cart);
+    //   };
+    //   getCart();
+    // }, []);
 
     const getProductById = (productId) => {
       const product = productData.find(product => product.id === productId);
@@ -58,21 +91,6 @@ const Checkout = () => {
         setCartProducts(productsInCart);
       }
     }, [productData, cart]);
-
-    const [contact,setContact] = useState([])
-    useEffect(() => {
-      const getContact = async () => {
-        const authState = await checkAuthState();
-        if (authState && authState.user) {
-          const uid = authState.user.uid;
-          const contact = await getUserDocument(uid);
-          setContact(contact)
-        }
-      };
-  
-      getContact();
-      handleCheckboxChange();
-    }, []);
 
     const [useDefault, setUseDefault] = useState(true);
     const [name, setName] = useState(contact.fullname);
@@ -155,96 +173,99 @@ const Checkout = () => {
         console.error("Error creating order:", error);
         alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại sau.");
     }
-};
+  };
 
+  console.log(role)
 
   return (
-    <div className='checkout'>
-        {contact?(
-        <div className='delivery-info'>
-            <div className='order-options'>
-                <h1>Thông tin giao hàng</h1>
-                <div className='delivery-field'>
-                    <label>
-                        <input
-                            type='checkbox'
-                            checked={useDefault}
-                            onChange={handleCheckboxChange}
-                        />
-                        Sử dụng thông tin mặc định
-                    </label>
-                </div>
-                <div className='order-field'>
-                    <label>Tên người nhận</label>
-                    <input
-                        type='text'
-                        placeholder='Tên người nhận'
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={useDefault}
-                    />
-                </div>
-                <div className='order-field'>
-                    <label>Số điện thoại</label>
-                    <input
-                        type='text'
-                        placeholder='Số điện thoại'
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        disabled={useDefault}
-                    />
-                </div>
-                <div className='order-field'>
-                    <label>Email</label>
-                    <input
-                        type='text'
-                        placeholder='Email'
-                        value={mail}
-                        onChange={(e) => setMail(e.target.value)}
-                        disabled={useDefault}
-                    />
-                </div>
-                <div className='order-field'>
-                    <label>Địa chỉ</label>
-                    <input
-                        type='text'
-                        placeholder='Địa chỉ'
-                        value={address}
-                        onChange={(e) => setAddress(e.target.value)}
-                        disabled={useDefault}
-                    />
-                </div>
-                <div className='order-field'>
-                  <label>Phương thức thanh toán</label>
-                  <select
-                    name="category"
-                    value={paymentMethod}
-                    onChange={handlePaymentMethod}
-                  >
-                    <option value="Tiền mặt">Tiền mặt</option>
-                    <option value="Momo">Ví điện tử momo</option>
-                  </select>
-                </div>
-            </div>
-            <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
-          </div>):(<div></div>)}
-          <div className='order-info'>
-                <h1>Tổng số tiền</h1>
+    <div>
+      {uid && role==="Customer"?(
+      <div className='checkout'>
+          {contact?(
+          <div className='delivery-info'>
+              <div className='order-options'>
+                  <h1>Thông tin giao hàng</h1>
+                  <div className='delivery-field'>
+                      <label>
+                          <input
+                              type='checkbox'
+                              checked={useDefault}
+                              onChange={handleCheckboxChange}
+                          />
+                          Sử dụng thông tin mặc định
+                      </label>
+                  </div>
+                  <div className='order-field'>
+                      <label>Tên người nhận</label>
+                      <input
+                          type='text'
+                          placeholder='Tên người nhận'
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          disabled={useDefault}
+                      />
+                  </div>
+                  <div className='order-field'>
+                      <label>Số điện thoại</label>
+                      <input
+                          type='text'
+                          placeholder='Số điện thoại'
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          disabled={useDefault}
+                      />
+                  </div>
+                  <div className='order-field'>
+                      <label>Email</label>
+                      <input
+                          type='text'
+                          placeholder='Email'
+                          value={mail}
+                          onChange={(e) => setMail(e.target.value)}
+                          disabled={useDefault}
+                      />
+                  </div>
+                  <div className='order-field'>
+                      <label>Địa chỉ</label>
+                      <input
+                          type='text'
+                          placeholder='Địa chỉ'
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
+                          disabled={useDefault}
+                      />
+                  </div>
+                  <div className='order-field'>
+                    <label>Phương thức thanh toán</label>
+                    <select
+                      name="category"
+                      value={paymentMethod}
+                      onChange={handlePaymentMethod}
+                    >
+                      <option value="Tiền mặt">Tiền mặt</option>
+                      <option value="Momo">Ví điện tử momo</option>
+                    </select>
+                  </div>
+              </div>
+              <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
+            </div>):(<div></div>)}
+            <div className='order-info'>
+              <h1>Tổng số tiền</h1>
+              <div className='order-item-price'>
+                <p>Tổng giá tiền sản phẩm</p>
+                <p>{totalPrice}đ</p>
+              </div>
+              <div className='order-item-price'>
+                <p>Phí giao hàng</p>
+                <p>{shippingFee}đ</p>
+              </div>
                 <div className='order-item-price'>
-                    <p>Tổng giá tiền sản phẩm</p>
-                    <p>{totalPrice}đ</p>
+                  <p>Giảm giá</p>
+                  <p>{discount}đ</p>
                 </div>
                 <div className='order-item-price'>
-                    <p>Phí giao hàng</p>
-                    <p>{shippingFee}đ</p>
-                </div>
-                <div className='order-item-price'>
-                    <p>Giảm giá</p>
-                    <p>{discount}đ</p>
-                </div>
-                <div className='order-item-price'>
-                    <p>Đơn giá</p>
-                    <p>{finalPrice}đ</p>
+                  <p>Đơn giá</p>
+                  <p>{finalPrice}đ</p>
                 </div>
                 <div className='apply-voucher'>
                   <input
@@ -258,26 +279,31 @@ const Checkout = () => {
                 </div>
                 <hr/>
                 {cartProducts.map((product, index)=>(
-                <div className='order-item'>
+                  <div className='order-item'>
                     <img src={product.imageUrl} alt=""/>
                     <div>
-                        <div>
-                        <p style={{fontSize: 20, fontWeight: 600, marginBottom: 8}}>{product.name}</p>
-                        </div>
-                        <div className='order-item-info'>
-                            <p>{product.size}</p>
-                            <p>x{product.quantity}</p>
-                        </div>
-                        <div className='order-item-info'>
-                            <div>
-                                {product.toppings?(<p>{product.toppings}</p>):(<p>Không topping</p>)}
-                            </div>
-                            <p>{product.price*product.quantity}đ</p> 
-                        </div>
+                      <p style={{fontSize: 20, fontWeight: 600, marginBottom: 8}}>{product.name}</p>
                     </div>
-                </div>
+                    <div className='order-item-info'>
+                      <p>{product.size}</p>
+                      <p>x{product.quantity}</p>
+                    </div>
+                    <div className='order-item-info'>
+                      <div>
+                        {product.toppings?(<p>{product.toppings}</p>):(<p>Không topping</p>)}
+                      </div>
+                      <div>
+                        <p>{product.price*product.quantity}đ</p> 
+                      </div>
+                    </div>
+                  </div>
                 ))}
-            </div>
+          </div>
+      </div>):(
+        <div className='admin-checkout'>
+          <img src="https://i.pinimg.com/736x/95/2f/03/952f038d5f081be698b2bf8583319516.jpg" alt=""/>
+        </div>
+      )}
     </div>
   )
 }

@@ -83,7 +83,9 @@ const ProductDisplay = ({ product }) => {
       <div className='productdisplay-right'>
         <div className='product-info'>
           <h1>{product.name}</h1>
+          {product.inStock?(
           <div className='product-price'>{price.toLocaleString()}đ</div>
+          ):(<div className='product-price'>Hết hàng</div>)}
         </div>
         <div className='choose-size'>
           <p>Chọn size</p>
@@ -126,7 +128,8 @@ const ProductDisplay = ({ product }) => {
             </div>
           </div>
         </div>):(<div></div>)}
-        <button onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
+        <p>Thành phần chính: {product.description}</p>
+        <button onClick={handleAddToCart} disabled={!product.inStock}>Thêm vào giỏ hàng</button>
       </div>
     </div>
   );
