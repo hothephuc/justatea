@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import SideBar from '../components/adPanel/SideBar'
-import AdPanel from '../components/adPanel/adPanel'
+import DashBoard from '../components/adPanel/DashBoard'
 import "./css/Admin.css"
 
 const Admin = () => {
@@ -13,7 +13,7 @@ const Admin = () => {
     return (
       <div className='grid-container'>
         <SideBar openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-        <AdPanel/>
+        <DashBoard/>
       </div>
     )
 }
