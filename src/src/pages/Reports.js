@@ -32,12 +32,22 @@ function Reports (){
     };
 
     const filteredOrders = orderData.filter(order =>
-        order?.orderId?.toLowerCase().includes(searchQuery.toLowerCase())
+        order?.orderID?.toString().includes(searchQuery.toLowerCase())
     );
+    const timestampToDate = (timestamp) => new Date(timestamp);
 
+    const formatDate = (date) => {
+        return new Intl.DateTimeFormat('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+    };
+    const formatTimestamp = (timestamp) => {
+        if (!timestamp) return 'N/A';
+        const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
+        return date.toLocaleDateString(); // Adjust format as needed
+      };
+    
     return (
         <div className="grid-container">
-            <SideBar openSidebarToggle={true} OpenSidebar={() => {}} /> {/* Add the sidebar */}
+            <SideBar/>
             <div className="table-container main-container">
                 <h1>Quản lý Đơn Hàng</h1>
                 <div className="search-container">
@@ -58,31 +68,31 @@ function Reports (){
                 <table>
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th>STT</th>
                             <th>OrderID</th>
-                            <th>DateCreated</th>
-                            <th>DateShipped</th>
-                            <th>Customer</th>
-                            <th>PhoneNumber</th>
-                            <th>Address</th>
-                            <th>Payment</th>
-                            <th>Price</th>
+                            <th>Ngày tạo đơn</th>
+                            <th>Ngày giao</th>
+                            <th>Tên người nhận</th>
+                            <th>SĐT</th>
+                            <th>Địa chỉ</th>
+                            <th>Phương thức thanh toán</th>
+                            <th>Tổng giá</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredOrders.map((order, index) => (
                             <tr
-                                key={order?.orderId ?? Math.random()} 
+                                key={order?.orderID ?? Math.random()} 
                                 onClick={() => handleOrderClick(order)}
-                                className={selectedOrder?.orderId === order?.orderId ? 'selected' : ''}
+                                className={selectedOrder?.orderID === order?.orderID ? 'selected' : ''}
                             >
                                 <td>{index + 1}</td> 
-                                <td>{order?.orderId ?? 'N/A'}</td>
-                                <td>{order?.dateCreated ?? 'N/A'}</td>
-                                <td>{order?.dateshipped ?? 'N/A'}</td>
-                                <td>{order?.contactInfo?.name ?? 'N/A'}</td>
-                                <td>{order?.contactInfo?.phone ?? 'N/A'}</td>
-                                <td>{order?.contactInfo?.address ?? 'N/A'}</td>
+                                <td>{order?.orderID ?? 'N/A'}</td>
+                                <td>{formatTimestamp(order?.dateCreated)}</td>
+                                <td>{order?.dateshipped ? formatTimestamp(order.dateshipped) : 'N/A'}</td>
+                                <td>{order?.contactInfo?.name || 'N/A'}</td>
+                                <td>{order?.contactInfo?.phone || 'N/A'}</td>
+                                <td>{order?.contactInfo?.address || 'N/A'}</td>
                                 <td>{order?.paymentInfo ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
                             </tr>
