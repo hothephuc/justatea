@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import SideBar from '../components/adPanel/SideBar';
 import searchIcon from '../components/assets/search-icon.png';
 
-function Reports() {
+
+function Reports (){
     const [orderData, setOrderData] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -31,32 +32,12 @@ function Reports() {
     };
 
     const filteredOrders = orderData.filter(order =>
-        order?.orderID?.toString().includes(searchQuery.toLowerCase())
+        order?.orderId?.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    const formatTimestamp = (timestamp) => {
-        if (!timestamp) return 'N/A';
-        const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
-        return date.toLocaleDateString(); // Adjust format as needed
-    };
-
-    // Handle status change
-    const handleStatusChange = async (order) => {
-        const statuses = ['Pending', 'Paid', 'Shipping', 'Delivered'];
-        const currentStatusIndex = statuses.indexOf(order.orderStatus);
-        const nextStatus = statuses[(currentStatusIndex + 1) % statuses.length];
-        
-        try {
-            await AdminController.updateOrderStatus(order.orderID, nextStatus);
-            setOrderData(orderData.map(o => o.orderID === order.orderID ? { ...o, orderStatus: nextStatus } : o));
-        } catch (error) {
-            console.error('Error updating status:', error);
-        }
-    };
 
     return (
         <div className="grid-container">
-            <SideBar />
+            <SideBar openSidebarToggle={true} OpenSidebar={() => {}} /> {/* Add the sidebar */}
             <div className="table-container main-container">
                 <h1>Quản lý Đơn Hàng</h1>
                 <div className="search-container">
@@ -77,38 +58,31 @@ function Reports() {
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
+                            <th>No</th>
                             <th>OrderID</th>
-                            <th>Ngày tạo đơn</th>
-                            <th>Ngày giao</th>
-                            <th>Tên người nhận</th>
-                            <th>SĐT</th>
-                            <th>Địa chỉ</th>
-                            <th>Tình trạng đơn hàng</th>
-                            <th>Mã thanh toán</th>
-                            <th>Tổng giá</th>
+                            <th>DateCreated</th>
+                            <th>DateShipped</th>
+                            <th>Customer</th>
+                            <th>PhoneNumber</th>
+                            <th>Address</th>
+                            <th>Payment</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredOrders.map((order, index) => (
                             <tr
-                                key={order?.orderID ?? Math.random()}
+                                key={order?.orderId ?? Math.random()} 
                                 onClick={() => handleOrderClick(order)}
-                                className={selectedOrder?.orderID === order?.orderID ? 'selected' : ''}
+                                className={selectedOrder?.orderId === order?.orderId ? 'selected' : ''}
                             >
-                                <td>{index + 1}</td>
-                                <td>{order?.orderID ?? 'N/A'}</td>
-                                <td>{formatTimestamp(order?.dateCreated)}</td>
-                                <td>{order?.dateshipped ? formatTimestamp(order.dateshipped) : 'N/A'}</td>
-                                <td>{order?.contactInfo?.name || 'N/A'}</td>
-                                <td>{order?.contactInfo?.phone || 'N/A'}</td>
-                                <td>{order?.contactInfo?.address || 'N/A'}</td>
-                                <td
-                                    onClick={() => handleStatusChange(order)}
-                                    className={`status-cell ${order.orderStatus}`}
-                                >
-                                    {order?.orderStatus ?? 'N/A'}
-                                </td>
+                                <td>{index + 1}</td> 
+                                <td>{order?.orderId ?? 'N/A'}</td>
+                                <td>{order?.dateCreated ?? 'N/A'}</td>
+                                <td>{order?.dateshipped ?? 'N/A'}</td>
+                                <td>{order?.contactInfo?.name ?? 'N/A'}</td>
+                                <td>{order?.contactInfo?.phone ?? 'N/A'}</td>
+                                <td>{order?.contactInfo?.address ?? 'N/A'}</td>
                                 <td>{order?.paymentInfo ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
                             </tr>
@@ -120,4 +94,4 @@ function Reports() {
     );
 }
 
-export default Reports;
+export default Reports
