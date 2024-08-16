@@ -223,6 +223,17 @@ class OrderController
         }
     }
 
+    static async placeOrder(uid, amount, orderId) 
+    {
+        try {
+            // Redirect to the PaymentPage with the required parameters
+            window.location.href = `/Ordered?amount=${amount}&userId=${uid}&orderId=${orderId}`;
+        } catch (error) {
+            console.error("Error redirecting to payment page:", error);
+            throw new Error("Failed to initiate payment. Please try again.");
+        }
+    }
+
     // static async payInCash(orderId) 
     // {
     //     try {

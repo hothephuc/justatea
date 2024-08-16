@@ -88,7 +88,8 @@ class CartController {
                 const userDoc = await getDoc(userDocRef);
 
                 if (userDoc.exists()) {
-                    const cartData = userDoc.data().cart || {};
+                    //const cartData = userDoc.data().cart || {};
+                    const cartData = userDoc.data()?.cart ?? null;
                     console.log("Retrieved cart data:", cartData);
                     return cartData;
                 } else {

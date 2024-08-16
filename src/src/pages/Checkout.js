@@ -164,7 +164,11 @@ const Checkout = () => {
           console.log("Order ID:", orderId);
           if (paymentMethod === "Momo") {
               await OrderController.placeOrderMomo(uid, finalPrice, orderId);
-          } else {
+          }
+          else if (paymentMethod === "Tiền mặt"){
+            await OrderController.placeOrder(uid, finalPrice, orderId);
+          }
+          else {
               alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
           }
       } else {
@@ -247,7 +251,7 @@ const Checkout = () => {
                     >
                       <option value="Tiền mặt">Tiền mặt</option>
                       <option value="Momo">Ví điện tử momo</option>
-                    </select>
+                    </select> 
                   </div>
               </div>
               <button onClick={handleOrder} disabled={!name || !mail || !phone || !address}>Lưu thông tin và thanh toán</button>
