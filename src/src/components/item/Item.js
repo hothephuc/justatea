@@ -10,6 +10,7 @@ const Item = ({ id, name, imageUrl, price, tag, inStock }) => {
         <img src={imageUrl} alt = ""/>
         <div className='item-info'>
             <h>{name}</h>
+            <p>{price}đ</p>
         </div>
       </Link>
     </div> 
