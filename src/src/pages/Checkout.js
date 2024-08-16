@@ -321,17 +321,17 @@ const Checkout = () => {
                     <img src={product.imageUrl} alt=""/>
                     <div>
                       <p style={{fontSize: 20, fontWeight: 600, marginBottom: 8}}>{product.name}</p>
-                    </div>
-                    <div className='order-item-info'>
-                      <p>{product.size}</p>
-                      <p>x{product.quantity}</p>
-                    </div>
-                    <div className='order-item-info'>
-                      <div>
-                        {product.toppings?(<p>{product.toppings}</p>):(<p>Không topping</p>)}
+                      <div className='order-item-info'>
+                        <p>{product.size}</p>
+                        <p>x{product.quantity}</p>
                       </div>
-                      <div>
-                        <p>{product.price*product.quantity}đ</p> 
+                      <div className='order-item-info'>
+                        <div>
+                          {product.toppings?(<p>{product.toppings}</p>):(<p>Không topping</p>)}
+                        </div>
+                        <div>
+                          <p>{product.price*product.quantity}đ</p> 
+                        </div>
                       </div>
                     </div>
                   </div>
