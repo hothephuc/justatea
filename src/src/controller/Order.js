@@ -39,13 +39,8 @@ class OrderController
             const orderDocRef = await addDoc(collection(db, "orders"), { 
                 ...newOrderInstance, 
             });
-
             const generatedOrderID = orderDocRef.id
-            await updateDoc(orderDocRef, 
-            {
-                orderID: orderDocRef.id // Set the orderID to the Firestore-generated document ID
-            });
-
+            await updateDoc(orderDocRef, { orderID: generatedOrderID });
             // Update the user's order array with the new OrderID directly
             const userDocRef = doc(db, "users", uid);
             
