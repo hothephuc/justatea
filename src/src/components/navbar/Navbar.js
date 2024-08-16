@@ -79,10 +79,7 @@ const Navbar = () => {
           <Link to="/About" className="navbar-link">Về chúng tôi</Link>
           {location.pathname === '/About' ? <hr/>:<></>}
         </li>
-        <li>
-          <Link to="/Picture" className="navbar-link">Hình ảnh</Link>
-          {location.pathname === '/Picture' ? <hr/>:<></>}
-        </li>
+        
         {/* New Customer Support Section */}
         <li>
           <Link to="/chatbot" className="navbar-link">Hỗ trợ khách hàng</Link>
