@@ -40,6 +40,7 @@ class OrderController
                 ...newOrderInstance, 
             });
 
+            const generatedOrderID = orderDocRef.id
             await updateDoc(orderDocRef, 
             {
                 orderID: orderDocRef.id // Set the orderID to the Firestore-generated document ID
