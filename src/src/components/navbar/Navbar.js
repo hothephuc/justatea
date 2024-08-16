@@ -3,7 +3,7 @@ import './Navbar.css';
 import logo from '../assets/logo.png';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { checkAuthState } from '../../server/auth';
-import DropdownMenu from './DropDownMenu';
+import DropdownMenu from './DropDownMenu/DropDownMenu';
 import SearchBar from '../searchBar/searchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AdminController from "../../controller/Admin";
+import AdminController from "../controller/Admin";
 import './css/Setting.css';
 
 function Setting() {
@@ -7,17 +7,20 @@ function Setting() {
     const [newImageUrl, setNewImageUrl] = useState('');
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [slideDoc,setSlideDoc] = useState({
+        imageUrl : '',
+    });
 
     useEffect(() => {
         async function fetchSlides() {
             try {
                 const slides = await AdminController.fetchAllSlideImageUrls();
-                setSlideImages(slides);
-                console.log('Setting fetch: ',slides)
-                console.log('Setting fetch: ',slideImages)
+                const formattedSlides = slides.map(url => ({ url }));
+                setSlideImages(formattedSlides);
+                console.log('Fetched images:', formattedSlides);
+                console.log(slideImages)
             } catch (error) {
                 console.error('Error fetching slides:', error);
-               
             }
         }
 
@@ -36,8 +39,8 @@ function Setting() {
         if (imageFile) {
             setLoading(true);
             try {
-                const updatedSlides = await AdminController.addSlideImageFile(imageFile);
-                setSlideImages(updatedSlides);
+                const newImageUrl = await AdminController.uploadImageSlide(imageFile);
+                setSlideImages(prevImages => [...prevImages, { url: newImageUrl }]);
                 setImageFile(null);
                 setNewImageUrl('');
             } catch (error) {
@@ -51,23 +54,32 @@ function Setting() {
 
     const removeSlide = async (index) => {
         try {
-            const updatedSlides = await AdminController.removeSlideImage(index);
-            setSlideImages(updatedSlides);
+            const imageUrl = slideImages[index].url; // Lấy imageUrl từ slideImages
+    
+            console.log('Đang xoá slide với URL:', imageUrl);
+    
+            const result = await AdminController.removeSlideImage(imageUrl);
+            
+            if (result) {
+                setSlideImages(prevImages => prevImages.filter((_, i) => i !== index));
+            } else {
+                console.error('Không thể xoá slide. Hãy thử lại.');
+            }
         } catch (error) {
-            console.error('Error removing slide:', error);
+            console.error('Lỗi khi xoá slide:', error);
             alert('Failed to remove slide. Please try again.');
         }
     };
-
+    
     return (
         <div className="slide-manager">
             <h2>Manage Slides</h2>
             <ul>
                     {slideImages.map((image, index) => {
-                    console.log(`Slide ${index + 1} URL:`, image.imageUrl); // Log the URL
+                    console.log(`Slide ${index + 1} URL:`, image.url);
                     return (
                         <li key={index} className="slide-item">
-                            <img src={image.imageUrl} alt={`Slide ${index + 1}`} className="slide-image" />
+                            <img src={image.url} alt={`Slide ${index + 1}`} className="slide-image" />
                             <button name={`remove-slide-${index}`} onClick={() => removeSlide(index)}>
                                 Remove
                             </button>

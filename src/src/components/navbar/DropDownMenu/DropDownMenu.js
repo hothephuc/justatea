@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { signOutUser } from '../../server/auth';
+import { signOutUser } from '../../../server/auth';
 import './DropDownMenu.css';
-import noavatar from "../assets/noavatar.png";
+import noavatar from "../../assets/noavatar.png";
 
 const DropdownMenu = ({ user }) => {
   const [avatar, setAvatar] = useState(null); // Initial state is null, indicating no image loaded yet

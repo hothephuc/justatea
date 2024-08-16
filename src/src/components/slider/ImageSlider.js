@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import '../hero/ImageSlider.css';
+import './ImageSlider.css'
 import AdminController from "../../controller/Admin";
 
 function ImageSlider() {

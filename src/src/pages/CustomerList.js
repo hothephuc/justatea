@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import AdminController from '../../controller/Admin';
+import AdminController from '../controller/Admin';
 import './css/CustomerList.css';
-import SideBar from './SideBar';
-import searchIcon from '../assets/search-icon.png'; 
+import SideBar from '../components/adPanel/SideBar';
+import searchIcon from '../components/assets/search-icon.png'
 
 function CustomerList() {
     const [users, setUsers] = useState([]);
@@ -81,8 +81,9 @@ function CustomerList() {
                             <th>Giới tính</th>
                             <th>Địa chỉ</th>
                             <th>Số điện thoại</th>
-                            <th>Vai trò</th>
+                            <th>Admin</th>
                             <th>Ngày sinh</th>
+                            <th>Hoạt động</th>
                         </tr>
                     </thead>
                     <tbody>

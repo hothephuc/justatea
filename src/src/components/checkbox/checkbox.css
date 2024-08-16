@@ -1,0 +1,19 @@
+.checkbox {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin: auto;
+  }
+  
+  .checked {
+    background-color: white;
+  }
+  
+  .unchecked {
+    background-color: white;
+  }
+  

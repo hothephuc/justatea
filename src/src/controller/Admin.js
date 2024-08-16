@@ -1,6 +1,6 @@
 import { app, db } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, doc, setDoc, getDoc, getFirestore, updateDoc,deleteDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
+import { getStorage, ref, uploadBytes, getDownloadURL,deleteObject} from "firebase/storage";
 import { uploadImage } from "./Utils";
 
 class AdminController {
@@ -51,6 +51,62 @@ class AdminController {
         }
     }
 
+    static async uploadImageSlide(imageFile) {
+        try{
+             // Construct storage path 
+             const storagePath = `slide/${imageFile.name}`;
+     
+             // Upload image and get the URL
+             const imageUrl = await uploadImage(imageFile, storagePath);
+             
+             // Create a new document reference in the "slide" collection
+             const slideRef = doc(collection(db, "slide"));
+     
+             // Add document with image information to Firestore
+             await setDoc(slideRef, {
+                 imageUrl: imageUrl,
+             });
+             console.log("Slide information uploaded successfully with ID:", slideRef.id);
+             return imageUrl; // Return the image URL
+             
+        } catch(error) {
+             console.error("Error uploading slide information:", error);
+             throw error; // Throw the error for handling in the caller function
+        }
+     }
+     /**
+     * Removes a slide image document from Firebase Firestore based on the image URL.
+     * 
+     * @param {string} imageUrl - The URL of the image to be removed.
+     * @returns {Promise<boolean>} - A promise that resolves to `true` if the slide is successfully removed, 
+     * or `false` if no matching document is found.
+     * @throws {Error} - Throws an error if the slide removal fails.
+     */
+     static async removeSlideImage(imageUrl) {
+        try {
+            // Tạo một query để tìm document có imageUrl khớp
+            const slideQuery = query(collection(db, "slide"), where("imageUrl", "==", imageUrl));
+            const querySnapshot = await getDocs(slideQuery);
+    
+            if (!querySnapshot.empty) {
+                // Lấy docRef của document đầu tiên tìm được (vì imageUrl là duy nhất)
+                const docRef = querySnapshot.docs[0].ref;
+    
+                // Xoá document
+                await deleteDoc(docRef);
+                console.log("Slide với URL", imageUrl, "đã bị xoá.");
+                return true; // Trả về true để biểu thị việc xoá thành công
+            } else {
+                console.error("Không tìm thấy slide với URL:", imageUrl);
+                return false;
+            }
+        } catch (error) {
+            console.error("Lỗi khi xoá slide:", error);
+            throw error;
+        }
+    }
+    
+    
     /**
      * Sets the user's role to Admin.
      * 
@@ -63,11 +119,17 @@ class AdminController {
         });
     }
 
+    /**
+     * Set the user's role to customer
+     * @param {string} uid - The user ID to update 
+     * @returns {Promise<void>} - a promise that resolves when the role is updated.
+     */
     static async setCustomer(uid) {
         await updateDoc(doc(db, "users", uid), {
             role: "Customer"
         });
     }
+
     /**
      * Uploads an avatar image to Firebase Storage and returns its download URL.
      * 
@@ -75,14 +137,7 @@ class AdminController {
      * @returns {Promise<string>} - A promise that resolves to the download URL of the uploaded avatar.
      * @throws {Error} - Throws an error if the image upload fails.
      */
-    static async uploadImageSlide(imageFile) {
-        if (imageFile) {
-            const storagePath = 'slide';
-            return await uploadImage(imageFile, storagePath);
-        }
-        return "";
-    }
-
+   
      // Fetch all users
      static async getAllUsers() {
         try {
@@ -114,6 +169,53 @@ class AdminController {
         } catch (error) {
             console.error('Error fetching slide image URLs:', error);
             throw error;
+        }
+    };
+
+    static async fetchAllOrders(){
+        try{
+            // Reference to the oders collection
+            const orderCollection = collection(db,'orders');
+            // Fetch all documents in the collection
+            const querySnapshot = await getDocs(orderCollection);
+            const orders =[];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log('Document data:', data);
+                if (data) {
+                    orders.push(data);
+                }
+            });
+            console.log('Fetched orders:', orders); // Log all fetched orders
+            return orders;
+        }catch (error) {
+            console.error('Error fetching orders:', error);
+            throw error;
+          }
+    }
+
+    static async fetchAllVouchers() {
+        try {
+          // Reference to the vouchers collection
+          const vouchersCollection = collection(db, 'vouchers');
+    
+          // Fetch all documents in the collection
+          const querySnapshot = await getDocs(vouchersCollection);
+          const vouchers = [];
+          
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            console.log('Document data:', data);
+            if (data) {
+                vouchers.push(data);
+            }
+          });
+          
+          console.log('Fetched vouchers:', vouchers); // Log all fetched vouchers
+          return vouchers;
+        } catch (error) {
+          console.error('Error fetching vouchers:', error);
+          throw error;
         }
     }
 }

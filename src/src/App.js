@@ -16,14 +16,15 @@ import Profile from "./pages/Profile";
 import Cart from "./pages/Cart"
 import PaymentPage from "./pages/PaymentPage"; // Import the PaymentPage
 import Admin from "./pages/Admin";
-import CustomerList from './components/adPanel/CustomerList';
-import Setting from './components/adPanel/Setting';
+import CustomerList from './pages/CustomerList';
+import Setting from './pages/Setting';
 import Checkout from './pages/Checkout';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import ChatbotPage from "./pages/Chatbot";
-import ProductMannager from './components/adPanel/ProductManager';
-import Reports from './components/adPanel/Reports';
+import ProductMannager from './pages/ProductManager';
+import Reports from './pages/Reports';
+import Voucher from './pages/Voucher';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/payment-fail" element={<PaymentFailure />} />
           <Route path="/product-manager" element={<ProductMannager/>}/>
           <Route path='/reports' element ={<Reports/>}/>
+          <Route path='/voucher' element ={<Voucher/>}/>
           <Route path='/chatbot' element={<ChatbotPage />} />  {/* Add the chatbot route */}
         </Routes>
         <Footer />
