@@ -2,7 +2,7 @@ import React from 'react'
 import './Item.css'
 import {Link} from 'react-router-dom'
 
-const Item = ({ id, name, imageUrl, price, tag }) => {
+const Item = ({ id, name, imageUrl, price, tag, inStock }) => {
   return (
     
     <div className='item'>
@@ -10,12 +10,9 @@ const Item = ({ id, name, imageUrl, price, tag }) => {
         <img src={imageUrl} alt = ""/>
         <div className='item-info'>
             <h>{name}</h>
-            <p>{price}đ</p>
         </div>
-    
-    </Link>
+      </Link>
     </div> 
- 
   )
 }
 

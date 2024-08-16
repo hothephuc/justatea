@@ -19,6 +19,7 @@
     margin: 0px 70px;
     flex-direction: column;
     gap: 20px;
+    color: #5D7A55;
 }
 
 .product-info h1{

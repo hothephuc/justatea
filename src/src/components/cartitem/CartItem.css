@@ -94,3 +94,48 @@
     font-family: 600;
     color: #f6eed9;
 }
+
+.empty-cart{
+    font-size: 18px;
+    text-align: center;
+    font-weight: 600;
+    color:#5d7a55;
+    margin-top: 20px;
+}
+
+.empty-cart h1{
+    font-size: 30px;
+    text-align: center;
+    font-weight: 800;
+    color:#5d7a55;
+}
+
+.empty-cart img{
+   width: 300px;
+   margin-top: 20px;
+}
+
+.empty-cart button{
+    height: 65px;
+    width: 400px;
+    border-radius: 10px;
+    background: #5d7a55;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #F6edd9;
+    margin-top: 30px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.empty-cart button:hover{
+    transform: scale(1.025);
+    transition: 0.6s;
+}
+
+.Loading{
+    font-size: 30px;
+    text-align: center;
+    font-weight: 800;
+    color:#5d7a55;
+}

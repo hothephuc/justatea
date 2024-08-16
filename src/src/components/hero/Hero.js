@@ -6,7 +6,7 @@ import hero_image from "../assets/hero.jpg"
 
 const Hero = () => {
   return (
-    <div>    
+    <div className='hero'>    
       <ImageSlider/>
     </div>
   );
