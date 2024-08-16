@@ -1,5 +1,12 @@
+const express = require('express');
+const axios = require('axios');
+const crypto = require('crypto');
 
-var serviceAccount = require("/home/phuc/Desktop/SE_project/justatea/src/src/config/service_account.json");
+const functions = require('firebase-functions');
+
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../config/service_account.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
