@@ -2,6 +2,7 @@
 .search-bar-wrapper {
   display: flex;
   align-items: center;
+  margin-top: 5px;
   /* Add any additional styling you need */
 }
 
