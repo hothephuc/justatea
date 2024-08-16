@@ -293,75 +293,13 @@ class AdminController {
      * @param {Date} deliveryDate - The delivery date for the order.
      * @returns {Promise<void>}
      */
-    static async setOrderStatusToShipping(orderId, deliveryDate) {
+    static async setOrderStatusToShipping(orderId) {
         try {
             const orderDocRef = doc(db, "orders", orderId);
             await updateDoc(orderDocRef, {
                 orderStatus: "Shipping",
-                dateshipped: deliveryDate, // Ensure deliveryDate is a Firestore Date object
             });
-            console.log(`Order ${orderId} status updated to 'Shipping' with delivery date ${deliveryDate}.`);
-        } catch (error) {
-            console.error("Error setting order status to 'Shipping':", error);
-            throw error;
-        }
-    }
-
-    /**
-     * Sets the order status to 'Delivered'.
-     *
-     * @param {string} orderId - The ID of the order to update.
-     * @returns {Promise<void>}
-     */
-    static async setOrderStatusToDelivered(orderId) {
-        try {
-            const orderDocRef = doc(db, "orders", orderId);
-            await updateDoc(orderDocRef, {
-                orderStatus: "Delivered",
-            });
-            console.log(`Order ${orderId} status updated to 'Delivered'.`);
-        } catch (error) {
-            console.error("Error setting order status to 'Delivered':", error);
-            throw error;
-        }
-    }
-
-
-
-    /**
-     * Sets the order status to 'Paid'.
-     *
-     * @param {string} orderId - The ID of the order to update.
-     * @returns {Promise<void>}
-     */
-    static async setOrderStatusToPaid(orderId) {
-        try {
-            const orderDocRef = doc(db, "orders", orderId);
-            await updateDoc(orderDocRef, {
-                orderStatus: "Paid",
-            });
-            console.log(`Order ${orderId} status updated to 'Paid'.`);
-        } catch (error) {
-            console.error("Error setting order status to 'Paid':", error);
-            throw error;
-        }
-    }
-
-    /**
-     * Sets the order status to 'Shipping' and updates the delivery date.
-     *
-     * @param {string} orderId - The ID of the order to update.
-     * @param {Date} deliveryDate - The delivery date for the order.
-     * @returns {Promise<void>}
-     */
-    static async setOrderStatusToShipping(orderId, deliveryDate) {
-        try {
-            const orderDocRef = doc(db, "orders", orderId);
-            await updateDoc(orderDocRef, {
-                orderStatus: "Shipping",
-                dateshipped: deliveryDate, // Ensure deliveryDate is a Firestore Date object
-            });
-            console.log(`Order ${orderId} status updated to 'Shipping' with delivery date ${deliveryDate}.`);
+            console.log(`Order ${orderId} status updated to 'Shipping'.`);
         } catch (error) {
             console.error("Error setting order status to 'Shipping':", error);
             throw error;

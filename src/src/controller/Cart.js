@@ -1,5 +1,5 @@
 import { app, db } from "../config/firebase-config";
-import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
+import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimestamp, getDocs, query, where, deleteField } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 class CartController {
@@ -209,6 +209,41 @@ class CartController {
         const userDoc = await getDoc(userDocRef);
         return userDoc.exists() ? userDoc.data() : null;
     }
+
+        /**
+     * Deletes the entire cart for a user with the role "Customer".
+     * 
+     * This function removes the `cart` field from the user's document in Firestore,
+     * effectively clearing the entire cart.
+     *
+     * @param {string} uid - The unique identifier of the user.
+     * @throws Will throw an error if the delete operation fails.
+     */
+        static async deleteUserCart(uid) {
+            try {
+                const userData = await CartController.getUserDocument(uid);
+                console.log("Fetched user data:", userData);
+    
+                if (userData && userData.role === "Customer") {
+                    console.log("User is a customer. Preparing to delete cart.");
+    
+                    // Create an update that deletes the cart field
+                    const userDocRef = doc(db, "users", uid);
+                    await updateDoc(userDocRef, {
+                        cart: deleteField() // Use deleteField() to remove the cart field
+                    });
+    
+                    console.log("Customer cart deleted successfully");
+                } else {
+                    console.log("User does not exist or role is not 'Customer'. No deletion performed.");
+                }
+            } catch (error) {
+                console.error("Error deleting customer cart:", error);
+                throw error;
+            }
+        }
+    
+        // ... other methods
 }
 
 export default CartController;

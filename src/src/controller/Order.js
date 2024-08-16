@@ -32,7 +32,7 @@ class OrderController
             }));
 
             // Create an instance of the Order class with the provided total price
-            const newOrderInstance = new Order(null, orderList, "Pending", new Date(), null,  paymentInfo, contactInfo, totalPrice);
+            const newOrderInstance = new Order(null, orderList, "Pending", new Date(), new Date(new Date().getTime() + 2 * 60 * 60 * 1000),  paymentInfo, contactInfo, totalPrice);
             console.log("New Order Instance:", newOrderInstance);
 
             // Add a new order to the "orders" collection with Firestore-generated ID

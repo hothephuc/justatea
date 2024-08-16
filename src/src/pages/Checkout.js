@@ -164,6 +164,7 @@ const Checkout = () => {
           console.log("Order ID:", orderId);
           if (paymentMethod === "Momo") {
               await OrderController.placeOrderMomo(uid, finalPrice, orderId);
+             
           } else {
               alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
           }

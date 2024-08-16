@@ -3,8 +3,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { db, collection, addDoc } from '../firebase';
 import {  doc, setDoc, getDoc, updateDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { motion } from 'framer-motion';
+import CartController from '../controller/Cart';
+import { checkAuthState } from '../server/auth';
 
-const PaymentSuccess = () => {
+const PaymentSuccess =  () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,8 +26,8 @@ const PaymentSuccess = () => {
       message,
       resultCode: parseInt(resultCode, 10)
     };
-    setPaymentStatus(status);
 
+    setPaymentStatus(status);
     const handlePaymentStatus = async () => {
       try {
         // Add the payment status to the payments collection and get the document reference
@@ -43,11 +45,17 @@ const PaymentSuccess = () => {
             },
             orderStatus: 'Paid' // Update order status to 'Paid'
           });
+    
+          // Delete the user's cart after updating the order
+          const authState = await checkAuthState();
+          const uid = authState.user.uid;
+          await CartController.deleteUserCart(uid);
         }
       } catch (error) {
         console.error("Error handling payment status: ", error);
       }
     };
+    
     
 
     handlePaymentStatus();
