@@ -100,3 +100,16 @@
 .apply-voucher p{
     color: red;
 }
+
+.admin-checkout{
+    gap: 50px;
+    background-image: linear-gradient(#90af87, white);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.admin-checkout img{
+    width: 400px;
+    margin: 30px auto;
+}

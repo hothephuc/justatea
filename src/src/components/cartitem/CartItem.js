@@ -8,12 +8,13 @@ import { Link } from 'react-router-dom';
 const CartItem = ({ uid }) => { 
     const { productData } = useContext(MenuContext);
     const [cartProducts, setCartProducts] = useState([]);
+    const [cartStatus, setCartStatus]=useState(false)
     const [cart, setCart] = useState({
         ProductList: [],
         priceList: [],
         quantityList: [],
         sizeList: [],
-        toppingList: []
+        toppingList: [],
     });
     const [paymentInfo, setPaymentInfo] = useState({}); 
     const [contactInfo, setContactInfo] = useState({}); 
@@ -21,7 +22,10 @@ const CartItem = ({ uid }) => {
     useEffect(() => {
         const getCart = async () => {
             const cartData = await CartController.retrieveCart(uid);
-            setCart(cartData);
+            if (cartData){
+                setCart(cartData);
+                setCartStatus(true)
+            }
         };
 
         getCart();
@@ -44,7 +48,7 @@ const CartItem = ({ uid }) => {
                         price: cart.priceList[index],
                         quantity: cart.quantityList[index],
                         size: cart.sizeList[index],
-                        toppings: cart.toppingList[index]
+                        toppings: cart.toppingList[index],
                     };
                 }
                 return null;
@@ -65,17 +69,17 @@ const CartItem = ({ uid }) => {
             setCartProducts(updatedCartProducts);
 
             // Update the quantity in the database
-            await CartController.modifyItemQuantity(uid, updatedCartProducts[index].id, newQuantity);
+            await CartController.modifyItemQuantity(uid, index, action);
         }
     };
 
     const handleRemoveItem = async (index) => {
         const updatedCartProducts = cartProducts.filter((_, i) => i !== index);
+        console.log(updatedCartProducts)
         setCartProducts(updatedCartProducts);
 
         // Remove the item from the database
-        await CartController.removeItemFromCart(uid, cart.ProductList[index]);
-
+        await CartController.removeItemFromCart(uid, index);
 
         const updatedCart = {
             ProductList: cart.ProductList.filter((_, i) => i !== index),
@@ -117,6 +121,7 @@ const CartItem = ({ uid }) => {
 
     return (
         <div className='cart-items'>
+            {cartProducts.length > 0 ? (<div>
             <div className='cart-item-up'>
                 <div className='cart-items-header'>
                     <p>Sản phẩm</p>
@@ -131,7 +136,7 @@ const CartItem = ({ uid }) => {
                 <hr />
                 <div>
                     {cartProducts.map((product, index) => (
-                        <div className='cart-items-item cart-items-header' key={product.id}>
+                        <div className='cart-items-item cart-items-header' key={index}>
                             <div className='cart-item-icon'>
                                 <img src={product.imageUrl} alt={product.name} />
                             </div>
@@ -174,7 +179,23 @@ const CartItem = ({ uid }) => {
                     </Link>
                 </div>
             </div>
-    </div>
+            </div>):
+            (
+                cartStatus===true?(
+                <div className='empty-cart'>
+                    <h1>Oops! Chưa có sản phẩm nào trong giỏ !</h1>
+                    <img src='https://i.pinimg.com/564x/47/07/f4/4707f4138db3ff7930a081dc17974fd8.jpg' alt=""></img>
+                    <p>Có vẻ như bạn đã quên thêm sản phẩm vào giỏ hàng.</p>
+                    <Link onClick={handleClick} style={{ color: '#f6edd9', textDecoration: 'none', border: 'none' }} to="/Menu">
+                    <button>Đặt món ngay</button>
+                    </Link>
+                </div>):(
+                    <div className='empty-cart'>
+                       <h1>Đang lấy thông tin giỏ hàng...</h1>
+                       <img style={{width: '200px', marginTop: "30px"}}src="https://cdn-icons-png.freepik.com/512/8232/8232922.png" about=""/>
+                    </div>)
+            )}
+        </div>
     );
 };
 
