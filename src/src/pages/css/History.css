@@ -1,0 +1,61 @@
+.history{
+    margin: 80px 100px;
+}
+
+.history h1{
+    text-align: center;
+    margin-bottom: 50px;
+    color: #5d7a55;
+}
+
+.history hr{
+    height: 3px;
+    background: black;
+    border: 0;
+}
+
+.history-headers{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr 2fr 2fr 1fr 0.5fr;
+    color: black;
+    gap: 50px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.history-orders-info{
+    margin-top: 20px;
+}
+
+.history-orders-info p{
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.history-orders-info img{
+    width: 25px;
+    cursor: pointer;
+    margin-left: 7px;
+}
+
+.history-orders-item{
+    display: flex;
+    gap: 20px;
+}
+
+.history-orders-item img{
+    width: 100px;
+    height: 100px;
+}
+
+.history-orders-item-list{
+    display: grid;
+    place-items: stretch;
+    grid-template-columns: 1.5fr 1.5fr 1.5fr 1.5fr ;
+    gap: 25px;
+}
+
+.history-orders-item-info p{
+    color:black;
+    margin-bottom: 0;
+}

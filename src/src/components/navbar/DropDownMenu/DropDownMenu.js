@@ -61,12 +61,12 @@ const DropdownMenu = ({ user }) => {
       </button>
       {isOpen && (
         <div className="dropdown-menu show">
-          <Link to="/Profile" className="dropdown-item">Tài khoản</Link>
+          <Link to="/Profile" className="dropdown-item" onClick={toggleDropdown}>Tài khoản</Link>
           {user?.userData?.role === 'Admin' && (
-            <Link to="/Admin" className="dropdown-item">Quyền admin</Link>
+            <Link to="/Admin" className="dropdown-item" onClick={toggleDropdown}>Quyền admin</Link>
           )}
           {/* New Customer Support Section */}
-          <Link to="/chatbot" className="dropdown-item">Hỗ trợ khách hàng</Link>
+          <Link to="/History" className="dropdown-item" onClick={toggleDropdown}>Lịch sử đơn hàng</Link>
           <button onClick={handleLogout} className="dropdown-item">Đăng xuất</button>
         </div>
       )}

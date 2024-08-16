@@ -25,6 +25,7 @@ import ChatbotPage from "./pages/Chatbot";
 import ProductMannager from './pages/ProductManager';
 import Reports from './pages/Reports';
 import Voucher from './pages/Voucher';
+import History from './pages/History';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/product-manager" element={<ProductMannager/>}/>
           <Route path='/reports' element ={<Reports/>}/>
           <Route path='/voucher' element ={<Voucher/>}/>
+          <Route path='/History' element ={<History/>}/>
           <Route path='/chatbot' element={<ChatbotPage />} />  {/* Add the chatbot route */}
         </Routes>
         <Footer />
