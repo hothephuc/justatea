@@ -4,7 +4,6 @@ import Navbar from "./components/navbar/Navbar";
 import Footer from "./components/footer/Footer";
 import LoginSignup from "./pages/LoginSignup";
 import About from "./pages/About";
-import Picture from "./pages/Picture";
 import Contact from "./pages/Contact";
 import Menu from "./pages/Menu";
 import Home from "./pages/Home";
@@ -26,6 +25,7 @@ import ProductMannager from './pages/ProductManager';
 import Reports from './pages/Reports';
 import Voucher from './pages/Voucher';
 import History from './pages/History';
+import Ordered from './pages/Ordered';
 
 function App() {
   return (
@@ -38,7 +38,6 @@ function App() {
           <Route path='/Menu/:productID' element={<Product />} />
           <Route path='/AddProduct' element={<AddProduct />} />
           <Route path='/Contact' element={<Contact />} />
-          <Route path='/Picture' element={<Picture />} />
           <Route path='/About' element={<About />} />
           <Route path='/LoginSignup' element={<LoginSignup />} />
           <Route path='/Signup' element={<Signup />} />
@@ -52,6 +51,7 @@ function App() {
           <Route path='/payment' element={<PaymentPage />} /> 
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-fail" element={<PaymentFailure />} />
+          <Route path="/Ordered" element={<Ordered />} />
           <Route path="/product-manager" element={<ProductMannager/>}/>
           <Route path='/reports' element ={<Reports/>}/>
           <Route path='/voucher' element ={<Voucher/>}/>

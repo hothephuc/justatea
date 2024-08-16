@@ -21,6 +21,10 @@
     margin-top: 10px;
 }
 
+.delivery-info button:disabled{
+    background: #90af87;
+}
+
 .order-field label{
     font-size: 18px;
     margin-bottom: 5px;

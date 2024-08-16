@@ -22,10 +22,11 @@ const CartItem = ({ uid }) => {
     useEffect(() => {
         const getCart = async () => {
             const cartData = await CartController.retrieveCart(uid);
+            console.log(cartData)
             if (cartData){
                 setCart(cartData);
-                setCartStatus(true)
             }
+            setCartStatus(true)
         };
 
         getCart();
@@ -118,10 +119,10 @@ const CartItem = ({ uid }) => {
             alert("Failed to create order.");
         }
     };
-
+    
     return (
         <div className='cart-items'>
-            {cartProducts.length > 0 ? (<div>
+            {cartProducts.length>0 ? (<div>
             <div className='cart-item-up'>
                 <div className='cart-items-header'>
                     <p>Sản phẩm</p>
