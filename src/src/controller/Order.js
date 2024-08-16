@@ -39,7 +39,8 @@ class OrderController
             const orderDocRef = await addDoc(collection(db, "orders"), { 
                 ...newOrderInstance, 
             });
-
+            const generatedOrderID = orderDocRef.id
+            await updateDoc(orderDocRef, { orderID: generatedOrderID });
             // Update the user's order array with the new OrderID directly
             const userDocRef = doc(db, "users", uid);
             
@@ -50,6 +51,7 @@ class OrderController
             });
 
             console.log("Order created and user order list updated successfully:", orderDocRef.id);
+            return generatedOrderID
         } catch (error) 
         {
             console.error("Error creating order and updating user order list:", error);
