@@ -186,7 +186,7 @@ const Checkout = () => {
 
   return (
     <div>
-      {uid && role==="Customer"?(
+      {uid && role==="Customer" && cartProducts.length>0?(
       <div className='checkout'>
           {contact?(
           <div className='delivery-info'>

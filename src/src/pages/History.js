@@ -5,6 +5,29 @@ import { getUserDocument} from '../controller/Utils.js'
 import { checkAuthState } from '../server/auth.js';
 import OrderController from '../controller/Order';
 
+
+const formatDateToVietnamese = (dateString) => {
+    const date = new Date(dateString);
+  
+    const daysOfWeek = [
+      'Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'
+    ];
+    const monthsOfYear = [
+      'tháng 1', 'tháng 2', 'tháng 3', 'tháng 4', 'tháng 5', 'tháng 6',
+      'tháng 7', 'tháng 8', 'tháng 9', 'tháng 10', 'tháng 11', 'tháng 12'
+    ];
+  
+    const dayOfWeek = daysOfWeek[date.getDay()];
+    const day = date.getDate();
+    const month = monthsOfYear[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+  
+    return `${dayOfWeek}, ngày ${day} ${month}, ${year} lúc ${hours}:${minutes}:${seconds}`;
+  };
+
 const History = () => {
     const[uid,setUID]=useState(null)
     const[role, setRole]=useState("Admin")
@@ -85,7 +108,8 @@ const History = () => {
             <p>Xem</p>
         </div>
         <hr/>
-        {orderProducts.map((order,index)=>(
+        {orderProducts.length>0?
+        (orderProducts.map((order,index)=>(
             <div className='history-orders'>
                 <div className='history-orders-info history-headers'>
                     <p style={{fontWeight: 600}}>{order.orderID}</p>
@@ -93,11 +117,12 @@ const History = () => {
                     {order.orderStatus==='Shipping'?(<p>Đang giao</p>):(<></>)}
                     {order.orderStatus==='Paid'?(<p>Đã thanh toán</p>):(<></>)}
                     {order.orderStatus==='Delivered'?(<p style={{color: 'green'}}>Hoàn tất</p>):(<></>)}
-                    <p>{order.dateCreated.toString()}</p>
+                    {/* <p>{order.dateCreated.toString()}</p> */}
+                    <p>{formatDateToVietnamese(order.dateCreated)}</p>
                     {order.dateshipped?
-                    (<p>{order.dateshipped.toString()}</p>):(<p>Chưa có</p>)
+                    <p>{formatDateToVietnamese(order.dateshipped)}</p>:(<p>Chưa có</p>)
                     }
-                    <p>{order.totalPrice}</p>
+                    <p>{order.totalPrice}đ</p>
                     <div onClick={() => toggleVisibility(index)}>
                     <img src={visibleDivs[index]? "https://www.svgrepo.com/show/93813/up-arrow.svg":
                     "https://cdn-icons-png.flaticon.com/256/54/54785.png"
@@ -124,7 +149,10 @@ const History = () => {
                 </div>)}
                 <hr/>
             </div>
-        ))}
+        ))):
+        (<div className='empty-history'>
+            <h1>Bạn chưa có đơn hàng nào</h1>
+        </div>)}
     </div>
   )
 }

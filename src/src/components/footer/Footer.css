@@ -32,7 +32,7 @@
     width: 90%;
     gap: 50px;
     color: #f6edd9;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .footer-about{
@@ -43,7 +43,7 @@
 }
 
 .footer-about p{
-    font-size: 16px;
+    font-size: 14px;
     line-height: 40px;
     margin: 0;
 }
@@ -60,7 +60,7 @@
 }
 
 .footer-content p {
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 5px;
 }
 
