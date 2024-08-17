@@ -76,11 +76,6 @@ export async function registerEmail(email, password, userInfo) {
     throw new Error("Invalid email format");
   }
 
-  if (!validatePassword(password)) {
-    console.error("Password does not meet criteria");
-    throw new Error("Password must be at least 6 characters long, contain a number, an uppercase letter");
-  }
-
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
