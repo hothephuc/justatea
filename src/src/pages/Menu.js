@@ -110,6 +110,7 @@ const Menu = () => {
           >
             <img className={category === item.category_name ? "active" : ""} src={item.category_image} alt="" />
             <p>{item.category_name}</p>
+
           </div>
         ))}
       </div>
