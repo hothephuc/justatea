@@ -34,7 +34,24 @@
 .custom-file-input {
     display: none;
 }
+.custom-file-label {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
 
+.custom-file-label:hover {
+    background-color: gray;
+    color: white;
+}
 .circular-image {
     border-radius: 50%;
     width: 150px; 
