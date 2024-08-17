@@ -35,6 +35,7 @@ class AdminController {
                 tag: productInfo.category,
                 description: productInfo.description,
                 imageUrl: imageUrl,
+                inStock: true, 
                 timestamp: new Date() // Add current timestamp
             });
 
