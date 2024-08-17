@@ -109,7 +109,7 @@ function Reports() {
                                 >
                                     {order?.orderStatus ?? 'N/A'}
                                 </td>
-                                <td>{order?.paymentInfo.paymentDocId ?? 'N/A'}</td>
+                                <td>{order?.paymentInfo ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
                             </tr>
                         ))}

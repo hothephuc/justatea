@@ -40,9 +40,7 @@ const PaymentSuccess =  () => {
         } else {
           // Update the order's paymentInfo and orderStatus fields
           await updateDoc(doc(db, 'orders', orderId), {
-            paymentInfo: {
-              paymentDocId: paymentDocRef.id // Save the ID of the payment document
-            },
+            paymentInfo: paymentDocRef.id,
             orderStatus: 'Paid' // Update order status to 'Paid'
           });
     
