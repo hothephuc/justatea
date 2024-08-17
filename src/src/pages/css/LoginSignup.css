@@ -128,3 +128,23 @@
 .hr-text:not(:empty)::after {
     margin-left: 10px;
 }
+.reset-password-field {
+    margin-top: 20px;
+  }
+  
+  .reset-password-field label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .reset-password-field input {
+    width: 100%;
+    padding: 8px; 
+    margin-bottom: 10px; 
+  }
+  
+  .reset-password-field button {
+    display: block; 
+    width: 100%; 
+    padding: 10px;
+  }

@@ -12,6 +12,7 @@ const LoginSignup = () => {
   const [password, setPassword] = useState("");
   const [clicked, setClicked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); 
   const [resetEmail, setResetEmail] = useState("");
   const [showResetPassword, setShowResetPassword] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const LoginSignup = () => {
     try {
       await signInEmail(username, password);
       console.log('Sign in successful');
-      navigate('/')
+      navigate('/');
       window.location.reload(); 
     } catch (error) {
       setErrorMessage('Email or passwords are incorrect');
@@ -40,7 +41,7 @@ const LoginSignup = () => {
       console.log('Google sign-in successful');
       console.log(googleUser);
 
-      if (googleUser.phone == "") {
+      if (googleUser.phone === "") {
         navigate('/ChangeProfile');
         window.location.reload();
       } else {
@@ -57,64 +58,28 @@ const LoginSignup = () => {
     try {
       await resetPassword(resetEmail);
       console.log('Password reset email sent successfully');
+      setSuccessMessage('Đã gửi email đặt lại mật khẩu thành công');
+      setErrorMessage("");
+      setResetEmail(""); // Clear the reset email field
+
+      // Reload the page after 5 seconds
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000); // 5000 milliseconds = 5 seconds
+
     } catch (error) {
       console.error('Error sending password reset email:', error);
-      setErrorMessage('Mật khẩu hoặc email đăng nhập không đúng.')
+      setErrorMessage('Mật khẩu hoặc email đăng nhập không đúng.');
+      setSuccessMessage("");
     }
   };
 
   return (
     <div className={`loginsignup ${showResetPassword ? 'expanded' : ''}`}>
       <div className='loginsignup-container'>
-        <h1>Đăng nhập</h1>
-        <div className='loginsignup-fields'>
-          <label>Email</label>
-          <input 
-            type="email" 
-            placeholder='Email'
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-          <label>Mật khẩu</label>
-          <input 
-            type="password" 
-            placeholder='Mật khẩu'
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <button 
-          className={username && password ? "active" : ""}
-          onClick={handleLogin}
-        >
-          Đăng nhập
-        </button>
-        {errorMessage && <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
-        <p className='loginsignup-options'>
-        <span
-          onClick={handleClick}
-          style={{
-            color:  'blue',
-            cursor: 'pointer',
-            textDecoration: clicked ? 'underline' : 'none',
-          }}
-        >
-          <Link to='/Signup'>Chưa có tài khoản?</Link>
-        </span>
-        <span
-          onClick={() => setShowResetPassword(!showResetPassword)}
-          style={{
-            color: 'blue',
-            cursor: 'pointer',
-            textDecoration: 'underline',
-          }}
-        >
-          Quên mật khẩu?
-        </span>
-      </p>
-
-        {showResetPassword && (
+        {showResetPassword ? (
           <div className='reset-password-field'>
+            <h1>Đặt lại mật khẩu</h1>
             <label>Nhập email của bạn</label>
             <input 
               type='email' 
@@ -125,14 +90,69 @@ const LoginSignup = () => {
             <button onClick={handlePasswordReset}>
               Đặt lại mật khẩu
             </button>
+            {successMessage && <p className="success-message" style={{ color: 'green' }}>{successMessage}</p>}
+            {errorMessage && <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
+          </div>
+        ) : (
+          <>
+            <h1>Đăng nhập</h1>
+            <div className='loginsignup-fields'>
+              <label>Email</label>
+              <input 
+                type="email" 
+                placeholder='Email'
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+              />
+              <label>Mật khẩu</label>
+              <input 
+                type="password" 
+                placeholder='Mật khẩu'
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </div>
+            <button 
+              className={username && password ? "active" : ""}
+              onClick={handleLogin}
+            >
+              Đăng nhập
+            </button>
+            {errorMessage && <p className="error-message" style={{ color: 'red' }}>{errorMessage}</p>}
+            <p className='loginsignup-options'>
+              <span
+                onClick={handleClick}
+                style={{
+                  color:  'blue',
+                  cursor: 'pointer',
+                  textDecoration: clicked ? 'underline' : 'none',
+                }}
+              >
+                <Link to='/Signup'>Chưa có tài khoản?</Link>
+              </span>
+              <span
+                onClick={() => setShowResetPassword(!showResetPassword)}
+                style={{
+                  color: 'blue',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                }}
+              >
+                Quên mật khẩu?
+              </span>
+            </p>
+          </>
+        )}
+        {!showResetPassword && (
+          <div className="hr-text">Hoặc</div>
+        )}
+        {!showResetPassword && (
+          <div className='Single-col Social-icon d-flex justify-content-evenly'>
+            <div onClick={handleGoogleSignIn}>
+              <FontAwesomeIcon icon={faGoogle} />
+            </div>   
           </div>
         )}
-        <div class="hr-text">Hoặc</div>
-        <div className='Single-col Social-icon d-flex justify-content-evenly'>
-          <div onClick={handleGoogleSignIn}>
-            <FontAwesomeIcon icon={faGoogle} />
-          </div>   
-        </div>
       </div>
     </div>
   );
