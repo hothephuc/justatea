@@ -40,18 +40,19 @@ const PaymentFailure = () => {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      style={{ textAlign: 'center', marginTop: '50px' }}
+      style={{ textAlign: 'center', marginTop: '50px', marginBottom: '50px' }}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1>Payment Failed</h1>
-        <p>Unfortunately, your payment could not be processed.</p>
-        <p>Order ID: <strong>{orderId}</strong></p>
-        {userId && <p>User ID: <strong>{userId}</strong></p>}
-        <p>Error Message: <strong>{decodeURIComponent(message)}</strong></p>
+        <h1 style={{color: '#5d7a55'}}>Thanh toán thất bại</h1>
+        <p style={{color: '#5d7a55'}}>Thật không may, đã có lỗi trong quá trình xử lý thanh toán.</p>
+        <p style={{color: '#5d7a55'}}>Mã đơn hàng: <strong>{orderId}</strong></p>
+        {userId && <p>ID người dùng: <strong>{userId}</strong></p>}
+        <p style={{color: '#5d7a55'}}>Lỗi: <strong>{decodeURIComponent(message)}</strong></p>
+        <img src="https://i.pinimg.com/564x/8c/00/d9/8c00d9c7c7c870f6f074c37968ec05cd.jpg" alt="Payment Failure" />
       </motion.div>
     </motion.div>
   );

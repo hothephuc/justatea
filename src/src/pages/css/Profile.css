@@ -46,12 +46,9 @@
     text-align: center;
     margin-top: 10px;
     transition: background-color 0.3s ease;
+    margin-bottom: 10px;
 }
 
-.custom-file-label:hover {
-    background-color: gray;
-    color: white;
-}
 .circular-image {
     border-radius: 50%;
     width: 150px; 
