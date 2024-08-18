@@ -114,6 +114,7 @@ const ChatbotPage = () => {
 
   return (
     <div className="chatbot-page">
+      <h1>Hỗ trợ khách hàng</h1>
       <div className="chat-window" ref={chatWindowRef}>
         {messages.map((message, index) => (
           <div key={index} className={message.role}>

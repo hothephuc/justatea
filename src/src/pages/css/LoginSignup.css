@@ -140,11 +140,17 @@
   .reset-password-field input {
     width: 100%;
     padding: 8px; 
-    margin-bottom: 10px; 
+    margin-bottom: 0px; 
   }
   
   .reset-password-field button {
-    display: block; 
     width: 100%; 
-    padding: 10px;
+    font-size: 20px;
+    background: #5d7a55;
+    color: #f6eed9;
+    cursor: pointer;
+  }
+
+  .reset-password-field button:disabled {
+    background: #90af87;
   }

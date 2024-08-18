@@ -31,7 +31,7 @@ const LoginSignup = () => {
       navigate('/');
       window.location.reload(); 
     } catch (error) {
-      setErrorMessage('Email or passwords are incorrect');
+      setErrorMessage('Email hoặc mật khẩu không đúng');
     }
   };
 
@@ -69,7 +69,7 @@ const LoginSignup = () => {
 
     } catch (error) {
       console.error('Error sending password reset email:', error);
-      setErrorMessage('Mật khẩu hoặc email đăng nhập không đúng.');
+      setErrorMessage('Email đăng nhập không đúng.');
       setSuccessMessage("");
     }
   };
@@ -87,7 +87,7 @@ const LoginSignup = () => {
               value={resetEmail}
               onChange={(event) => setResetEmail(event.target.value)}
             />
-            <button onClick={handlePasswordReset}>
+            <button onClick={handlePasswordReset} disabled={!resetEmail}>
               Đặt lại mật khẩu
             </button>
             {successMessage && <p className="success-message" style={{ color: 'green' }}>{successMessage}</p>}

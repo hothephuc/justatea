@@ -3,12 +3,20 @@
 .chatbot-page {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100vw; /* Full width of the viewport */
-  margin: 0;
+  /* /* height: 100vh;
+  width: 100vw;  */
+  width: 50%;
+  height: 50%;
+  margin: 50px auto;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5; /* Light background for the entire page */
+  background-color: white; /* Light background for the entire page */
+}
+
+.chatbot-page h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #5d7a55; /* Dark text for better readability */
 }
 
 .chat-window {
@@ -18,8 +26,8 @@
   border: 1px solid #ddd;
   padding: 20px;
   background-color: #ffffff; /* White background for the chat window */
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  border-radius: 10px 10px 0px 0px;
+   /* Soft shadow for depth */
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* Allow scrolling when content exceeds height */
@@ -33,6 +41,13 @@
   border-radius: 12px;
   margin-bottom: 12px;
   max-width: 75%; /* Limit width to prevent very long lines */
+}
+
+.chat-window .user p{
+  margin-bottom: 0px;
+}
+.chat-window .model p{
+  margin-bottom: 0px;
 }
 
 .chat-window .user {
@@ -52,14 +67,15 @@
   padding: 10px;
   align-items: center;
   box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1); /* Shadow to separate input from chat window */
+  gap: 10px;
 }
 
 .chat-input input {
-  flex: 1;
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 20px; /* Rounded corners for input field */
   font-size: 16px; /* Larger text for better readability */
+  width: 90%;
 }
 
 .chat-input button {
