@@ -143,10 +143,8 @@ const Checkout = () => {
                 if (paymentMethod === "Momo") {
                     await OrderController.placeOrderMomo(uid, finalPrice, orderId);
                 } else if (paymentMethod === "Tiền mặt") {
+                    await CartController.deleteUserCart(uid)
                     await OrderController.placeOrder(uid, finalPrice, orderId);
-                    await CartController.deleteUserCart(uid);
-                } else {
-                    alert("Đơn hàng của bạn đã được tạo thành công và sẽ được thanh toán bằng tiền mặt!");
                 }
             } else {
                 console.error("Order ID is undefined.");
