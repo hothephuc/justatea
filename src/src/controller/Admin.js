@@ -222,44 +222,6 @@ class AdminController {
     };
 
     /**
-     * Sets the order status to 'Shipping' and updates the delivery date.
-     *
-     * @param {string} orderId - The ID of the order to update.
-     * @param {Date} deliveryDate - The delivery date for the order.
-     * @returns {Promise<void>}
-     */
-    static async setOrderStatusToShipping(orderId) {
-        try {
-            const orderDocRef = doc(db, "orders", orderId);
-            await updateDoc(orderDocRef, {
-                orderStatus: "Shipping",
-            });
-            console.log(`Order ${orderId} status updated to 'Shipping'.`);
-        } catch (error) {
-            console.error("Error setting order status to 'Shipping':", error);
-            throw error;
-        }
-    }
-
-    /**
-     * Sets the order status to 'Delivered'.
-     *
-     * @param {string} orderId - The ID of the order to update.
-     * @returns {Promise<void>}
-     */
-    static async setOrderStatusToDelivered(orderId) {
-        try {
-            const orderDocRef = doc(db, "orders", orderId);
-            await updateDoc(orderDocRef, {
-                orderStatus: "Delivered",
-            });
-            console.log(`Order ${orderId} status updated to 'Delivered'.`);
-        } catch (error) {
-            console.error("Error setting order status to 'Delivered':", error);
-            throw error;
-        }
-    }
-    /**
      * Updates the order status to the specified value.
      *
      * @param {string} orderId - The ID of the order to update.
@@ -273,6 +235,26 @@ class AdminController {
                 orderStatus: status,
             });
             console.log(`Order ${orderId} status updated to '${status}'.`);
+
+            // If the status is 'Delivered', update the corresponding sales documents
+            if (status === "Delivered") {
+                const salesCollection = collection(db, "sales");
+                const salesQuery = query(salesCollection, where("orderID", "==", orderId));
+                const salesSnapshot = await getDocs(salesQuery);
+
+                const updatePromises = [];
+                salesSnapshot.forEach((doc) => {
+                    const salesDocRef = doc.ref;
+                    updatePromises.push(
+                        updateDoc(salesDocRef, {
+                            Delivered: true,
+                        })
+                    );
+                });
+
+                await Promise.all(updatePromises);
+                console.log(`All related sales records for order ${orderId} updated to 'Delivered'.`);
+            }
         } catch (error) {
             console.error(`Error updating order status to '${status}':`, error);
             throw error;
@@ -301,6 +283,34 @@ class AdminController {
     }
 
 
+     /**
+     * Counts the number of orders where the status is not 'Delivered'.
+     *
+     * @returns {Promise<number>} The total count of orders not delivered.
+     */
+     static async countOrdersAlert() 
+     {
+        try {
+            // Initialize the alert count
+            let alert = 0;
+
+            // Query to get orders where status is not 'Delivered'
+            const ordersQuery = query(
+                collection(db, "orders"),
+                where("orderStatus", "!=", "Delivered")
+            );
+            const ordersSnapshot = await getDocs(ordersQuery);
+
+            // Count the number of orders not delivered
+            alert = ordersSnapshot.size;
+
+            console.log(`Total count of orders not delivered: ${alert}`);
+            return alert;
+        } catch (error) {
+            console.error("Error counting orders not delivered:", error);
+            throw error;
+        }
+    }
 
 }
 

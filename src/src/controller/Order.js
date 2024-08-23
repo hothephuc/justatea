@@ -4,6 +4,7 @@ import Order from "../model/Order";
 import { arrayUnion } from "firebase/firestore";
 import Voucher from "../model/Voucher";
 import VoucherController from "../controller/Voucher";
+import Sales from "../model/Sales";
 class OrderController 
 {
        /**
@@ -51,6 +52,23 @@ class OrderController
             });
 
             console.log("Order created and user order list updated successfully:", orderDocRef.id);
+
+            // Record the sale for each product in the order
+            for (const item of orderList) 
+            {
+                const saleInstance = new Sales(
+                    generatedOrderID,
+                    item.ProductID,
+                    item.Quantity,
+                    new Date(),
+                    false  // Initial delivery status is false
+                );
+                console.log("New Sale Instance:", saleInstance);
+
+                // Add the sale record to the "sales" collection
+                await addDoc(collection(db, "sales"), { ...saleInstance });
+            }
+
             return generatedOrderID
         } catch (error) 
         {
@@ -272,19 +290,7 @@ class OrderController
         }
     }
 
-    // static async payInCash(orderId) 
-    // {
-    //     try {
-    //         const orderRef = doc(db, 'orders', orderId); // Get a reference to the order document
-    //         await updateDoc(orderRef, {
-    //             orderStatus: "Paid", // Update order status to "Paid"
-    //         });
-    //         console.log("Order status updated to 'Paid'.");
-    //     } catch (error) {
-    //         console.error("Error updating order status:", error);
-    //         throw error; // Rethrow the error for handling in the caller
-    //     }
-    // }
+  
 
 }
 
