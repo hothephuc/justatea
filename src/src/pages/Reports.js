@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import SideBar from '../components/adPanel/SideBar';
 import searchIcon from '../components/assets/search-icon.png';
 
-
-function Reports (){
+function Reports() {
     const [orderData, setOrderData] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
@@ -34,20 +33,30 @@ function Reports (){
     const filteredOrders = orderData.filter(order =>
         order?.orderID?.toString().includes(searchQuery.toLowerCase())
     );
-    const timestampToDate = (timestamp) => new Date(timestamp);
 
-    const formatDate = (date) => {
-        return new Intl.DateTimeFormat('vi-VN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
-    };
     const formatTimestamp = (timestamp) => {
         if (!timestamp) return 'N/A';
         const date = new Date(timestamp.seconds * 1000); // Convert seconds to milliseconds
         return date.toLocaleDateString(); // Adjust format as needed
-      };
-    
+    };
+
+    // Handle status change
+    const handleStatusChange = async (order) => {
+        const statuses = ['Pending', 'Paid', 'Shipping', 'Delivered'];
+        const currentStatusIndex = statuses.indexOf(order.orderStatus);
+        const nextStatus = statuses[(currentStatusIndex + 1) % statuses.length];
+        
+        try {
+            await AdminController.updateOrderStatus(order.orderID, nextStatus);
+            setOrderData(orderData.map(o => o.orderID === order.orderID ? { ...o, orderStatus: nextStatus } : o));
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
+    };
+
     return (
         <div className="grid-container">
-            <SideBar/>
+            <SideBar />
             <div className="table-container main-container">
                 <h1>Quản lý Đơn Hàng</h1>
                 <div className="search-container">
@@ -75,6 +84,7 @@ function Reports (){
                             <th>Tên người nhận</th>
                             <th>SĐT</th>
                             <th>Địa chỉ</th>
+                            <th>Tình trạng đơn hàng</th>
                             <th>Mã thanh toán</th>
                             <th>Tổng giá</th>
                         </tr>
@@ -82,17 +92,23 @@ function Reports (){
                     <tbody>
                         {filteredOrders.map((order, index) => (
                             <tr
-                                key={order?.orderID ?? Math.random()} 
+                                key={order?.orderID ?? Math.random()}
                                 onClick={() => handleOrderClick(order)}
                                 className={selectedOrder?.orderID === order?.orderID ? 'selected' : ''}
                             >
-                                <td>{index + 1}</td> 
+                                <td>{index + 1}</td>
                                 <td>{order?.orderID ?? 'N/A'}</td>
                                 <td>{formatTimestamp(order?.dateCreated)}</td>
                                 <td>{order?.dateshipped ? formatTimestamp(order.dateshipped) : 'N/A'}</td>
                                 <td>{order?.contactInfo?.name || 'N/A'}</td>
                                 <td>{order?.contactInfo?.phone || 'N/A'}</td>
                                 <td>{order?.contactInfo?.address || 'N/A'}</td>
+                                <td
+                                    onClick={() => handleStatusChange(order)}
+                                    className={`status-cell ${order.orderStatus}`}
+                                >
+                                    {order?.orderStatus ?? 'N/A'}
+                                </td>
                                 <td>{order?.paymentInfo.paymentDocId ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
                             </tr>
@@ -104,4 +120,4 @@ function Reports (){
     );
 }
 
-export default Reports
+export default Reports;
