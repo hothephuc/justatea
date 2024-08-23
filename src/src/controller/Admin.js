@@ -1,7 +1,7 @@
 import { app, db } from "../config/firebase-config";
 import { collection, doc, setDoc, getDoc, getFirestore, updateDoc,deleteDoc, serverTimestamp, getDocs, query, where } from "firebase/firestore"; 
 import { getStorage, ref, uploadBytes, getDownloadURL,deleteObject} from "firebase/storage";
-import { uploadImage } from "./Utils";
+import { uploadImage, countDocuments } from "./Utils";
 import OrderController from "./Order";
 import Order from "../model/Order";
 class AdminController {
@@ -372,6 +372,30 @@ class AdminController {
             throw error;
         }
     }
+
+
+        /**
+     * Counts the number of users in the 'users' collection.
+     * 
+     * @returns {Promise<number>} - The number of documents in the 'users' collection.
+     */
+    static async countUsers() 
+    {
+        return await countDocuments('users');
+    }
+
+    /**
+     * Counts the number of products in the 'products' collection.
+     * 
+     * @returns {Promise<number>} - The number of documents in the 'products' collection.
+     */
+    static async  countProducts() 
+    {
+        return await countDocuments('products');
+    }
+
+
+
 }
 
 export default AdminController;

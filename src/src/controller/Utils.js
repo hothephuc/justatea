@@ -68,3 +68,11 @@ import { collection, doc, setDoc, getDoc, getFirestore, updateDoc, serverTimesta
         const [month, day, year] = dateString.split('-').map(Number);
         return new Date(year, month - 1, day, 12, 0, 0);
     }
+
+    export async function countDocuments(collectionName) 
+    {
+        const colRef = collection(db, collectionName);
+        const snapshot = await getDocs(colRef);
+        return snapshot.size;
+    }
+    
