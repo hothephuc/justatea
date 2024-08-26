@@ -84,7 +84,7 @@ function CustomerList() {
                             <th>Giới tính</th>
                             <th>Địa chỉ</th>
                             <th>Số điện thoại</th>
-                            <th>Admin</th>
+                            <th>Chức vụ</th>
                             <th>Ngày sinh</th>
                             <th>Thay đổi quyền</th> {/* New column for button */}
                         </tr>
