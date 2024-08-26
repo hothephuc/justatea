@@ -1,144 +1,118 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import 
 { BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill}
  from 'react-icons/bs'
  import 
- { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } 
+ { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LabelList, Line } 
  from 'recharts';
+import AdminController from '../../controller/Admin';
 
 function AdPanel() {
+  const [alertCount, setAlertCount] = useState();
+  const [productCount, setProductCount] = useState();
+  const [customerCount, setCustomerCount] = useState();
+  const [salesData, setSalesData] = useState([]);
 
-    const data = [
-        {
-          name: 'Page A',
-          uv: 4000,
-          pv: 2400,
-          amt: 2400,
-        },
-        {
-          name: 'Page B',
-          uv: 3000,
-          pv: 1398,
-          amt: 2210,
-        },
-        {
-          name: 'Page C',
-          uv: 2000,
-          pv: 9800,
-          amt: 2290,
-        },
-        {
-          name: 'Page D',
-          uv: 2780,
-          pv: 3908,
-          amt: 2000,
-        },
-        {
-          name: 'Page E',
-          uv: 1890,
-          pv: 4800,
-          amt: 2181,
-        },
-        {
-          name: 'Page F',
-          uv: 2390,
-          pv: 3800,
-          amt: 2500,
-        },
-        {
-          name: 'Page G',
-          uv: 3490,
-          pv: 4300,
-          amt: 2100,
-        },
-      ];
-     
+  useEffect(() => {
+      async function fetchCustomerCount() {
+          try {
+              const count = await AdminController.countUsers();
+              setCustomerCount(count);
+          } catch (error) {
+              console.error("Error fetching customer count:", error);
+          }
+      }
+
+      async function fetchProductCount() {
+          try {
+              const count = await AdminController.countProducts();
+              setProductCount(count);
+          } catch (error) {
+              console.error("Error fetching product count:", error);
+          }
+      }
+
+      async function fetchAlertCount() {
+          try {
+              const count = await AdminController.countOrdersAlert();
+              setAlertCount(count);
+          } catch (error) {
+              console.error("Error fetching alert count:", error);
+          }
+      }
+
+      async function fetchSalesData() {
+          try {
+              const sales = await AdminController.getTop5ProductsBySales();
+              setSalesData(sales);
+              console.log('Sales data:', sales);
+          } catch (error) {
+              console.error("Error fetching sales data:", error);
+          }
+      }
+
+      fetchCustomerCount();
+      fetchProductCount();
+      fetchAlertCount();
+      fetchSalesData();
+  }, []);
 
   return (
-    <main className='main-container'>
-        <div className='main-title'>
-            <h3>DASHBOARD</h3>
-        </div>
+      <main className='main-container'>
+          <div className='main-title'>
+              <h3>Bản thống kê</h3>
+          </div>
 
-        <div className='main-cards'>
-            <div className='card'>
-                <div className='card-inner'>
-                    <h3>PRODUCTS</h3>
-                    <BsFillArchiveFill className='card_icon'/>
-                </div>
-                <h1>300</h1>
-            </div>
-            <div className='card'>
-                <div className='card-inner'>
-                    <h3>CATEGORIES</h3>
-                    <BsFillGrid3X3GapFill className='card_icon'/>
-                </div>
-                <h1>12</h1>
-            </div>
-            <div className='card'>
-                <div className='card-inner'>
-                    <h3>CUSTOMERS</h3>
-                    <BsPeopleFill className='card_icon'/>
-                </div>
-                <h1>33</h1>
-            </div>
-            <div className='card'>
-                <div className='card-inner'>
-                    <h3>ALERTS</h3>
-                    <BsFillBellFill className='card_icon'/>
-                </div>
-                <h1>42</h1>
-            </div>
-        </div>
-
-        <div className='charts'>
-            <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-            }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="pv" fill="#8884d8" />
-                <Bar dataKey="uv" fill="#82ca9d" />
-                </BarChart>
-            </ResponsiveContainer>
-
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                width={500}
-                height={300}
-                data={data}
-                margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                }}
-                >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-                </LineChart>
-            </ResponsiveContainer>
-
-        </div>
-    </main>
-  )
+          <div className='main-cards'>
+              <div className='card'>
+                  <div className='card-inner'>
+                      <h3>Sản phẩm</h3>
+                      <BsFillArchiveFill className='card_icon' />
+                  </div>
+                  <h1>{productCount}</h1>
+              </div>
+              <div className='card'>
+                  <div className='card-inner'>
+                      <h3>Người dùng</h3>
+                      <BsPeopleFill className='card_icon' />
+                  </div>
+                  <h1>{customerCount}</h1>
+              </div>
+              <div className='card'>
+                  <div className='card-inner'>
+                      <h3>Đơn hàng</h3>
+                      <BsFillBellFill className='card_icon' />
+                  </div>
+                  <h1>{alertCount}</h1>
+              </div>
+          </div>
+          <div className='main-title'>
+              <h3>Số sản phẩm bán chạy nhất trong tháng</h3>
+          </div>
+          <div className='charts'>
+              <ResponsiveContainer width="100%" height={400}>
+                  <BarChart
+                      data={salesData}
+                      margin={{
+                          top: 5,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
+                      }}
+                  >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name"/>
+                      <YAxis />
+                      <Tooltip/>
+                      <Legend />
+                      <Bar dataKey="totalQuantity" fill="#8884d8">
+                        <LabelList dataKey="totalQuantity" position="top" formatter={(value) => `${value} Sản Phẩm đã bán`} /> 
+                      </Bar>
+                  </BarChart>
+              </ResponsiveContainer>
+          </div>
+      </main>
+  );
 }
 
 export default AdPanel

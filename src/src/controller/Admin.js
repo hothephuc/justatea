@@ -312,6 +312,92 @@ class AdminController {
         }
     }
 
+    static async fetchSale(){
+        try{
+            // Reference to the oders collection
+            const saleCollection = query(
+                collection(db,'sales'),
+                where('Delivered','==','true')
+            );
+            // Fetch all documents in the collection
+            const querySnapshot = await getDocs(saleCollection);
+            const sales =[];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log('Document data:', data);
+                if (data) {
+                    sales.push(data);
+                }
+            });
+            console.log('Fetched sales:', sales); // Log all fetched sales
+            return sales;
+        }catch (error) {
+            console.error('Error fetching sales:', error);
+            throw error;
+          }
+    }
+
+    /**
+     * Fetches the top 5 products with the highest sales quantity.
+     * 
+     * @returns {Promise<Array>} - A promise that resolves to an array of the top 5 products with the highest sales quantity.
+     * @throws {Error} - Throws an error if the fetching process fails.
+     */
+    static async getTop5ProductsBySales() {
+        try {
+            // Reference to the 'sales' collection
+            const salesCollection = collection(db, 'sales');
+
+            // Fetch all sales documents
+            const salesSnapshot = await getDocs(salesCollection);
+            
+            // Create an object to hold the total quantity sold for each product
+            const productSalesMap = {};
+
+            salesSnapshot.forEach((doc) => {
+                const data = doc.data();
+                const productId = data.ProductID;
+                const numsold = data.NumSold || 0;
+
+                // Accumulate the sales quantity for each product
+                if (productSalesMap[productId]) {
+                    productSalesMap[productId] += numsold;
+                } else {
+                    productSalesMap[productId] = numsold;
+                }
+            });
+
+            // Convert the productSalesMap object to an array of [productId, totalQuantity] pairs
+            const productSalesArray = Object.entries(productSalesMap);
+
+            // Sort the array based on totalQuantity in descending order
+            productSalesArray.sort((a, b) => b[1] - a[1]);
+
+            // Get the top 5 products with the highest sales quantity
+            const top5Products = productSalesArray.slice(0, 5);
+
+            // Fetch detailed product information for the top 5 products
+            const top5ProductDetails = [];
+            for (const [productId, totalQuantity] of top5Products) {
+                const productDoc = await getDoc(doc(db, 'products', productId));
+                if (productDoc.exists()) {
+                    const productData = productDoc.data();
+                    top5ProductDetails.push({
+                        id: productId,
+                        totalQuantity,
+                        name: productData.name,  
+                        ...productData,
+                    });
+                }
+            }
+
+            console.log('Top 5 products by sales quantity:', top5ProductDetails);
+            return top5ProductDetails;
+        } catch (error) {
+            console.error('Error fetching top 5 products by sales quantity:', error);
+            throw error;
+        }
+    }
 }
 
 export default AdminController;
