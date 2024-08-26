@@ -1,1 +1,20 @@
+/* Style for the status change button */
+.status-change-button {
+    background-color: gray; /* Green background */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 8px 16px; /* Padding around the text */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 14px; /* Font size */
+    text-align: center; /* Center text horizontally */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
 
+.status-change-button:hover {
+    background-color: black; /* Darker green on hover */
+}
+
+.status-change-button:focus {
+    outline: none; /* Remove default focus outline */
+}

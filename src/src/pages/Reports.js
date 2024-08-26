@@ -3,13 +3,13 @@ import AdminController from '../controller/Admin';
 import { Link } from 'react-router-dom';
 import SideBar from '../components/adPanel/SideBar';
 import searchIcon from '../components/assets/search-icon.png';
+import './css/Reports.css'
 
 function Reports() {
     const [orderData, setOrderData] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Fetch the orders when the component mounts
     useEffect(() => {
         const loadOrders = async () => {
             try {
@@ -40,7 +40,6 @@ function Reports() {
         return date.toLocaleDateString(); // Adjust format as needed
     };
 
-    // Handle status change
     const handleStatusChange = async (order) => {
         const statuses = ['Pending', 'Paid', 'Shipping', 'Delivered'];
         const currentStatusIndex = statuses.indexOf(order.orderStatus);
@@ -87,6 +86,7 @@ function Reports() {
                             <th>Tình trạng đơn hàng</th>
                             <th>Mã thanh toán</th>
                             <th>Tổng giá</th>
+                            <th>Thay đổi trạng thái</th> {/* New column for button */}
                         </tr>
                     </thead>
                     <tbody>
@@ -103,14 +103,22 @@ function Reports() {
                                 <td>{order?.contactInfo?.name || 'N/A'}</td>
                                 <td>{order?.contactInfo?.phone || 'N/A'}</td>
                                 <td>{order?.contactInfo?.address || 'N/A'}</td>
-                                <td
-                                    onClick={() => handleStatusChange(order)}
-                                    className={`status-cell ${order.orderStatus}`}
-                                >
+                                <td className={`status-cell ${order.orderStatus}`}>
                                     {order?.orderStatus ?? 'N/A'}
                                 </td>
                                 <td>{order?.paymentInfo.paymentDocId ?? 'N/A'}</td>
                                 <td>{order?.totalPrice ?? 'N/A'}</td>
+                                <td>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation(); 
+                                            handleStatusChange(order);
+                                        }}
+                                        className="status-change-button"
+                                    >
+                                        Thay đổi
+                                    </button>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

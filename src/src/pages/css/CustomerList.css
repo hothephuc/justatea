@@ -233,27 +233,24 @@ tr:hover {
     background-color: #d0e0ff;
 }
 
-/* Styling for role change buttons */
-.role-change-buttons {
-    display: flex;
-    gap: 10px;
+/* Style for the role change button */
+.role-change-button {
+  background-color: gray; /* Green background */
+  color: white; /* White text */
+  border: none; /* No border */
+  padding: 8px 16px; /* Padding around the text */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 14px; /* Font size */
+  text-align: center; /* Center text horizontally */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+  min-width: 150px; /* Minimum width to ensure consistent size */
 }
 
-.role-change-buttons button {
-    background-color: gray;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.role-change-button:hover {
+  background-color: black; /* Darker green on hover */
 }
 
-.role-change-buttons button:hover {
-    background-color:  black;
-}
-
-.role-change-buttons button:disabled {
-    background-color: #d6d6d6;
-    cursor: not-allowed;
+.role-change-button:focus {
+  outline: none; /* Remove default focus outline */
 }
