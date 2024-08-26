@@ -60,7 +60,7 @@ function AdPanel() {
   return (
       <main className='main-container'>
           <div className='main-title'>
-              <h3>Bản thống kê</h3>
+              <h3>Bảng thống kê</h3>
           </div>
 
           <div className='main-cards'>

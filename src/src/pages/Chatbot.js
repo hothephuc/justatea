@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import "../pages/css/Chatbot.css";
 import ProductController from '../controller/Product';
 
-const genAI = new GoogleGenerativeAI("AIzaSyCL3SxaggSY6G5Idx_jGEE9bi4SCHGpn5A");
+const genAI = new GoogleGenerativeAI("AIzaSyBWSkkagFF8acntA4a0rEKa4-al5apVPeA");
 
 // Helper function to format Firestore Timestamp
 const formatTimestamp = (timestamp) => {

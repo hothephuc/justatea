@@ -63,9 +63,9 @@ const Menu = () => {
 
   const filterByPrice = (item) => {
     if (priceFilter === "all") return true;
-    if (priceFilter === "below20") return item.price < 20000;
-    if (priceFilter === "20to50") return item.price >= 20000 && item.price <= 50000;
-    if (priceFilter === "above50") return item.price > 50000;
+    if (priceFilter === "below20") return item.price < 30000;
+    if (priceFilter === "20to50") return item.price >= 30000 && item.price <= 40000;
+    if (priceFilter === "above50") return item.price > 40000;
     return false; // Ensure all cases are handled
   };
 
@@ -96,9 +96,9 @@ const Menu = () => {
         </select>
         <select onChange={handlePriceFilterChange} value={priceFilter} className='filter-dropdown'>
           <option value="all">All Prices</option>
-          <option value="below20">Dưới 20000</option>
-          <option value="20to50">20000 - 50000</option>
-          <option value="above50">Trên 50000</option>
+          <option value="below20">Dưới 30000</option>
+          <option value="20to50">30000 - 40000</option>
+          <option value="above50">Trên 40000</option>
         </select>
       </div>
       <div className='category'>
@@ -124,9 +124,6 @@ const Menu = () => {
           <p>No products found matching your search criteria.</p>
         )}
       </div>
-      <Link to='/AddProduct' style={{ textDecoration: 'none' }} onClick={handleClick}>
-        <button className='add-product-button'>Thêm sản phẩm</button>
-      </Link>
     </div>
   );
 }
